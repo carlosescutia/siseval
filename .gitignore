@@ -1,0 +1,17 @@
+.env
+composer.lock
+
+metadatos/*
+fichas/*
+
+application/cache/*
+!application/cache/index.html
+
+application/logs/*
+!application/logs/index.html
+
+!application/*/.htaccess
+
+*~
+*.swp
+*.swo
