@@ -19,7 +19,9 @@ DROP TABLE IF EXISTS opciones_sistema;
 CREATE TABLE opciones_sistema (
     cve_opcion serial,
     cod_opcion text,
-    nom_opcion text
+    nom_opcion text,
+    url text,
+    es_menu integer
 );
 
 DROP TABLE IF EXISTS accesos_sistema;
