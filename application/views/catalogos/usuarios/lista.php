@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-sm-1">
                             <?php 
-                            $item_eliminar = $usuarios_item['nom_usuario']; 
+                            $item_eliminar = $usuarios_item['nom_usuario'] . " - " . $usuarios_item['nom_dependencia'] ;
                             $url = base_url() . "usuarios/eliminar/". $usuarios_item['cve_usuario']; 
                             ?>
                             <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
