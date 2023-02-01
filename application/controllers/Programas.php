@@ -26,7 +26,7 @@ class Programas extends CI_Controller {
             $this->load->view('programas/index', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->login();
+            redirect('inicio/login');
         }
     }
 

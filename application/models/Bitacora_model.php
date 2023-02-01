@@ -11,19 +11,14 @@ class Bitacora_model extends CI_Model {
         return $result;
     }
 
-    public function get_bitacora($dependencia, $area, $cve_rol, $accion, $entidad)
+    public function get_bitacora($nom_dependencia, $cve_rol, $accion, $entidad)
     {
-        if ($cve_rol == 'sup') {
-            $area = '%';
-        }
         if ($cve_rol == 'adm') {
-            $dependencia = '%';
-            $area = '%';
+            $nom_dependencia = '%';
         }
-        $sql = "select b.* from bitacora b where b.dependencia LIKE ? and b.area LIKE ?";
+        $sql = "select b.* from bitacora b where b.nom_dependencia LIKE ? ";
         $parametros = array();
-        array_push($parametros, "$dependencia");
-        array_push($parametros, "$area");
+        array_push($parametros, "$nom_dependencia");
         if ($accion <> "") {
             $sql .= ' and b.accion = ?';
             array_push($parametros, "$accion");
