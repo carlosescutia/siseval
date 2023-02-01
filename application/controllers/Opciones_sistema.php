@@ -29,6 +29,7 @@ class Opciones_sistema extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
             $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('catalogos/opciones_sistema/lista', $data);
             $this->load->view('templates/footer');
         } else {

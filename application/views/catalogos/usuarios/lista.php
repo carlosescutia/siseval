@@ -63,7 +63,12 @@
                             <p><?= $usuarios_item['activo'] ?></p>
                         </div>
                         <div class="col-sm-1">
-                            <p><a style="color: #f00" href="<?= base_url() ?>usuarios/eliminar/<?= $usuarios_item['cve_usuario'] ?>/"><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                            <?php 
+                            $item_eliminar = $usuarios_item['nom_usuario']; 
+                            $url = base_url() . "usuarios/eliminar/". $usuarios_item['cve_usuario']; 
+                            ?>
+                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            </a></p>
                         </div>
                     </div>
                 </div>

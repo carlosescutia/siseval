@@ -45,7 +45,12 @@
                             <p><?= $accesos_sistema_item['nom_rol'] ?></p>
                         </div>
                         <div class="col-sm-1">
-                            <p><a style="color: #f00" href="<?= base_url() ?>accesos_sistema/eliminar/<?= $accesos_sistema_item['cve_acceso'] ?>/"><i class="bi bi-x-circle boton-eliminar" ></i></a><p>
+                            <?php 
+                            $item_eliminar = $accesos_sistema_item['cod_opcion'] . " " . $accesos_sistema_item['nom_opcion'] . " - " . $accesos_sistema_item['nom_rol'] ;
+                            $url = base_url() . "accesos_sistema/eliminar/". $accesos_sistema_item['cve_acceso']; 
+                            ?>
+                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            </a></p>
                         </div>
                     </div>
                 </div>

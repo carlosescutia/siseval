@@ -31,6 +31,7 @@ class Accesos_sistema extends CI_Controller {
             $data['accesos_sistema'] = $this->accesos_sistema_model->get_accesos_sistema();
 
             $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('catalogos/accesos_sistema/lista', $data);
             $this->load->view('templates/footer');
         } else {
