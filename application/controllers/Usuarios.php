@@ -30,6 +30,7 @@ class Usuarios extends CI_Controller {
             $data['usuarios'] = $this->usuarios_model->get_usuarios();
 
             $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('catalogos/usuarios/lista', $data);
             $this->load->view('templates/footer');
         } else {

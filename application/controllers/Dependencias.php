@@ -30,6 +30,7 @@ class Dependencias extends CI_Controller {
             $data['dependencias'] = $this->dependencias_model->get_dependencias();
 
             $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('catalogos/dependencias/lista', $data);
             $this->load->view('templates/footer');
         } else {

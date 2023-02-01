@@ -39,7 +39,12 @@
                             <p><a href="<?=base_url()?>dependencias/detalle/<?=$dependencias_item['cve_dependencia']?>"><?= $dependencias_item['nom_dependencia'] ?></a></p>
                         </div>
                         <div class="col-sm-1">
-                            <p><a href="<?= base_url() ?>dependencias/eliminar/<?= $dependencias_item['cve_dependencia'] ?>/"><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                            <?php 
+                            $item_eliminar = $dependencias_item['nom_dependencia']; 
+                            $url = base_url() . "dependencias/eliminar/". $dependencias_item['cve_dependencia']; 
+                            ?>
+                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            </a></p>
                         </div>
                     </div>
                 </div>
@@ -55,4 +60,5 @@
             <a href="<?=base_url()?>catalogos" class="btn btn-secondary">Volver</a>
         </div>
     </div>
+
 </main>

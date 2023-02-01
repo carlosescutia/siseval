@@ -45,7 +45,12 @@
                             <p><a href="<?=base_url()?>opciones_sistema/detalle/<?=$opciones_sistema_item['cve_opcion']?>"><?= $opciones_sistema_item['nom_opcion'] ?></a></p>
                         </div>
                         <div class="col-sm-1">
-                            <p><a style="color: #f00" href="<?= base_url() ?>opciones_sistema/eliminar/<?= $opciones_sistema_item['cve_opcion'] ?>/"><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                            <?php 
+                            $item_eliminar = $opciones_sistema_item['cod_opcion'] . " " . $opciones_sistema_item['nom_opcion'] ;
+                            $url = base_url() . "opciones_sistema/eliminar/". $opciones_sistema_item['cve_opcion']; 
+                            ?>
+                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            </a></p>
                         </div>
                     </div>
                 </div>
