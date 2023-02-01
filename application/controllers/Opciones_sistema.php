@@ -7,6 +7,7 @@ class Opciones_sistema extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('opciones_sistema_model');
         $this->load->model('accesos_sistema_model');
+        $this->load->model('bitacora_model');
     }
 
     public function index()
@@ -95,13 +96,41 @@ class Opciones_sistema extends CI_Controller {
 
             $opciones_sistema = $this->input->post();
             if ($opciones_sistema) {
+                
+                if ($cve_opcion) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
+                // guardado
                 $data = array(
                     'cod_opcion' => $opciones_sistema['cod_opcion'],
                     'nom_opcion' => $opciones_sistema['nom_opcion'],
                     'url' => $opciones_sistema['url'],
                     'es_menu' => $opciones_sistema['es_menu']
                 );
-                $this->opciones_sistema_model->guardar($data, $cve_opcion);
+                $cve_opcion = $this->opciones_sistema_model->guardar($data, $cve_opcion);
+
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $entidad = 'opciones_sistema';
+                $valor = $cve_opcion ." ". $opciones_sistema['cod_opcion'] . " " . $opciones_sistema['nom_opcion'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
+
             }
             redirect('opciones_sistema');
 
@@ -114,6 +143,29 @@ class Opciones_sistema extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
+            // registro en bitacora
+            $opcion = $this->opciones_sistema_model->get_opcion($cve_opcion);
+            $separador = ' -> ';
+            $usuario = $this->session->userdata('usuario');
+            $nom_usuario = $this->session->userdata('nom_usuario');
+            $nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'eliminó';
+            $entidad = 'opciones_sistema';
+            $valor = $cve_opcion ." ". $opcion['cod_opcion'] . " " . $opcion['nom_opcion'];
+            $data = array(
+                'fecha' => date("Y-m-d"),
+                'hora' => date("H:i"),
+                'origen' => $_SERVER['REMOTE_ADDR'],
+                'usuario' => $usuario,
+                'nom_usuario' => $nom_usuario,
+                'nom_dependencia' => $nom_dependencia,
+                'accion' => $accion,
+                'entidad' => $entidad,
+                'valor' => $valor
+            );
+            $this->bitacora_model->guardar($data);
+
+            // eliminado
             $this->opciones_sistema_model->eliminar($cve_opcion);
             redirect('opciones_sistema');
 

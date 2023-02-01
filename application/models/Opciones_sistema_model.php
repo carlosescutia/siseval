@@ -17,15 +17,23 @@ class Opciones_sistema_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_opcion_cod($cod_opcion) {
+        $sql = 'select * from opciones_sistema where cod_opcion = ?;';
+        $query = $this->db->query($sql, array($cod_opcion));
+        return $query->row_array();
+    }
+
     public function guardar($data, $cve_opcion)
     {
         if ($cve_opcion) {
             $this->db->where('cve_opcion', $cve_opcion);
-            $result = $this->db->update('opciones_sistema', $data);
+            $this->db->update('opciones_sistema', $data);
+            $id = $cve_opcion;
         } else {
-            $result = $this->db->insert('opciones_sistema', $data);
+            $this->db->insert('opciones_sistema', $data);
+            $id = $this->db->insert_id();
         }
-        return $result;
+        return $id;
     }
 
     public function eliminar($cve_opcion)

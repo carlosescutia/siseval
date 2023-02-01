@@ -8,6 +8,7 @@ class Usuarios extends CI_Controller {
         $this->load->model('dependencias_model');
         $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
+        $this->load->model('bitacora_model');
     }
 
     public function index()
@@ -101,6 +102,13 @@ class Usuarios extends CI_Controller {
 
             $usuarios = $this->input->post();
             if ($usuarios) {
+                
+                if ($cve_usuario) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
+                // guardado
                 $data = array(
                     'cve_dependencia' => $usuarios['cve_dependencia'],
                     'cve_rol' => $usuarios['cve_rol'],
@@ -109,7 +117,29 @@ class Usuarios extends CI_Controller {
                     'password' => $usuarios['password'],
                     'activo' => empty($usuarios['activo']) ? '0' : $usuarios['activo']
                 );
-                $this->usuarios_model->guardar($data, $cve_usuario);
+                $cve_usuario = $this->usuarios_model->guardar($data, $cve_usuario);
+
+                // registro en bitacora
+                $dependencia = $this->dependencias_model->get_dependencia($usuarios['cve_dependencia']);
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $entidad = 'usuarios';
+                $valor = $cve_usuario ." ". $usuarios['nom_usuario'] . $separador . $dependencia['nom_dependencia'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
+
             }
             redirect('usuarios');
 
@@ -122,11 +152,34 @@ class Usuarios extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            $this->usuarios_model->eliminar($cve_usuario);
-            redirect('usuarios');
+            // registro en bitacora
+            $datos_usuario = $this->usuarios_model->get_usuario($cve_usuario);
+			$separador = ' -> ';
+			$usuario = $this->session->userdata('usuario');
+			$nom_usuario = $this->session->userdata('nom_usuario');
+			$nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'eliminó';
+			$entidad = 'usuarios';
+			$valor = $cve_usuario ." ". $datos_usuario['nom_usuario'] . $separador . $datos_usuario['nom_dependencia'];
+			$data = array(
+				'fecha' => date("Y-m-d"),
+				'hora' => date("H:i"),
+				'origen' => $_SERVER['REMOTE_ADDR'],
+				'usuario' => $usuario,
+				'nom_usuario' => $nom_usuario,
+				'nom_dependencia' => $nom_dependencia,
+				'accion' => $accion,
+				'entidad' => $entidad,
+				'valor' => $valor
+			);
+			$this->bitacora_model->guardar($data);
 
-        } else {
-            redirect('inicio/login');
-        }
-    }
+            // eliminado
+			$this->usuarios_model->eliminar($cve_usuario);
+
+			redirect('usuarios');
+		} else {
+			redirect('inicio/login');
+		}
+	}
 }
