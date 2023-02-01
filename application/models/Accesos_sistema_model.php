@@ -33,11 +33,13 @@ class Accesos_sistema_model extends CI_Model {
     {
         if ($cve_acceso) {
             $this->db->where('cve_acceso', $cve_acceso);
-            $result = $this->db->update('accesos_sistema', $data);
+            $this->db->update('accesos_sistema', $data);
+            $id = $cve_acceso;
         } else {
-            $result = $this->db->insert('accesos_sistema', $data);
+            $this->db->insert('accesos_sistema', $data);
+            $id = $this->db->insert_id();
         }
-        return $result;
+        return $id;
     }
 
     public function eliminar($cve_acceso)

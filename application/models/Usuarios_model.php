@@ -25,7 +25,7 @@ class Usuarios_model extends CI_Model {
     }
 
     public function get_usuario($cve_usuario) {
-        $sql = 'select u.*, r.nom_rol from usuarios u left join roles r on u.cve_rol = r.cve_rol where u.cve_usuario = ?;';
+        $sql = 'select u.*, d.nom_dependencia, r.nom_rol from usuarios u left join roles r on u.cve_rol = r.cve_rol left join dependencias d on u.cve_dependencia = d.cve_dependencia where u.cve_usuario = ?;';
         $query = $this->db->query($sql, array($cve_usuario));
         return $query->row_array();
     }
@@ -34,11 +34,13 @@ class Usuarios_model extends CI_Model {
     {
         if ($cve_usuario) {
             $this->db->where('cve_usuario', $cve_usuario);
-            $result = $this->db->update('usuarios', $data);
+            $this->db->update('usuarios', $data);
+            $id = $cve_usuario;
         } else {
-            $result = $this->db->insert('usuarios', $data);
+            $this->db->insert('usuarios', $data);
+            $id = $this->db->insert_id();
         }
-        return $result;
+        return $id;
     }
 
     public function eliminar($cve_usuario)
