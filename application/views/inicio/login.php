@@ -31,7 +31,6 @@
                 max-width: 430px;
                 padding: 15px;
                 margin: auto;
-                background-color: white;
             }
             .form-signin .form-control {
                 position: relative;
@@ -75,14 +74,14 @@
             <?php if ($error): ?>
             <p class="text-danger"><?php echo $error ?></p>
             <?php endif ?>
-            <img class="mt-3 mb-5" src="<?=base_url()?>img/gto_iplaneg.png" alt="iplaneg">
-            <h1 class="h3 mb-5 font-weight-normal">Inicie sesión</h1>
+            <img class="mb-4" src="<?=base_url()?>img/gto_iplaneg.png" alt="iplaneg">
+            <h1 class="h3 mb-3 font-weight-normal">Inicie su sesión</h1>
             <label for="inputEmail" class="sr-only">Usuario</label>
             <input name="usuario" class="form-control" placeholder="Usuario" required autofocus>
             <label for="inputPassword" class="sr-only">Contraseña</label>
             <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
-            <p class="mt-5 mb-3 text-muted">&copy; Iplaneg 2023</p>
+            <p class="mt-5 mb-3 text-muted">&copy; Iplaneg 2022</p>
         </form>
     </body>
 </html>
