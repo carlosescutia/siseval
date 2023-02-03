@@ -1,22 +1,14 @@
-/* ENCABEZADOS DE SECCIÓN */
-.background-principal {
-    background-color: #0066ff !important;
-}
-
-.border-principal {
-    border-color: #0066ff !important;
-}
-
-.background-secundario {
-    background-color: #0082ff !important;
-}
-
-.border-secundario {
-    border-color: #0082ff !important;
-}
-/* ENCABEZADOS DE SECCIÓN */
-
 .boton-eliminar {
     font-size: 1rem; 
     color: red;
+}
+
+.header-dependencia {
+    padding: 15px;
+    background-color: #C0C6D5 !important;
+    text-transform: uppercase;
+}
+
+.tabla-datos {
+    font-size: 1.3rem;
 }

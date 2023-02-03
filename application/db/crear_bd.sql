@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS proyectos;
 CREATE TABLE proyectos (
     id_proyecto serial,
     cve_proyecto text,
+    cve_anterior_proyecto text,
     nom_proyecto text,
     cve_programa text,
     periodo integer,
@@ -15,6 +16,25 @@ CREATE TABLE programas (
     cve_programa text,
     nom_programa text,
     cve_dependencia integer
+);
+
+DROP TABLE IF EXISTS evaluaciones;
+CREATE TABLE evaluaciones (
+    id_evaluacion serial,
+    cve_proyecto text,
+    periodo text,
+    tipo_evaluacion text,
+    fecha_final_cronograma date,
+    fecha_final_efectiva date,
+    finalizo_cronograma text,
+    metodo_financiamiento text,
+    nom_evaluador text,
+    costo_total_evaluacion numeric(12,2),
+    liga_general_informe_evaluacion text,
+    liga_directa_informe_evaluacion text,
+    origen_aae text,
+    documento_probatorio_financiamiento text,
+    dependencia_responsable text
 );
 
 DROP TABLE IF EXISTS usuarios;
