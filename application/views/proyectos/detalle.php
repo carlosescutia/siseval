@@ -8,10 +8,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <?php include 'evaluacion_actual.php' ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?php include 'historico_evaluaciones.php' ?>
         </div>
     </div>
