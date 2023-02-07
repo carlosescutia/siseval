@@ -37,6 +37,18 @@ CREATE TABLE evaluaciones (
     dependencia_responsable text
 );
 
+DROP TABLE IF EXISTS tipos_evaluacion;
+CREATE TABLE tipos_evaluacion (
+    id_tipo_evaluacion serial,
+    nom_tipo_evaluacion text
+);
+
+DROP TABLE IF EXISTS justificaciones_evaluacion;
+CREATE TABLE justificaciones_evaluacion (
+    id_justificacion_evaluacion serial,
+    nom_justificacion_evaluacion text
+);
+
 DROP TABLE IF EXISTS usuarios;
 CREATE TABLE usuarios (
     cve_usuario serial, 
