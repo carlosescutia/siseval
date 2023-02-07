@@ -10,8 +10,10 @@
                     <?php include "dependencias/boton.php" ?>
                 </div>
                 <div class="col-md-4">
+                    <?php include "justificaciones_evaluacion/boton.php" ?>
                 </div>
                 <div class="col-md-4">
+                    <?php include "tipos_evaluacion/boton.php" ?>
                 </div>
             </div>
         </div>
