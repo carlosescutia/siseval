@@ -15,7 +15,13 @@
 
         <div class="col-md-12">
             <div class="form-group row">
-                <label for="nom_dependencia" class="col-sm-2 col-form-label">Nombre</label>
+                <label for="nom_completo_dependencia" class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="nom_completo_dependencia" id="nom_completo_dependencia">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="nom_dependencia" class="col-sm-2 col-form-label">Siglas</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="nom_dependencia" id="nom_dependencia">
                 </div>
