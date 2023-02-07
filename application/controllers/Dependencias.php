@@ -108,6 +108,7 @@ class Dependencias extends CI_Controller {
 
                 // guardado
                 $data = array(
+                    'nom_completo_dependencia' => $dependencias['nom_completo_dependencia'],
                     'nom_dependencia' => $dependencias['nom_dependencia']
                 );
                 $cve_dependencia = $this->dependencias_model->guardar($data, $cve_dependencia);
