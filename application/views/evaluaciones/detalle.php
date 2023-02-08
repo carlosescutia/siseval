@@ -1,69 +1,68 @@
 <main role="main" class="ml-sm-auto px-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2>Evaluación</h2>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped tabla-datos">
-                <tbody>
-                    <tr>
-                        <td>Clave del proyecto</td>
-                        <td><?= $evaluacion['cve_proyecto'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Periodo</td>
-                        <td><?= $evaluacion['periodo'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Tipo de evaluación</td>
-                        <td><?= $evaluacion['tipo_evaluacion'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Fecha final del cronograma</td>
-                        <td><?= $evaluacion['fecha_final_cronograma'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Fecha final efectiva</td>
-                        <td><?= $evaluacion['fecha_final_efectiva'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>¿Finalizó de acuerdo al cronograma?</td>
-                        <td><?= $evaluacion['finalizo_cronograma'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Método de financiamiento</td>
-                        <td><?= $evaluacion['metodo_financiamiento'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Evaluador</td>
-                        <td><?= $evaluacion['nom_evaluador'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Costo total de la evaluación</td>
-                        <td>$ <?= number_format($evaluacion['costo_total_evaluacion'], 2) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Liga general del informe de evaluación</td>
-                        <td><a href="<?= $evaluacion['liga_general_informe_evaluacion'] ?>" target="_blank"><?= $evaluacion['liga_general_informe_evaluacion'] ?></a></td>
-                    </tr>
-                    <tr>
-                        <td>Liga directa del informe de evaluación</td>
-                        <td><a href="<?= $evaluacion['liga_directa_informe_evaluacion'] ?>" target="_blank"><?= $evaluacion['liga_directa_informe_evaluacion'] ?></a></td>
-                    </tr>
-                    <tr>
-                        <td>Origen AAE</td>
-                        <td><?= $evaluacion['origen_aae'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Documento probatorio del financiamiento</td>
-                        <td><?= $evaluacion['documento_probatorio_financiamiento'] ?></td>
-                    </tr>
-                    <tr>
-                        <td>Dependencia responsable</td>
-                        <td><?= $evaluacion['dependencia_responsable'] ?></td>
-                    </tr>
-                </tbody>
-            </table>
+
+    <div class="card mt-3 mb-3 tabla-datos">
+        <div class="card-header text-white bg-primary">
+            <?= $evaluacion['cve_proyecto'] ?> - <?= $evaluacion['periodo'] ?>: <?= $evaluacion['tipo_evaluacion'] ?> (<?= $evaluacion['dependencia_responsable'] ?>)
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label">Fecha final del cronograma</label>
+                    <?php
+                    $myDate = $evaluacion['fecha_final_cronograma'];
+                    $tempDate = date_create("$myDate");
+                    $newDate = date_format($tempDate, 'd/m/Y'); ?>
+                    <input type="text" class="form-control" value="<?= $newDate ?>" readonly>
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label">Fecha final efectiva</label>
+                    <?php
+                    $myDate = $evaluacion['fecha_final_efectiva'];
+                    $tempDate = date_create("$myDate");
+                    $newDate = date_format($tempDate, 'd/m/Y'); ?>
+                    <input type="text" class="form-control" value="<?= $newDate ?>" readonly>
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label">Método de financiamiento</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['metodo_financiamiento'] ?>" readonly>
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label">Evaluador</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['nom_evaluador'] ?>" readonly>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label">Costo total de la evaluación</label>
+                    <input type="text" class="form-control" value="$ <?= number_format($evaluacion['costo_total_evaluacion'], 2) ?>" readonly>
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label">Origen AAE</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['origen_aae'] ?>" readonly>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label">Documento probatorio del financiamiento</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['documento_probatorio_financiamiento'] ?>" readonly>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <?php
+                    $liga_general_informe_evaluacion = $evaluacion['liga_general_informe_evaluacion'];
+                    ?>
+                    <label class="form-label">Liga general del informe de la evaluacion</label>
+                    <label class="form-control"><a href="<?=$liga_general_informe_evaluacion?>" target="_blank"><?= $liga_general_informe_evaluacion ?></a></label>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <?php
+                    $liga_directa_informe_evaluacion = $evaluacion['liga_directa_informe_evaluacion'];
+                    ?>
+                    <label class="form-label">Liga directa del informe de la evaluacion</label>
+                    <label class="form-control"><a href="<?=$liga_directa_informe_evaluacion?>" target="_blank"><?= $liga_directa_informe_evaluacion ?></a></label>
+                </div>
+            </div>
         </div>
     </div>
 
