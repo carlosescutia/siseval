@@ -9,7 +9,7 @@ class Proyectos_model extends CI_Model {
         if ($cve_rol == 'adm' || $cve_rol == 'sup') {
             $cve_dependencia = '%';
         }
-        $sql = 'select py.*, pg.* from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where pg.cve_dependencia::text LIKE ? order by pg.cve_programa, py.cve_proyecto;';
+        $sql = "select py.*, pg.*, (select count(*) from evaluaciones_actuales where cve_proyecto = py.cve_proyecto) as status_actual, (select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where pg.cve_dependencia::text LIKE ? order by pg.cve_programa, py.cve_proyecto;";
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }

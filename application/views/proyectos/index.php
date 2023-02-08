@@ -27,6 +27,9 @@
                             <div class="col-sm-1">
                                 <p>Presupuesto</p>
                             </div>
+                            <div class="col-sm-2 text-center">
+                                <p>Status</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,6 +55,21 @@
                                     </div>
                                     <div class="col-sm-1 text-end">
                                         <p><?= number_format($proyectos_item['presupuesto_aprobado'], 2) ?></p>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <?php
+                                        if ($proyectos_item['status_actual'] == '0') {
+                                            $fondo_actual = 'bg-secondary';
+                                        } else{
+                                            $fondo_actual = 'bg-primary';
+                                        }
+                                        if ($proyectos_item['status_previo'] == '0') {
+                                            $fondo_previo = 'bg-secondary';
+                                        } else{
+                                            $fondo_previo = 'bg-primary';
+                                        } ?>
+                                        <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $proyectos_item['status_actual'] ?></span> evaluación actual<br>
+                                        <span class="badge rounded-pill <?=$fondo_previo?>"><?= $proyectos_item['status_previo'] ?></span> evaluaciones previas</p>
                                     </div>
                                 </div>
                             </div>
