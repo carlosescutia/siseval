@@ -37,6 +37,22 @@ CREATE TABLE evaluaciones (
     dependencia_responsable text
 );
 
+DROP TABLE IF EXISTS evaluaciones_actuales;
+CREATE TABLE evaluaciones_actuales (
+    id_evaluacion_actual serial,
+    cve_proyecto text,
+    id_tipo_evaluacion integer,
+    otro_tipo_evaluacion text,
+    id_justificacion_evaluacion integer,
+    otra_justificacion_evaluacion text,
+    anios_ejecucion integer,
+    meses_duracion integer,
+    objetivo text,
+    recursos_propios text,
+    monto numeric(12,2),
+    observaciones text
+);
+
 DROP TABLE IF EXISTS tipos_evaluacion;
 CREATE TABLE tipos_evaluacion (
     id_tipo_evaluacion serial,
