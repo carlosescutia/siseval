@@ -95,8 +95,6 @@ class Dependencias extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            $nueva_dependencia = is_null($cve_dependencia);
-
             $dependencias = $this->input->post();
             if ($dependencias) {
 

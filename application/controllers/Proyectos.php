@@ -13,6 +13,9 @@ class Proyectos extends CI_Controller {
         $this->load->model('programas_model');
         $this->load->model('evaluaciones_model');
         $this->load->model('dependencias_model');
+        $this->load->model('tipos_evaluacion_model');
+        $this->load->model('justificaciones_evaluacion_model');
+        $this->load->model('evaluaciones_actuales_model');
     }
 
     public function index()
@@ -58,8 +61,28 @@ class Proyectos extends CI_Controller {
             $cve_anterior_proyecto = $data['proyecto']['cve_anterior_proyecto'];
             $data['programa'] = $this->programas_model->get_programa_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $cve_dependencia, $cve_rol);
+            $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
+            $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
+            $data['evaluacion_actual'] = $this->evaluaciones_actuales_model->get_evaluacion_actual_proyecto($cve_proyecto);
+            if (! $data['evaluacion_actual']) {
+                $data['evaluacion_actual'] = array (
+                    'id_evaluacion_actual' => null,
+                    'cve_proyecto' => $cve_proyecto,
+                    'id_tipo_evaluacion' => null,
+                    'otro_tipo_evaluacion' => null,
+                    'id_justificacion_evaluacion' => null,
+                    'otra_justificacion_evaluacion' => null,
+                    'anios_ejecucion' => null,
+                    'meses_duracion' => null,
+                    'objetivo' => null,
+                    'recursos_propios' => null,
+                    'monto' => null,
+                    'observaciones' => null
+                );
+            }
 
             $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('proyectos/detalle', $data);
             $this->load->view('templates/footer');
         } else {
