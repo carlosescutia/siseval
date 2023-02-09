@@ -37,9 +37,9 @@ CREATE TABLE evaluaciones (
     dependencia_responsable text
 );
 
-DROP TABLE IF EXISTS evaluaciones_actuales;
-CREATE TABLE evaluaciones_actuales (
-    id_evaluacion_actual serial,
+DROP TABLE IF EXISTS propuestas_evaluacion;
+CREATE TABLE propuestas_evaluacion (
+    id_propuesta_evaluacion serial,
     cve_proyecto text,
     id_tipo_evaluacion integer,
     otro_tipo_evaluacion text,

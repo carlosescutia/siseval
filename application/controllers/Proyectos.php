@@ -15,7 +15,7 @@ class Proyectos extends CI_Controller {
         $this->load->model('dependencias_model');
         $this->load->model('tipos_evaluacion_model');
         $this->load->model('justificaciones_evaluacion_model');
-        $this->load->model('evaluaciones_actuales_model');
+        $this->load->model('propuestas_evaluacion_model');
     }
 
     public function index()
@@ -63,10 +63,10 @@ class Proyectos extends CI_Controller {
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
-            $data['evaluacion_actual'] = $this->evaluaciones_actuales_model->get_evaluacion_actual_proyecto($cve_proyecto);
-            if (! $data['evaluacion_actual']) {
-                $data['evaluacion_actual'] = array (
-                    'id_evaluacion_actual' => null,
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_proyecto($cve_proyecto);
+            if (! $data['propuesta_evaluacion']) {
+                $data['propuesta_evaluacion'] = array (
+                    'id_propuesta_evaluacion' => null,
                     'cve_proyecto' => $cve_proyecto,
                     'id_tipo_evaluacion' => null,
                     'otro_tipo_evaluacion' => null,

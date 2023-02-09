@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-md-8">
-            <?php include 'evaluacion_actual.php' ?>
+            <?php include 'propuestas_evaluacion.php' ?>
         </div>
         <div class="col-md-4">
             <?php include 'historico_evaluaciones.php' ?>
