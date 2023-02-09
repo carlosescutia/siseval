@@ -6,45 +6,34 @@
         </div>
         <div class="card-body">
             <div class="row mb-3">
-                <div class="col-sm-3">
-                    <label class="form-label">Fecha final del cronograma</label>
-                    <?php
-                    $myDate = $evaluacion['fecha_final_cronograma'];
-                    $tempDate = date_create("$myDate");
-                    $newDate = date_format($tempDate, 'd/m/Y'); ?>
-                    <input type="text" class="form-control" value="<?= $newDate ?>" readonly>
+                <div class="col-sm-4">
+                    <label class="form-label">Tipo de evaluación</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['tipo_evaluacion'] ?>" readonly>
                 </div>
-                <div class="col-sm-3">
-                    <label class="form-label">Fecha final efectiva</label>
-                    <?php
-                    $myDate = $evaluacion['fecha_final_efectiva'];
-                    $tempDate = date_create("$myDate");
-                    $newDate = date_format($tempDate, 'd/m/Y'); ?>
-                    <input type="text" class="form-control" value="<?= $newDate ?>" readonly>
+                <div class="col-sm-4">
+                    <label class="form-label">Periodo</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['periodo'] ?>" readonly>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
+                    <label class="form-label">Dependencia responsable</label>
+                    <input type="text" class="form-control" value="<?= $evaluacion['dependencia_responsable'] ?>" readonly>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-sm-4">
                     <label class="form-label">Método de financiamiento</label>
                     <input type="text" class="form-control" value="<?= $evaluacion['metodo_financiamiento'] ?>" readonly>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <label class="form-label">Evaluador</label>
                     <input type="text" class="form-control" value="<?= $evaluacion['nom_evaluador'] ?>" readonly>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-3">
-                    <label class="form-label">Costo total de la evaluación</label>
+                <div class="col-sm-4">
+                    <label class="form-label">Costo de evaluación</label>
                     <input type="text" class="form-control" value="$ <?= number_format($evaluacion['costo_total_evaluacion'], 2) ?>" readonly>
                 </div>
-                <div class="col-sm-3">
-                    <label class="form-label">Origen AAE</label>
-                    <input type="text" class="form-control" value="<?= $evaluacion['origen_aae'] ?>" readonly>
-                </div>
-                <div class="col-sm-6">
-                    <label class="form-label">Documento probatorio del financiamiento</label>
-                    <input type="text" class="form-control" value="<?= $evaluacion['documento_probatorio_financiamiento'] ?>" readonly>
-                </div>
             </div>
+            <hr class="pb-3"/>
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <?php
@@ -61,6 +50,15 @@
                     ?>
                     <label class="form-label">Liga directa del informe de la evaluacion</label>
                     <label class="form-control"><a href="<?=$liga_directa_informe_evaluacion?>" target="_blank"><?= $liga_directa_informe_evaluacion ?></a></label>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <?php
+                    $liga_conag = $evaluacion['liga_conag'];
+                    ?>
+                    <label class="form-label">Liga conag</label>
+                    <label class="form-control"><a href="<?=$liga_conag?>" target="_blank"><?= $liga_conag ?></a></label>
                 </div>
             </div>
         </div>

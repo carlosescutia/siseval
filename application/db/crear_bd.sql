@@ -24,17 +24,13 @@ CREATE TABLE evaluaciones (
     cve_proyecto text,
     periodo text,
     tipo_evaluacion text,
-    fecha_final_cronograma date,
-    fecha_final_efectiva date,
-    finalizo_cronograma text,
     metodo_financiamiento text,
     nom_evaluador text,
     costo_total_evaluacion numeric(12,2),
+    dependencia_responsable text,
     liga_general_informe_evaluacion text,
     liga_directa_informe_evaluacion text,
-    origen_aae text,
-    documento_probatorio_financiamiento text,
-    dependencia_responsable text
+    liga_conag text
 );
 
 DROP TABLE IF EXISTS propuestas_evaluacion;
