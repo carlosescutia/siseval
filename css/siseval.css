@@ -12,3 +12,7 @@
 .tabla-datos {
     font-size: 1.3rem;
 }
+
+.boton {
+    text-decoration: none !important;
+}
