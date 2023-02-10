@@ -19,10 +19,20 @@
         <?php } ?>
     </div>
     <?php if (in_array('99', $accesos_sistema_rol)) { ?>
-        <div class="card-footer text-end">
-            <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['cve_proyecto']?>">
-                <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
-            </form>
-        </div>
+        <?php if ( $cve_rol == 'usr' ) { ?>
+            <?php if ( $num_propuestas_evaluacion_proyecto_dependencia['num'] == 0 ) { ?>
+                <div class="card-footer text-end">
+                    <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['cve_proyecto']?>">
+                        <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
+                    </form>
+                </div>
+            <?php } ?>
+        <?php } else { ?>
+            <div class="card-footer text-end">
+                <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['cve_proyecto']?>">
+                    <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
+                </form>
+            </div>
+        <?php } ?>
     <?php } ?>
 </div>
