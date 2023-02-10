@@ -6,15 +6,15 @@ class Propuestas_evaluacion_model extends CI_Model {
     }
 
     public function get_propuesta_evaluacion($id_propuesta_evaluacion) {
-        $sql = 'select * from propuestas_evaluacion where id_propuesta_evaluacion = ?;';
+        $sql = 'select pe.*, te.nom_tipo_evaluacion, d.nom_dependencia from propuestas_evaluacion pe left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion left join dependencias d on pe.cve_dependencia = d.cve_dependencia where id_propuesta_evaluacion = ?;';
         $query = $this->db->query($sql, array($id_propuesta_evaluacion));
         return $query->row_array();
     }
 
-    public function get_propuesta_evaluacion_proyecto($cve_proyecto) {
-        $sql = 'select * from propuestas_evaluacion where cve_proyecto = ?;';
+    public function get_propuestas_evaluacion_proyecto($cve_proyecto) {
+        $sql = 'select pe.*, te.nom_tipo_evaluacion, d.nom_dependencia from propuestas_evaluacion pe left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion left join dependencias d on pe.cve_dependencia = d.cve_dependencia where cve_proyecto = ?;';
         $query = $this->db->query($sql, array($cve_proyecto));
-        return $query->row_array();
+        return $query->result_array();
     }
 
     public function guardar($data, $id_propuesta_evaluacion)

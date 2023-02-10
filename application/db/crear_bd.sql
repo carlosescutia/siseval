@@ -37,6 +37,7 @@ DROP TABLE IF EXISTS propuestas_evaluacion;
 CREATE TABLE propuestas_evaluacion (
     id_propuesta_evaluacion serial,
     cve_proyecto text,
+    cve_dependencia integer,
     id_tipo_evaluacion integer,
     otro_tipo_evaluacion text,
     id_justificacion_evaluacion integer,

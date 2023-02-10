@@ -5,9 +5,66 @@ class Propuestas_evaluacion extends CI_Controller {
     {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->model('usuarios_model');
+        $this->load->model('accesos_sistema_model');
+        $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
 
+        $this->load->model('tipos_evaluacion_model');
+        $this->load->model('justificaciones_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
+    }
+
+    public function detalle($id_propuesta_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
+            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+            $data['cve_dependencia'] = $cve_dependencia;
+            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+            $data['cve_rol'] = $cve_rol;
+            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+            $data['error'] = $this->session->flashdata('error');
+            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
+            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+
+            $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
+            $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('propuestas_evaluacion/detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function nuevo($cve_proyecto)
+    {
+        if ($this->session->userdata('logueado')) {
+            $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
+            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+            $data['cve_dependencia'] = $cve_dependencia;
+            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+            $data['cve_rol'] = $cve_rol;
+            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+            $data['error'] = $this->session->flashdata('error');
+            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
+            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+
+            $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
+            $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
+            $data['cve_proyecto'] = $cve_proyecto;
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('propuestas_evaluacion/nuevo', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
     }
 
     public function guardar()
@@ -27,6 +84,7 @@ class Propuestas_evaluacion extends CI_Controller {
                 // guardado
                 $data = array(
                     'cve_proyecto' => $propuesta_evaluacion['cve_proyecto'],
+                    'cve_dependencia' => $propuesta_evaluacion['cve_dependencia'],
                     'id_tipo_evaluacion' => empty($propuesta_evaluacion['id_tipo_evaluacion']) ? null : $propuesta_evaluacion['id_tipo_evaluacion'],
                     'otro_tipo_evaluacion' => $propuesta_evaluacion['otro_tipo_evaluacion'],
                     'id_justificacion_evaluacion' => empty($propuesta_evaluacion['id_justificacion_evaluacion']) ? null : $propuesta_evaluacion['id_justificacion_evaluacion'],
