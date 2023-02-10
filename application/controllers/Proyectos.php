@@ -63,6 +63,8 @@ class Proyectos extends CI_Controller {
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
+            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
+            /*
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_proyecto($cve_proyecto);
             if (! $data['propuesta_evaluacion']) {
                 $data['propuesta_evaluacion'] = array (
@@ -80,6 +82,7 @@ class Proyectos extends CI_Controller {
                     'observaciones' => null
                 );
             }
+             */
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
