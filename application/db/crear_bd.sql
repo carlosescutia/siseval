@@ -42,8 +42,6 @@ CREATE TABLE propuestas_evaluacion (
     otro_tipo_evaluacion text,
     id_justificacion_evaluacion integer,
     otra_justificacion_evaluacion text,
-    anios_ejecucion integer,
-    meses_duracion integer,
     objetivo text,
     recursos_propios text,
     monto numeric(12,2),
