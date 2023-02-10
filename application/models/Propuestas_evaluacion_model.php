@@ -12,7 +12,7 @@ class Propuestas_evaluacion_model extends CI_Model {
     }
 
     public function get_propuestas_evaluacion_proyecto($cve_proyecto) {
-        $sql = 'select pe.*, te.nom_tipo_evaluacion, d.nom_dependencia from propuestas_evaluacion pe left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion left join dependencias d on pe.cve_dependencia = d.cve_dependencia where cve_proyecto = ?;';
+        $sql = 'select pe.*, te.nom_tipo_evaluacion, d.nom_dependencia from propuestas_evaluacion pe left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion left join dependencias d on pe.cve_dependencia = d.cve_dependencia where cve_proyecto = ? order by d.nom_dependencia, te.nom_tipo_evaluacion;';
         $query = $this->db->query($sql, array($cve_proyecto));
         return $query->result_array();
     }
