@@ -40,7 +40,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <a href="#" id="action_link" type="button" class="btn btn-danger">Eliminar</a>
+                <a href="#" id="action_link" type="button" class="btn btn-danger boton">Eliminar</a>
             </div>
         </div>
     </div>
