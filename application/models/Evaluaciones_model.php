@@ -6,7 +6,7 @@ class Evaluaciones_model extends CI_Model {
     }
 
     public function get_evaluaciones_proyecto($cve_proyecto) {
-        $sql = 'select e.* from evaluaciones e where e.cve_proyecto = ?';
+        $sql = 'select e.* from evaluaciones e where e.cve_proyecto = ? order by e.periodo, e.dependencia_responsable, e.tipo_evaluacion';
         $query = $this->db->query($sql, array($cve_proyecto));
         return $query->result_array();
     }
