@@ -64,25 +64,6 @@ class Proyectos extends CI_Controller {
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
-            /*
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_proyecto($cve_proyecto);
-            if (! $data['propuesta_evaluacion']) {
-                $data['propuesta_evaluacion'] = array (
-                    'id_propuesta_evaluacion' => null,
-                    'cve_proyecto' => $cve_proyecto,
-                    'id_tipo_evaluacion' => null,
-                    'otro_tipo_evaluacion' => null,
-                    'id_justificacion_evaluacion' => null,
-                    'otra_justificacion_evaluacion' => null,
-                    'anios_ejecucion' => null,
-                    'meses_duracion' => null,
-                    'objetivo' => null,
-                    'recursos_propios' => null,
-                    'monto' => null,
-                    'observaciones' => null
-                );
-            }
-             */
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
