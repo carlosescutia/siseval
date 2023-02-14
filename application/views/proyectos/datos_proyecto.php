@@ -11,6 +11,10 @@
                     <td><?= $programa['nom_programa'] ?></td>
                 </tr>
                 <tr>
+                    <td>Dependencia responsable</td>
+                    <td><?= $proyecto['nom_dependencia'] ?></td>
+                </tr>
+                <tr>
                     <td>Presupuesto aprobado</td>
                     <td>$ <?= number_format($proyecto['presupuesto_aprobado'], 2) ?></td>
                 </tr>
