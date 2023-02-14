@@ -1,3 +1,5 @@
+/* Tablas de información del sistema */
+
 DROP TABLE IF EXISTS proyectos;
 CREATE TABLE proyectos (
     id_proyecto serial,
@@ -59,6 +61,49 @@ CREATE TABLE justificaciones_evaluacion (
     id_justificacion_evaluacion serial,
     nom_justificacion_evaluacion text
 );
+
+DROP TABLE IF EXISTS calificaciones_propuesta;
+CREATE TABLE calificaciones_propuesta (
+    id_calificacion_propuesta serial,
+    id_propuesta_evaluacion integer,
+    cve_dependencia integer,
+    obligatorias integer,
+    solicitud integer,
+    intervenciones_estrategicas integer,
+    intervenciones_relevantes integer,
+    peso_presupuestario integer,
+    tiempo_ejecucion integer,
+    informacion_disponible integer,
+    mayor_cobertura integer,
+    tiempo_razonable integer,
+    clasificacion_supervisor integer,
+    comentarios text
+);
+
+DROP TABLE IF EXISTS valores_calificacion;
+CREATE TABLE valores_calificacion (
+    id_valor_calificacion serial,
+    puntaje integer,
+    nom_valor_calificacion text
+);
+
+DROP TABLE IF EXISTS clasificaciones_supervisor;
+CREATE TABLE clasificaciones_supervisor (
+    id_clasificacion_supervisor serial,
+    cve_clasificacion_supervisor integer,
+    nom_clasificacion_supervisor text
+);
+
+DROP TABLE IF EXISTS probabilidades_inclusion;
+CREATE TABLE probabilidades_inclusion (
+    id_probabilidad_inclusion serial,
+    min integer,
+    max integer,
+    nom_probabilidad_inclusion text
+);
+
+
+/* Tablas de administración del sistema */
 
 DROP TABLE IF EXISTS usuarios;
 CREATE TABLE usuarios (
