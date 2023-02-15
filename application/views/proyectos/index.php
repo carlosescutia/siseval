@@ -54,7 +54,7 @@
                                         <p><?= $proyectos_item['periodo'] ?></p>
                                     </div>
                                     <div class="col-sm-1 text-end">
-                                        <p><?= number_format($proyectos_item['presupuesto_aprobado'], 2) ?></p>
+                                        <p><?= number_format($proyectos_item['presupuesto_aprobado'], 0) ?></p>
                                     </div>
                                     <div class="col-sm-2">
                                         <?php
