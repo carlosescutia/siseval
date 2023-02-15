@@ -1,3 +1,6 @@
+/* Eliminar vistas para permitir eliminar tablas dependientes */
+DROP VIEW IF EXISTS calificaciones_proyectos;
+
 /* Tablas de información del sistema */
 
 DROP TABLE IF EXISTS proyectos;
@@ -158,3 +161,25 @@ CREATE TABLE bitacora (
     entidad text,
     valor text
 );
+
+
+/* Vistas para reportes */
+
+/*
+Vista calificaciones_proyectos
+-----------------------
+Se obtienen proyectos con propuesta de evaluación calificada
+*/
+CREATE VIEW calificaciones_proyectos AS
+SELECT 
+	pe.cve_proyecto,
+	cp.id_propuesta_evaluacion, 
+	te.nom_tipo_evaluacion, 
+	sum(obligatorias + solicitud + intervenciones_estrategicas + intervenciones_relevantes + peso_presupuestario + tiempo_ejecucion + informacion_disponible + mayor_cobertura + tiempo_razonable) / 5 as puntaje, 
+	(select nom_probabilidad_inclusion from probabilidades_inclusion where (sum(obligatorias + solicitud + intervenciones_estrategicas + intervenciones_relevantes + peso_presupuestario + tiempo_ejecucion + informacion_disponible + mayor_cobertura + tiempo_razonable) / 5) between min and max) as probabilidad 
+FROM 
+	calificaciones_propuesta cp 
+	left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion 
+	left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
+GROUP BY 
+	pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion;
