@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td>Presupuesto aprobado</td>
-                    <td>$ <?= number_format($proyecto['presupuesto_aprobado'], 2) ?></td>
+                    <td>$ <?= number_format($proyecto['presupuesto_aprobado'], 0) ?></td>
                 </tr>
                 <tr>
                     <td>Tipo de gasto</td>

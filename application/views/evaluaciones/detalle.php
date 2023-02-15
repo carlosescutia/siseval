@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-sm-4">
                     <label class="form-label">Costo de evaluación</label>
-                    <input type="text" class="form-control" value="$ <?= number_format($evaluacion['costo_total_evaluacion'], 2) ?>" readonly>
+                    <input type="text" class="form-control" value="$ <?= number_format($evaluacion['costo_total_evaluacion'], 0) ?>" readonly>
                 </div>
             </div>
             <hr class="pb-3"/>
