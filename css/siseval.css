@@ -9,6 +9,14 @@
     text-transform: uppercase;
 }
 
+.header-nivel2 {
+    background-color: #5398FD !important;
+}
+
+.header-nivel3 {
+    background-color: #8BB9FD !important;
+}
+
 .tabla-datos {
     font-size: 1.3rem;
 }

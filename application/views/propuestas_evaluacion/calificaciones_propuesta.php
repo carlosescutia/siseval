@@ -1,5 +1,5 @@
 <div class="card mt-0 mb-3 tabla-datos">
-    <div class="card-header text-white bg-primary">Calificaciones de la propuesta</div>
+    <div class="card-header text-white header-nivel3">Calificaciones de la propuesta</div>
     <div class="card-body">
         <div class="col-sm-12">
             <div class="row">

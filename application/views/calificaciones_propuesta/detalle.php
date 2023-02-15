@@ -1,6 +1,6 @@
 <main role="main" class="ml-sm-auto px-4">
     <div class="card mt-0 mb-3 tabla-datos">
-        <div class="card-header text-white bg-primary">Calificación <?= $calificacion_propuesta['nom_dependencia'] ?></div>
+        <div class="card-header text-white header-nivel3">Calificación <?= $calificacion_propuesta['nom_dependencia'] ?></div>
         <div class="card-body">
             <form method="post" action="<?= base_url() ?>calificaciones_propuesta/guardar/">
                 <div class="row mb-3">
