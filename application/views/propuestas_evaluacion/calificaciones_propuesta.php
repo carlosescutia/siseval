@@ -3,24 +3,21 @@
     <div class="card-body">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="col-sm-12 ps-3">
                         <div class="row small">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <strong>Dependencia</strong>
                             </div>
-                            <div class="col-sm-3 text-center">
+                            <div class="col-sm-6 text-center">
                                 <strong>Puntaje</strong>
-                            </div>
-                            <div class="col-sm-3 text-center">
-                                <strong>Ponderado</strong>
                             </div>
                         </div>
                     </div>
                     <?php foreach ($calificaciones_propuesta as $calificaciones_propuesta_item) { ?>
                         <div class="col-sm-12 ps-3 alternate-color">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <p><a href="<?=base_url()?>calificaciones_propuesta/detalle/<?= $calificaciones_propuesta_item['id_calificacion_propuesta'] ?>"><?= $calificaciones_propuesta_item['nom_dependencia'] ?></a>
                                     <?php if (in_array('99', $accesos_sistema_rol)) {
                                         if ($cve_dependencia == $calificaciones_propuesta_item['cve_dependencia']) { 
@@ -30,28 +27,25 @@
                                         <?php } 
                                     } ?>
                                 </div>
-                                <div class="col-sm-3 text-center">
+                                <div class="col-sm-6 text-center">
                                     <p><?= $calificaciones_propuesta_item['puntaje'] ?></p>
-                                </div>
-                                <div class="col-sm-3 text-center">
-                                    <p><?= $calificaciones_propuesta_item['puntaje'] / 5 ?></p>
                                 </div>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
-                <div class="col-sm-6 d-flex text-center">
+                <div class="col-sm-8 d-flex text-center">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="card h-100">
+                            <div class="card h-100 ms-3">
                                 <div class="card-header">Puntaje total</div>
                                 <div class="card-body d-flex align-items-center justify-content-center">
-                                    <h3 class="display-3"><?= $calificacion_final_propuesta_evaluacion['ponderado'] ?></h3>
+                                    <h3 class="display-3"><?= $calificacion_final_propuesta_evaluacion['puntaje'] ?></h3>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="card h-100">
+                            <div class="card h-100 ms-3">
                                 <div class="card-header">Probabilidad de inclusión en la Agenda Anual de Evaluación</div>
                                 <div class="card-body d-flex align-items-center justify-content-center">
                                     <h1><?= $calificacion_final_propuesta_evaluacion['probabilidad'] ?></h1>

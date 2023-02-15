@@ -94,11 +94,11 @@
                 <hr class="mt-5 mb-4" />
 
                 <div class="row mb-3">
-                    <div class="col-sm-3 text-center">
-                        <label for="puntaje">Puntaje (sin ponderación)</label>
+                    <div class="col-sm-2 text-center">
+                        <label for="puntaje">Puntaje</label>
                         <h1><?= $calificacion_propuesta['puntaje'] ?></h1>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="clasificacion_supervisor">Clasificación del supervisor</label>
                         <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
                             <option value=""></option>
