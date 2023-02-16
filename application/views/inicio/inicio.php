@@ -3,16 +3,13 @@
         <h2>Inicio</h2>
     </div>
     <div class="row">
-        <div class="col-md-8">
-            <div class="col-md-12">
-                <?php include "bienvenida.php"; ?>
-            </div>
+        <div class="col-md-7 tabla-datos">
+            <?php include "bienvenida.php"; ?>
+            <?php include "indicadores.php"; ?>
         </div>
-        <div class="col-md-3 ml-5">
-            <img src="<?=base_url();?>img/evaluacion.jpg" class="img-fluid rounded">
+        <div class="col-md-5 ml-5">
+            <?php include "calendario.php"; ?>
         </div>
     </div>
-
-    <hr />
 
 </main>
