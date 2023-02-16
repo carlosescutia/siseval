@@ -4,89 +4,61 @@
         <div class="card-body">
             <form method="post" action="<?= base_url() ?>calificaciones_propuesta/guardar/">
                 <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label for="evaluacion_obligatoria">¿La evaluación es obligatoria?</label>
+                        <select class="form-select" name="evaluacion_obligatoria" id="evaluacion_obligatoria">
+                            <option value="1">Si</option>
+                            <option value="0" selected>No</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="incidencias_programa">¿El programa tiene incidencias?</label>
+                        <select class="form-select" name="incidencias_programa" id="incidencias_programa">
+                            <option value="1">Si</option>
+                            <option value="0" selected>No</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="mt-5 mb-4" />
+                <div class="row mb-3">
                     <div class="col-sm-4">
-                        <label for="obligatorias">Obligatorias</label>
-                        <select class="form-select" name="obligatorias" id="obligatorias">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
+                        <label for="agenda2030">Agenda 2030</label>
+                        <select class="form-select" name="agenda2030" id="agenda2030">
+                            <option value="100">Si</option>
+                            <option value="50">Parcialmente</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="solicitud">Solicitud</label>
-                        <select class="form-select" name="solicitud" id="solicitud">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
+                        <label for="pertinencia_evaluación">Pertinencia de evaluación</label>
+                        <select class="form-select" name="pertinencia_evaluacion" id="pertinencia_evaluacion">
+                            <option value="100">Si</option>
+                            <option value="0">No</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="intervenciones_estrategicas">Intervenciones estratégicas</label>
-                        <select class="form-select" name="intervenciones_estrategicas" id="intervenciones_estrategicas">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
+                        <label for="ciclo_evaluativo">Ciclo evaluativo</label>
+                        <select class="form-select" name="ciclo_evaluativo" id="ciclo_evaluativo">
+                            <option value="100">Si</option>
+                            <option value="0">No</option>
                         </select>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-sm-4">
-                        <label for="intervenciones_relevantes">Intervenciones relevantes</label>
-                        <select class="form-select" name="intervenciones_relevantes" id="intervenciones_relevantes">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
+                        <label for="recomendaciones_previas">Recomendaciones previas</label>
+                        <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
+                            <option value="100">Todas atendidas</option>
+                            <option value="66">Atendidas más del 50%</option>
+                            <option value="33">Atendidas menos del 50%</option>
+                            <option value="0">Sin atender</option>
                         </select>
                     </div>
-                    <div class="col-sm-4">
-                        <label for="peso_presupuestario">Peso presupuestario</label>
-                        <select class="form-select" name="peso_presupuestario" id="peso_presupuestario">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="tiempo_ejecucion">Tiempo de ejecución</label>
-                        <select class="form-select" name="tiempo_ejecucion" id="tiempo_ejecucion">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-sm-4">
                         <label for="informacion_disponible">Información disponible</label>
                         <select class="form-select" name="informacion_disponible" id="informacion_disponible">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="mayor_cobertura">Mayor cobertura</label>
-                        <select class="form-select" name="mayor_cobertura" id="mayor_cobertura">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="tiempo_razonable">Tiempo razonable</label>
-                        <select class="form-select" name="tiempo_razonable" id="tiempo_razonable">
-                            <option value=""></option>
-                            <?php foreach ($valores_calificacion as $valores_calificacion_item) { ?>
-                            <option value="<?=$valores_calificacion_item['puntaje']?>"><?=$valores_calificacion_item['nom_valor_calificacion']?></option>
-                            <?php } ?>
+                            <option value="100">Alta</option>
+                            <option value="50">Media</option>
+                            <option value="0">Baja</option>
                         </select>
                     </div>
                 </div>
@@ -94,12 +66,11 @@
                 <hr class="mt-5 mb-4" />
 
                 <div class="row mb-3">
-                    <div class="col-sm-3 text-center">
+                    <div class="col-sm-2 text-center">
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="clasificacion_supervisor">Clasificación del supervisor</label>
                         <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
-                            <option value=""></option>
                             <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
                             <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>"><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
                             <?php } ?>
@@ -129,4 +100,3 @@
     </div>
 
 </main>
-

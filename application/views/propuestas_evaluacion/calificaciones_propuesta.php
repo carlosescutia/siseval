@@ -40,7 +40,9 @@
                             <div class="card h-100 ms-3">
                                 <div class="card-header">Puntaje total</div>
                                 <div class="card-body d-flex align-items-center justify-content-center">
+                                    <?php if ($calificacion_final_propuesta_evaluacion) { ?>
                                     <h3 class="display-3"><?= $calificacion_final_propuesta_evaluacion['puntaje'] ?></h3>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +50,9 @@
                             <div class="card h-100 ms-3">
                                 <div class="card-header">Probabilidad de inclusión en la Agenda Anual de Evaluación</div>
                                 <div class="card-body d-flex align-items-center justify-content-center">
+                                    <?php if ($calificacion_final_propuesta_evaluacion) { ?>
                                     <h1><?= $calificacion_final_propuesta_evaluacion['probabilidad'] ?></h1>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
