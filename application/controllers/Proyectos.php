@@ -32,6 +32,20 @@ class Proyectos extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
+            $filtros = $this->input->post();
+            if ($filtros) {
+                $cve_dependencia_filtro = $filtros['cve_dependencia_filtro'];
+                $anexo_filtro = $filtros['anexo_filtro'];
+                $propuesta_filtro = $filtros['propuesta_filtro'];
+            } else {
+                $cve_dependencia_filtro = '0';
+                $anexo_filtro = '0';
+                $propuesta_filtro = '0';
+			}
+            $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
+            $data['anexo_filtro'] = $anexo_filtro;
+            $data['propuesta_filtro'] = $propuesta_filtro;
+
             $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia, $cve_rol);
             $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, $cve_rol);
 
