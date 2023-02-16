@@ -88,15 +88,13 @@ class Calificaciones_propuesta extends CI_Controller {
                 $data = array(
                     'id_propuesta_evaluacion' => $calificacion_propuesta['id_propuesta_evaluacion'],
                     'cve_dependencia' => $calificacion_propuesta['cve_dependencia'],
-                    'obligatorias' => $calificacion_propuesta['obligatorias'],
-                    'solicitud' => $calificacion_propuesta['solicitud'],
-                    'intervenciones_estrategicas' => $calificacion_propuesta['intervenciones_estrategicas'],
-                    'intervenciones_relevantes' => $calificacion_propuesta['intervenciones_relevantes'],
-                    'peso_presupuestario' => $calificacion_propuesta['peso_presupuestario'],
-                    'tiempo_ejecucion' => $calificacion_propuesta['tiempo_ejecucion'],
+                    'evaluacion_obligatoria' => $calificacion_propuesta['evaluacion_obligatoria'],
+                    'incidencias_programa' => $calificacion_propuesta['incidencias_programa'],
+                    'agenda2030' => $calificacion_propuesta['agenda2030'],
+                    'pertinencia_evaluacion' => $calificacion_propuesta['pertinencia_evaluacion'],
+                    'ciclo_evaluativo' => $calificacion_propuesta['ciclo_evaluativo'],
+                    'recomendaciones_previas' => $calificacion_propuesta['recomendaciones_previas'],
                     'informacion_disponible' => $calificacion_propuesta['informacion_disponible'],
-                    'mayor_cobertura' => $calificacion_propuesta['mayor_cobertura'],
-                    'tiempo_razonable' => $calificacion_propuesta['tiempo_razonable'],
                     'clasificacion_supervisor' => $calificacion_propuesta['clasificacion_supervisor'],
                     'comentarios' => $calificacion_propuesta['comentarios']
                 );
@@ -108,7 +106,7 @@ class Calificaciones_propuesta extends CI_Controller {
 				$nom_usuario = $this->session->userdata('nom_usuario');
 				$nom_dependencia = $this->session->userdata('nom_dependencia');
 				$entidad = 'calificaciones_propuesta';
-                $valor = $id_calificacion_propuesta . " " . $calificacion_propuesta['cve_proyecto'];
+                $valor = $id_calificacion_propuesta . " " . $calificacion_propuesta['cve_dependencia'];
 				$data = array(
 					'fecha' => date("Y-m-d"),
 					'hora' => date("H:i"),

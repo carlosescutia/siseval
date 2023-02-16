@@ -1,5 +1,6 @@
 /* Eliminar vistas para permitir eliminar tablas dependientes */
-DROP VIEW IF EXISTS calificaciones_proyectos;
+DROP VIEW IF EXISTS puntaje_calificacion_propuesta;
+DROP VIEW IF EXISTS puntaje_calificacion_dependencia;
 
 /* Tablas de información del sistema */
 
@@ -70,15 +71,13 @@ CREATE TABLE calificaciones_propuesta (
     id_calificacion_propuesta serial,
     id_propuesta_evaluacion integer,
     cve_dependencia integer,
-    obligatorias integer,
-    solicitud integer,
-    intervenciones_estrategicas integer,
-    intervenciones_relevantes integer,
-    peso_presupuestario integer,
-    tiempo_ejecucion integer,
+    evaluacion_obligatoria integer,
+    incidencias_programa integer,
+    agenda2030 integer,
+    pertinencia_evaluacion integer,
+    ciclo_evaluativo integer,
+    recomendaciones_previas integer,
     informacion_disponible integer,
-    mayor_cobertura integer,
-    tiempo_razonable integer,
     clasificacion_supervisor integer,
     comentarios text
 );
@@ -166,20 +165,34 @@ CREATE TABLE bitacora (
 /* Vistas para reportes */
 
 /*
-Vista calificaciones_proyectos
+Vista puntaje_calificacion_dependencia
 -----------------------
-Se obtienen proyectos con propuesta de evaluación calificada
-*/
-CREATE VIEW calificaciones_proyectos AS
+Se obtiene puntaje de dependencia de calificación de propuesta
+ */
+CREATE VIEW puntaje_calificacion_dependencia AS
 SELECT 
-	pe.cve_proyecto,
-	cp.id_propuesta_evaluacion, 
-	te.nom_tipo_evaluacion, 
-	sum(obligatorias + solicitud + intervenciones_estrategicas + intervenciones_relevantes + peso_presupuestario + tiempo_ejecucion + informacion_disponible + mayor_cobertura + tiempo_razonable) / 5 as puntaje, 
-	(select nom_probabilidad_inclusion from probabilidades_inclusion where (sum(obligatorias + solicitud + intervenciones_estrategicas + intervenciones_relevantes + peso_presupuestario + tiempo_ejecucion + informacion_disponible + mayor_cobertura + tiempo_razonable) / 5) between min and max) as probabilidad 
+    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
+    (case
+        when evaluacion_obligatoria = 1 or incidencias_programa = 1 then 500
+        else (agenda2030 + pertinencia_evaluacion + ciclo_evaluativo + recomendaciones_previas + informacion_disponible)
+    end) / 5 as puntaje
 FROM 
-	calificaciones_propuesta cp 
-	left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion 
-	left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
+    calificaciones_propuesta cp
+    left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
+    left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
+    left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
+
+/*
+Vista puntaje_calificacion_propuesta
+-----------------------
+Se obtiene puntaje de calificaciones de propuestas
+ */
+CREATE VIEW puntaje_calificacion_propuesta AS
+SELECT 
+    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, 
+    sum(pcd.puntaje) as puntaje,
+    (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max) as probabilidad
+FROM 
+    puntaje_calificacion_dependencia pcd
 GROUP BY 
-	pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion;
+    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion ;
