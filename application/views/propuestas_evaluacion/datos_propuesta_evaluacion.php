@@ -1,5 +1,5 @@
 <div class="card mt-0 mb-3 tabla-datos">
-    <div class="card-header text-white header-nivel2">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
+    <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
         <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar/">
             <div class="row mb-3">

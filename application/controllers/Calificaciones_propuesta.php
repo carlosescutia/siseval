@@ -94,6 +94,7 @@ class Calificaciones_propuesta extends CI_Controller {
                     'pertinencia_evaluacion' => $calificacion_propuesta['pertinencia_evaluacion'],
                     'ciclo_evaluativo' => $calificacion_propuesta['ciclo_evaluativo'],
                     'recomendaciones_previas' => $calificacion_propuesta['recomendaciones_previas'],
+                    'justificacion_no_atencion' => $calificacion_propuesta['justificacion_no_atencion'],
                     'informacion_disponible' => $calificacion_propuesta['informacion_disponible'],
                     'clasificacion_supervisor' => $calificacion_propuesta['clasificacion_supervisor'],
                     'comentarios' => $calificacion_propuesta['comentarios']

@@ -3,7 +3,7 @@
         <div class="col-sm-12 alternate-color">
             <div class="row">
                 <div class="col-sm-8 text-start">
-                    <h1 class="h2">Programas a integrar la Agenda anual de evaluación</h1>
+                    <h1 class="h2">Proyecto de programas a integrar la Agenda anual de evaluación</h1>
                 </div>
                 <div class="col-sm-4 text-end">
                     <form>

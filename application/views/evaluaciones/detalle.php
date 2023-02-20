@@ -1,7 +1,7 @@
 <main role="main" class="ml-sm-auto px-4">
 
     <div class="card mt-3 mb-3 tabla-datos">
-        <div class="card-header text-white header-nivel2">
+        <div class="card-header text-white bg-primary">
             <?= $evaluacion['cve_proyecto'] ?> - <?= $evaluacion['periodo'] ?>: <?= $evaluacion['tipo_evaluacion'] ?> (<?= $evaluacion['dependencia_responsable'] ?>)
         </div>
         <div class="card-body">
