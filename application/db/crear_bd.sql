@@ -13,7 +13,8 @@ CREATE TABLE proyectos (
     cve_programa text,
     periodo integer,
     presupuesto_aprobado numeric (12,2),
-    cve_tipo_gasto text
+    cve_tipo_gasto text,
+    anexo_social integer
 );
 
 DROP TABLE IF EXISTS programas;

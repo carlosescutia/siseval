@@ -35,19 +35,27 @@ class Proyectos extends CI_Controller {
             $filtros = $this->input->post();
             if ($filtros) {
                 $cve_dependencia_filtro = $filtros['cve_dependencia_filtro'];
-                $anexo_filtro = $filtros['anexo_filtro'];
-                $propuesta_filtro = $filtros['propuesta_filtro'];
+                $anexo_social = $filtros['anexo_social'];
+                $evaluaciones_propuestas = $filtros['evaluaciones_propuestas'];
             } else {
-                $cve_dependencia_filtro = '0';
-                $anexo_filtro = '0';
-                $propuesta_filtro = '0';
+                $cve_dependencia_filtro = $cve_dependencia;
+                if ($cve_rol == 'sup') {
+                    $cve_dependencia_filtro = '%';
+                }
+                $anexo_social = '0';
+                $evaluaciones_propuestas = '0';
 			}
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
-            $data['anexo_filtro'] = $anexo_filtro;
-            $data['propuesta_filtro'] = $propuesta_filtro;
+            $data['anexo_social'] = $anexo_social;
+            $data['evaluaciones_propuestas'] = $evaluaciones_propuestas;
 
-            $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia, $cve_rol);
-            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, $cve_rol);
+            $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
+            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro);
+            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                $cve_dependencia = '%';
+            }
+
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('proyectos/index', $data);

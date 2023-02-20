@@ -12,23 +12,25 @@
                         <div class="row">
                             <div class="col-2">
                                 <select class="form-select form-select-sm" name="cve_dependencia_filtro">
-                                    <option value="" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
-                                    <?php foreach ($dependencias as $dependencias_item) { ?>
-                                    <option value="<?= $dependencias_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_item['nom_dependencia']?></option>
+                                    <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
+                                        <option value="%" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
+                                    <?php } ?>
+                                    <?php foreach ($dependencias_filtro as $dependencias_filtro_item) { ?>
+                                    <option value="<?= $dependencias_filtro_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_filtro_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_filtro_item['nom_dependencia']?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select class="form-select form-select-sm" name="anexo_filtro">
-                                    <option value="" <?= ($anexo_filtro == '') ? 'selected' : '' ?> >Todos los proyectos</option>
-                                    <option value="1" <?= ($anexo_filtro == '1') ? 'selected' : '' ?>>Solamente proyectos del anexo social</option>
+                                <select class="form-select form-select-sm" name="anexo_social">
+                                    <option value="0" <?= ($anexo_social == '0') ? 'selected' : '' ?> >Todos los proyectos</option>
+                                    <option value="1" <?= ($anexo_social == '1') ? 'selected' : '' ?>>Solamente proyectos del anexo social</option>
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select class="form-select form-select-sm" name="propuesta_filtro">
-                                    <option value="" <?= ($propuesta_filtro == '') ? 'selected' : '' ?> >Con y sin evaluaciones propuestas</option>
-                                    <option value="1" <?= ($propuesta_filtro == '1') ? 'selected' : '' ?> >Solamente proyectos con evaluaciones propuestas</option>
-                                    <option value="2" <?= ($propuesta_filtro == '2') ? 'selected' : '' ?> >Solamente proyectos sin evaluaciones propuestas</option>
+                                <select class="form-select form-select-sm" name="evaluaciones_propuestas">
+                                    <option value="0" <?= ($evaluaciones_propuestas == '0') ? 'selected' : '' ?> >Con y sin evaluaciones propuestas</option>
+                                    <option value="1" <?= ($evaluaciones_propuestas == '1') ? 'selected' : '' ?> >Solamente proyectos con evaluaciones propuestas</option>
+                                    <option value="2" <?= ($evaluaciones_propuestas == '2') ? 'selected' : '' ?> >Solamente proyectos sin evaluaciones propuestas</option>
                                 </select>
                             </div>
                             <div class="col-1">
