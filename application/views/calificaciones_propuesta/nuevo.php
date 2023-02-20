@@ -54,6 +54,10 @@
                         </select>
                     </div>
                     <div class="col-sm-4">
+                        <label for="justificacion_no_atencion">Justificación de no atención</label>
+                        <input type="text" class="form-control" name="justificacion_no_atencion" id="justificacion_no_atencion">
+                    </div>
+                    <div class="col-sm-4">
                         <label for="informacion_disponible">Información disponible</label>
                         <select class="form-select" name="informacion_disponible" id="informacion_disponible">
                             <option value="100">Alta</option>

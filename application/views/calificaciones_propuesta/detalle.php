@@ -1,6 +1,6 @@
 <main role="main" class="ml-sm-auto px-4">
     <div class="card mt-0 mb-3 tabla-datos">
-        <div class="card-header text-white header-nivel3">Calificación <?= $calificacion_propuesta['nom_dependencia'] ?></div>
+        <div class="card-header text-white bg-primary">Calificación <?= $calificacion_propuesta['nom_dependencia'] ?></div>
         <div class="card-body">
             <form method="post" action="<?= base_url() ?>calificaciones_propuesta/guardar/">
                 <div class="row mb-3">
@@ -52,6 +52,10 @@
                             <option value="33" <?= ($calificacion_propuesta['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
                             <option value="0" <?= ($calificacion_propuesta['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
                         </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="justificacion_no_atencion">Justificación de no atención</label>
+                        <input type="text" class="form-control" name="justificacion_no_atencion" id="justificacion_no_atencion" value="<?=$calificacion_propuesta['justificacion_no_atencion']?>">
                     </div>
                     <div class="col-sm-4">
                         <label for="informacion_disponible">Información disponible</label>

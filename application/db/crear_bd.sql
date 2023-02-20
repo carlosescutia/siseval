@@ -78,6 +78,7 @@ CREATE TABLE calificaciones_propuesta (
     pertinencia_evaluacion integer,
     ciclo_evaluativo integer,
     recomendaciones_previas integer,
+    justificacion_no_atencion text,
     informacion_disponible integer,
     clasificacion_supervisor integer,
     comentarios text
