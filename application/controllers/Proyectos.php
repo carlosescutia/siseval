@@ -8,6 +8,7 @@ class Proyectos extends CI_Controller {
         $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
+        $this->load->model('parametros_sistema_model');
 
         $this->load->model('proyectos_model');
         $this->load->model('programas_model');
@@ -87,6 +88,7 @@ class Proyectos extends CI_Controller {
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia);
+            $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');

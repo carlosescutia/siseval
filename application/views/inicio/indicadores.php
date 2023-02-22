@@ -4,31 +4,16 @@
             <div class="col-sm-12">
                 <div class="row mb-5">
                     <div class="col-sm-4 border-end">
-                        <h1>47</h1>
-                        <p>Programas de la dependencia</p>
+                        <h1><?= $estadisticas_proyectos['num_proyectos'] ?></h1>
+                        <p>Proyectos de la dependencia</p>
                     </div>
                     <div class="col-sm-4 border-end">
-                        <h1>2</h1>
-                        <p>Programas propuestos para evaluar</p>
+                        <h1><?= $estadisticas_proyectos['num_proyectos_propuesta'] ?></h1>
+                        <p>Propuestas de evaluación</p>
                     </div>
                     <div class="col-sm-4">
-                        <h1>2</h1>
-                        <p>Propuestas con observaciones</p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4 border-end">
-                        <h1>1</h1>
-                        <p>Evaluaciones autorizadas</p>
-                    </div>
-                    <div class="col-sm-4 border-end">
-                        <h1>1</h1>
-                        <p>Evaluaciones en proceso</p>
-                    </div>
-                    <div class="col-sm-4">
-                        <h1>0</h1>
-                        <p>Evaluaciones concluídas</p>
+                        <h1><?= $estadisticas_proyectos['num_propuestas_calificadas'] ?></h1>
+                        <p>Propuestas calificadas</p>
                     </div>
                 </div>
             </div>
