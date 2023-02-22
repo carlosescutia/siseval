@@ -163,6 +163,12 @@ CREATE TABLE bitacora (
     valor text
 );
 
+DROP TABLE IF EXISTS parametros_sistema;
+CREATE TABLE parametros_sistema (
+    cve_parametro_sistema serial,
+    nom_parametro_sistema text,
+    valor_parametro_sistema text
+);
 
 /* Vistas para reportes */
 
