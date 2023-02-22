@@ -6,7 +6,7 @@ class Proyectos_model extends CI_Model {
     }
 
     public function get_proyectos_dependencia($cve_dependencia, $anexo_social, $evaluaciones_propuestas) {
-        $sql = "select py.*, pg.*, (select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual, (select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where pg.cve_dependencia::text LIKE ? ";
+        $sql = "select py.*, pg.*, (select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual, (select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as propuestas_calificadas, (select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where pg.cve_dependencia::text LIKE ? ";
 
         $parametros = array();
         array_push($parametros, "$cve_dependencia");
@@ -47,6 +47,14 @@ class Proyectos_model extends CI_Model {
         $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pcp.puntaje >= 200 ;';
         $query = $this->db->query($sql);
         return $query->result_array();
+    }
+
+    public function get_estadisticas_proyectos_dependencia($cve_dependencia) {
+        $sql = 'select sum(num_proyectos) as num_proyectos, sum(num_proyectos_propuesta) as num_proyectos_propuesta, sum(num_propuestas_calificadas) as num_propuestas_calificadas from estadisticas_dependencia where cve_dependencia::text LIKE ?';
+        $parametros = array();
+        array_push($parametros, "$cve_dependencia");
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array();
     }
 
 }

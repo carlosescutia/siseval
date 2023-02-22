@@ -105,12 +105,18 @@
                                         } else{
                                             $fondo_actual = 'bg-primary';
                                         }
+                                        if ($proyectos_item['propuestas_calificadas'] == '0') {
+                                            $fondo_calificadas = 'bg-secondary';
+                                        } else{
+                                            $fondo_calificadas = 'bg-success';
+                                        }
                                         if ($proyectos_item['status_previo'] == '0') {
                                             $fondo_previo = 'bg-secondary';
                                         } else{
                                             $fondo_previo = 'bg-primary';
                                         } ?>
                                         <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $proyectos_item['status_actual'] ?></span> evaluaciones propuestas<br>
+                                        <span class="badge rounded-pill <?=$fondo_calificadas?>"><?= $proyectos_item['propuestas_calificadas'] ?></span> propuestas calificadas<br>
                                         <span class="badge rounded-pill <?=$fondo_previo?>"><?= $proyectos_item['status_previo'] ?></span> evaluaciones previas</p>
                                     </div>
                                 </div>

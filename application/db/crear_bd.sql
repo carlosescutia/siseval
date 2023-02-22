@@ -1,6 +1,7 @@
 /* Eliminar vistas para permitir eliminar tablas dependientes */
 DROP VIEW IF EXISTS puntaje_calificacion_propuesta;
 DROP VIEW IF EXISTS puntaje_calificacion_dependencia;
+DROP VIEW IF EXISTS estadisticas_dependencia;
 
 /* Tablas de información del sistema */
 
@@ -190,6 +191,7 @@ FROM
     left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
     left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
 
+
 /*
 Vista puntaje_calificacion_propuesta
 -----------------------
@@ -204,3 +206,21 @@ FROM
     puntaje_calificacion_dependencia pcd
 GROUP BY 
     pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion ;
+
+
+/*
+Vista estadisticas_dependencia
+-----------------------
+Se obtienen estadisticas por dependencia
+ */
+CREATE VIEW estadisticas_dependencia AS
+SELECT 
+    pg.cve_dependencia,
+    count(py.cve_proyecto) as num_proyectos,
+    (select count(*) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto left join programas p on py.cve_programa = p.cve_programa where p.cve_dependencia = pg.cve_dependencia) as num_proyectos_propuesta,
+    (select count(*) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto left join programas p on p.cve_programa = py.cve_programa where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta ) and pg.cve_dependencia = p.cve_dependencia) as num_propuestas_calificadas
+FROM 
+    proyectos py  
+    left join programas pg on py.cve_programa = pg.cve_programa
+GROUP BY
+    pg.cve_dependencia ;
