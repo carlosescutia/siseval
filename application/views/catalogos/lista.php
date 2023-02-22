@@ -39,6 +39,11 @@
                     <?php include "accesos_sistema/boton.php" ?>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <?php include "parametros_sistema/boton.php" ?>
+                </div>
+            </div>
         </div>
     </div>
 </main>
