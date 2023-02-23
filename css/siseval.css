@@ -24,3 +24,9 @@
 .boton {
     text-decoration: none !important;
 }
+
+.texto-ayuda {
+    font-size: 0.9rem;
+    background-color: #FFEDC8;
+    padding: 10px;
+}

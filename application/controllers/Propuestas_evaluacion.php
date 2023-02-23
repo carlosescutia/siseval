@@ -98,6 +98,7 @@ class Propuestas_evaluacion extends CI_Controller {
                     'objetivo' => $propuesta_evaluacion['objetivo'],
                     'recursos_propios' => $propuesta_evaluacion['recursos_propios'],
                     'monto' => empty($propuesta_evaluacion['monto']) ? null : $propuesta_evaluacion['monto'],
+                    'recomendaciones_previas' => empty($propuesta_evaluacion['recomendaciones_previas']) ? null : $propuesta_evaluacion['recomendaciones_previas'],
                     'observaciones' => $propuesta_evaluacion['observaciones']
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
