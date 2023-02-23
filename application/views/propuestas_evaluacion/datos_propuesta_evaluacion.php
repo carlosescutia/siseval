@@ -110,6 +110,29 @@
                     </div>                
                     <input type="text" class="form-control" name="monto" id="monto" value="<?=$propuesta_evaluacion['monto']?>">
                 </div>
+                <div class="col-sm-6">
+                    <label for="recomendaciones_previas">
+                        Recomendaciones previas
+                        <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
+                            <i class="bi bi-info-circle"></i>
+                        </a>
+                    </label>
+                    <div class="collapse" id="ayuda_recomendaciones_previas">
+                        <div class="texto-ayuda">
+                            <ul>
+                                <li>Seleccione la opción que mejor corresponda al avance en la atención de las recomendaciones de evaluaciones previas aplicadas al programa de acuerdo a lo señalado por la dependencia que lo propone. </li>
+                                <li>Seleccione N/A cuando el programa no cuente con evaluaciones previas. </li>
+                            </ul>
+                        </div>
+                    </div>                
+                    <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
+                        <option value=""></option>
+                        <option value="100" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '100') ? 'selected' : '' ?> >Todas atendidas</option>
+                        <option value="66" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '66') ? 'selected' : '' ?> >Atendidas más del 50%</option>
+                        <option value="33" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
+                        <option value="0" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
+                    </select>
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-sm-6">

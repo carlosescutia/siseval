@@ -53,6 +53,7 @@ CREATE TABLE propuestas_evaluacion (
     objetivo text,
     recursos_propios text,
     monto numeric(12,2),
+    recomendaciones_previas integer,
     observaciones text
 );
 
@@ -182,7 +183,7 @@ SELECT
     cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
     (case
         when evaluacion_obligatoria = 1 then 500
-        else (agenda2030 + pertinencia_evaluacion + ciclo_evaluativo + recomendaciones_previas + informacion_disponible)
+        else (agenda2030 + pertinencia_evaluacion + ciclo_evaluativo + cp.recomendaciones_previas + informacion_disponible)
     end) / 5 as puntaje
 FROM 
     calificaciones_propuesta cp
