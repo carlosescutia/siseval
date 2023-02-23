@@ -74,7 +74,6 @@ CREATE TABLE calificaciones_propuesta (
     id_propuesta_evaluacion integer,
     cve_dependencia integer,
     evaluacion_obligatoria integer,
-    incidencias_programa integer,
     agenda2030 integer,
     pertinencia_evaluacion integer,
     ciclo_evaluativo integer,
@@ -182,7 +181,7 @@ CREATE VIEW puntaje_calificacion_dependencia AS
 SELECT 
     cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
     (case
-        when evaluacion_obligatoria = 1 or incidencias_programa = 1 then 500
+        when evaluacion_obligatoria = 1 then 500
         else (agenda2030 + pertinencia_evaluacion + ciclo_evaluativo + recomendaciones_previas + informacion_disponible)
     end) / 5 as puntaje
 FROM 

@@ -89,7 +89,6 @@ class Calificaciones_propuesta extends CI_Controller {
                     'id_propuesta_evaluacion' => $calificacion_propuesta['id_propuesta_evaluacion'],
                     'cve_dependencia' => $calificacion_propuesta['cve_dependencia'],
                     'evaluacion_obligatoria' => $calificacion_propuesta['evaluacion_obligatoria'],
-                    'incidencias_programa' => $calificacion_propuesta['incidencias_programa'],
                     'agenda2030' => $calificacion_propuesta['agenda2030'],
                     'pertinencia_evaluacion' => $calificacion_propuesta['pertinencia_evaluacion'],
                     'ciclo_evaluativo' => $calificacion_propuesta['ciclo_evaluativo'],
