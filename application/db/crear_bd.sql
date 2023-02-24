@@ -107,6 +107,29 @@ CREATE TABLE probabilidades_inclusion (
     nom_probabilidad_inclusion text
 );
 
+DROP TABLE IF EXISTS objetivos_desarrollo;
+CREATE TABLE objetivos_desarrollo (
+    id_objetivo_desarrollo serial,
+    cve_objetivo_desarrollo integer,
+    nom_objetivo_desarrollo text
+);
+
+DROP TABLE IF EXISTS metas_ods;
+CREATE TABLE metas_ods (
+    id_meta_ods serial,
+    cve_meta_ods text,
+    cve_objetivo_desarrollo integer,
+    nom_meta_ods text
+);
+
+DROP TABLE IF EXISTS programas_metas;
+CREATE TABLE programas_metas (
+    id_programa_meta serial,
+    cve_programa text,
+    cve_meta_ods text
+);
+
+
 
 /* Tablas de administración del sistema */
 

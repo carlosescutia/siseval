@@ -17,6 +17,7 @@ class Proyectos extends CI_Controller {
         $this->load->model('tipos_evaluacion_model');
         $this->load->model('justificaciones_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
+        $this->load->model('metas_ods_model');
     }
 
     public function index()
@@ -89,6 +90,7 @@ class Proyectos extends CI_Controller {
             $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia);
             $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
+            $data['metas'] = $this->metas_ods_model->get_metas_proyecto($cve_proyecto);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
