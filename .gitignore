@@ -1,8 +1,8 @@
 .env
 composer.lock
 
-metadatos/*
-fichas/*
+adjuntos_propuestas/*
+oficios/*
 
 application/cache/*
 !application/cache/index.html
