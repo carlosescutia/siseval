@@ -18,7 +18,7 @@ class Dependencias_model extends CI_Model {
     }
 
     public function get_dependencias_proyectos($cve_dependencia) {
-        $sql = 'select distinct pg.cve_dependencia, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on pg.cve_dependencia = d.cve_dependencia where pg.cve_dependencia::text LIKE ? order by d.nom_dependencia;';
+        $sql = 'select distinct pg.cve_dependencia, d.nom_dependencia, d.carga_evaluaciones from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on pg.cve_dependencia = d.cve_dependencia where pg.cve_dependencia::text LIKE ? order by d.nom_dependencia;';
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }

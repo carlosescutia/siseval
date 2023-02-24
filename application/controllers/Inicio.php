@@ -11,6 +11,7 @@ class Inicio extends CI_Controller {
         $this->load->model('parametros_sistema_model');
 
         $this->load->model('proyectos_model');
+        $this->load->model('dependencias_model');
     }
 
     public function index()
@@ -28,6 +29,7 @@ class Inicio extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
 
+            $data['dependencia'] = $this->dependencias_model->get_dependencia($cve_dependencia);
 
             if ($cve_rol == 'sup') {
                 $cve_dependencia = '%';
