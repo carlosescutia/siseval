@@ -9,6 +9,7 @@
         </div>
         <div class="col-md-5 ml-5">
             <?php include "calendario.php"; ?>
+            <?php include "oficio.php"; ?>
         </div>
     </div>
 
