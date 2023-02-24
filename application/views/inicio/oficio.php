@@ -1,10 +1,8 @@
-<div class="card mt-0 mb-3">
-    <div class="card-header card-sistema">
-        <strong>Oficio</strong>
-    </div>
+<div class="card mt-0 mb-3 mx-5 border-0 texto-menor">
     <div class="card-body">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <div class="mt-5">
+        <h4>Oficio de solicitud de evaluaciones</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div class="mt-3">
             <?php 
             $nombre_archivo = 'oficio_' . $nom_dependencia . '.pdf';
             $nombre_archivo_fs = './oficios/' . $nombre_archivo;

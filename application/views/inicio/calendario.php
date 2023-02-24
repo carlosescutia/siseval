@@ -1,4 +1,4 @@
-<div class="card mt-0 mb-3 text-center">
+<div class="card border-0 border-start mt-0 mb-3 text-center">
     <div class="card-body">
         <div>
             <?php foreach ($parametros_sistema as $parametros_sistema_item) {
