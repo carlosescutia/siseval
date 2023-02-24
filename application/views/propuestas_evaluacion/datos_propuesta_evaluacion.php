@@ -165,16 +165,62 @@
                 </div>
             </div>
 
+
             <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
             <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
             <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-            <?php if (in_array('99', $accesos_sistema_rol)) {
-                if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
-                    <div class="card-footer text-end">
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+            <div class="card-footer text-end">
+                <div class="row">
+                    <div class="col-sm-8 texto-menor text-start">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <?php 
+                                $nombre_archivo = 'adjunto_' . $id_propuesta_evaluacion . '.zip';
+                                $nombre_archivo_fs = './adjuntos_propuestas/' . $nombre_archivo;
+                                $nombre_archivo_url = base_url() . 'adjuntos_propuestas/' . $nombre_archivo;
+                                if ( file_exists($nombre_archivo_fs) ) { ?>
+                                    <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
+                                <?php } ?>
+                            </div>
+                            <?php if (in_array('99', $accesos_sistema_rol)) {
+                                if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
+                                <div class="col-sm-8">
+                                    <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/adjunto_propuesta">
+                                        <div class="row text-danger">
+                                            <?php if ($error) { 
+                                            echo $error;
+                                            } ?>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <input type="file" class="form-control-file" name="subir_archivo">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="submit" class="btn btn-primary btn-sm">Subir adjunto</button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                                    </form>
+                                </div>
+                                <?php } 
+                            } ?>
+                        </div>
                     </div>
-                <?php } 
-            } ?>
+                    <div class="col-sm-4">
+                        <?php if (in_array('99', $accesos_sistema_rol)) {
+                            if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                            <?php } 
+                        } ?>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
+
+    </div>
+    <div class="card-footer text-center">
+    </div>
+</div>
+

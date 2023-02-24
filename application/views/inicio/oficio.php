@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="card-footer text-center">
-        <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/enviar">
+        <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
             <div class="row text-danger">
                 <?php if ($error) { 
                 echo $error;
