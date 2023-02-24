@@ -170,7 +170,8 @@ DROP TABLE IF EXISTS dependencias;
 CREATE TABLE dependencias (
     cve_dependencia serial,
     nom_dependencia text,
-    nom_completo_dependencia text
+    nom_completo_dependencia text,
+    carga_evaluaciones integer
 );
 
 DROP TABLE IF EXISTS bitacora;

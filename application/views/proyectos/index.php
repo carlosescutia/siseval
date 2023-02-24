@@ -46,7 +46,7 @@
 
     <div class="row">
         <?php foreach ($dependencias as $dependencias_item) { ?>
-            <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>
+        <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?><span class="h6"><?= ($dependencias_item['carga_evaluaciones']) ? '' : ' - No solicita evaluaciones para el ejercicio fiscal' ?></span></h3>
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-12">

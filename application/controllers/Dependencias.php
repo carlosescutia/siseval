@@ -176,4 +176,90 @@ class Dependencias extends CI_Controller {
         }
     }
 
+    public function desactivar_evaluaciones()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $dependencias = $this->input->post();
+            if ($dependencias) {
+
+                // guardado
+                $data = array(
+                    'carga_evaluaciones' => 0
+                );
+                $cve_dependencia = $dependencias['cve_dependencia'];
+                $this->dependencias_model->guardar($data, $cve_dependencia);
+                
+                // registro en bitacora
+				$separador = ' -> ';
+				$usuario = $this->session->userdata('usuario');
+				$nom_usuario = $this->session->userdata('nom_usuario');
+				$nom_dependencia = $this->session->userdata('nom_dependencia');
+				$entidad = 'dependencias';
+                $valor = $cve_dependencia . " " . $dependencias['nom_dependencia'];
+                $accion = 'modificó';
+				$data = array(
+					'fecha' => date("Y-m-d"),
+					'hora' => date("H:i"),
+					'origen' => $_SERVER['REMOTE_ADDR'],
+					'usuario' => $usuario,
+					'nom_usuario' => $nom_usuario,
+					'nom_dependencia' => $nom_dependencia,
+					'accion' => $accion,
+					'entidad' => $entidad,
+					'valor' => $valor
+				);
+				$this->bitacora_model->guardar($data);
+
+            }
+            redirect('inicio');
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function activar_evaluaciones()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $dependencias = $this->input->post();
+            if ($dependencias) {
+
+                // guardado
+                $data = array(
+                    'carga_evaluaciones' => 1
+                );
+                $cve_dependencia = $dependencias['cve_dependencia'];
+                $this->dependencias_model->guardar($data, $cve_dependencia);
+                
+                // registro en bitacora
+				$separador = ' -> ';
+				$usuario = $this->session->userdata('usuario');
+				$nom_usuario = $this->session->userdata('nom_usuario');
+				$nom_dependencia = $this->session->userdata('nom_dependencia');
+				$entidad = 'dependencias';
+                $valor = $cve_dependencia . " " . $dependencias['nom_dependencia'];
+                $accion = 'modificó';
+				$data = array(
+					'fecha' => date("Y-m-d"),
+					'hora' => date("H:i"),
+					'origen' => $_SERVER['REMOTE_ADDR'],
+					'usuario' => $usuario,
+					'nom_usuario' => $nom_usuario,
+					'nom_dependencia' => $nom_dependencia,
+					'accion' => $accion,
+					'entidad' => $entidad,
+					'valor' => $valor
+				);
+				$this->bitacora_model->guardar($data);
+
+            }
+            redirect('inicio');
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
 }
