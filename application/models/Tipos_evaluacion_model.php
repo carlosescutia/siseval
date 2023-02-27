@@ -6,7 +6,7 @@ class Tipos_evaluacion_model extends CI_Model {
     }
 
     public function get_tipos_evaluacion() {
-        $sql = 'select * from tipos_evaluacion order by id_tipo_evaluacion;';
+        $sql = 'select * from tipos_evaluacion order by orden;';
         $query = $this->db->query($sql);
         return $query->result_array();
     }

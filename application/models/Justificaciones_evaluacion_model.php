@@ -6,7 +6,7 @@ class Justificaciones_evaluacion_model extends CI_Model {
     }
 
     public function get_justificaciones_evaluacion() {
-        $sql = 'select * from justificaciones_evaluacion order by id_justificacion_evaluacion;';
+        $sql = 'select * from justificaciones_evaluacion order by orden ;';
         $query = $this->db->query($sql);
         return $query->result_array();
     }

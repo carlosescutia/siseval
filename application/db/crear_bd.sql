@@ -60,13 +60,15 @@ CREATE TABLE propuestas_evaluacion (
 DROP TABLE IF EXISTS tipos_evaluacion;
 CREATE TABLE tipos_evaluacion (
     id_tipo_evaluacion serial,
-    nom_tipo_evaluacion text
+    nom_tipo_evaluacion text,
+    orden integer
 );
 
 DROP TABLE IF EXISTS justificaciones_evaluacion;
 CREATE TABLE justificaciones_evaluacion (
     id_justificacion_evaluacion serial,
-    nom_justificacion_evaluacion text
+    nom_justificacion_evaluacion text,
+    orden integer
 );
 
 DROP TABLE IF EXISTS calificaciones_propuesta;
@@ -89,14 +91,16 @@ DROP TABLE IF EXISTS valores_calificacion;
 CREATE TABLE valores_calificacion (
     id_valor_calificacion serial,
     puntaje integer,
-    nom_valor_calificacion text
+    nom_valor_calificacion text,
+    orden integer
 );
 
 DROP TABLE IF EXISTS clasificaciones_supervisor;
 CREATE TABLE clasificaciones_supervisor (
     id_clasificacion_supervisor serial,
     cve_clasificacion_supervisor integer,
-    nom_clasificacion_supervisor text
+    nom_clasificacion_supervisor text,
+    orden integer
 );
 
 DROP TABLE IF EXISTS probabilidades_inclusion;
@@ -104,7 +108,8 @@ CREATE TABLE probabilidades_inclusion (
     id_probabilidad_inclusion serial,
     min integer,
     max integer,
-    nom_probabilidad_inclusion text
+    nom_probabilidad_inclusion text,
+    orden integer
 );
 
 DROP TABLE IF EXISTS objetivos_desarrollo;
