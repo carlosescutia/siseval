@@ -36,10 +36,19 @@
                             <div class="col-1">
                                 <button class="btn btn-success btn-sm">Filtrar</button>
                             </div>
+            </form>
+                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                                <?php if ( $cve_rol == 'usr' ) { ?>
+                                    <div class="col-sm-3 text-end">
+                                        <form method="post" action="<?= base_url() ?>proyectos/nuevo">
+                                            <button type="submit" class="btn btn-primary">Nuevo</button>
+                                        </form>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 
@@ -90,7 +99,16 @@
                                         <p><?= $proyectos_item['cve_proyecto'] ?></p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p><a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a></p>
+                                        <p>
+                                        <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
+                                        <?php if (in_array('99', $accesos_sistema_rol)) {
+                                            if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { 
+                                                $item_eliminar = 'Proyecto: '.$proyectos_item['cve_proyecto']. ' ' .$proyectos_item['nom_proyecto'];
+                                                $url = base_url() . "proyectos/eliminar/". $proyectos_item['id_proyecto']; ?>
+                                                <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
+                                            <?php } 
+                                        } ?>
+                                        </p>
                                     </div>
                                     <div class="col-sm-1 text-center">
                                         <p><?= $proyectos_item['periodo'] ?></p>
