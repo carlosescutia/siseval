@@ -98,8 +98,21 @@ class Propuestas_evaluacion extends CI_Controller {
                     'objetivo' => $propuesta_evaluacion['objetivo'],
                     'recursos_propios' => $propuesta_evaluacion['recursos_propios'],
                     'monto' => empty($propuesta_evaluacion['monto']) ? null : $propuesta_evaluacion['monto'],
-                    'recomendaciones_previas' => empty($propuesta_evaluacion['recomendaciones_previas']) ? null : $propuesta_evaluacion['recomendaciones_previas'],
-                    'observaciones' => $propuesta_evaluacion['observaciones']
+                    'observaciones' => $propuesta_evaluacion['observaciones'],
+                    'recomendaciones_previas' => empty($propuesta_evaluacion['recomendaciones_previas']) ? 0 : $propuesta_evaluacion['recomendaciones_previas'],
+                    'justificacion_no_atencion' => $propuesta_evaluacion['justificacion_no_atencion'],
+                    'info_diagnostico' => empty($propuesta_evaluacion['info_diagnostico']) ? null : $propuesta_evaluacion['info_diagnostico'],
+                    'info_mir' => empty($propuesta_evaluacion['info_mir']) ? null : $propuesta_evaluacion['info_mir'],
+                    'info_reglasop' => empty($propuesta_evaluacion['info_reglasop']) ? null : $propuesta_evaluacion['info_reglasop'],
+                    'info_regsadm' => empty($propuesta_evaluacion['info_regsadm']) ? null : $propuesta_evaluacion['info_regsadm'],
+                    'info_fuentes_of' => empty($propuesta_evaluacion['info_fuentes_of']) ? null : $propuesta_evaluacion['info_fuentes_of'],
+                    'info_progpresup' => empty($propuesta_evaluacion['info_progpresup']) ? null : $propuesta_evaluacion['info_progpresup'],
+                    'info_padronben' => empty($propuesta_evaluacion['info_padronben']) ? null : $propuesta_evaluacion['info_padronben'],
+                    'info_lineamientos' => empty($propuesta_evaluacion['info_lineamientos']) ? null : $propuesta_evaluacion['info_lineamientos'],
+                    'info_guiasop' => empty($propuesta_evaluacion['info_guiasop']) ? null : $propuesta_evaluacion['info_guiasop'],
+                    'info_normativa' => empty($propuesta_evaluacion['info_normativa']) ? null : $propuesta_evaluacion['info_normativa'],
+                    'info_otro' => empty($propuesta_evaluacion['info_otro']) ? null : $propuesta_evaluacion['info_otro'],
+                    'otra_info_disponible' => $propuesta_evaluacion['otra_info_disponible'],
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
                 
