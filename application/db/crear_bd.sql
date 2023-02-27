@@ -53,8 +53,21 @@ CREATE TABLE propuestas_evaluacion (
     objetivo text,
     recursos_propios text,
     monto numeric(12,2),
+    observaciones text,
     recomendaciones_previas integer,
-    observaciones text
+    justificacion_no_atencion text,
+    info_diagnostico integer,
+    info_mir integer,
+    info_reglasop integer,
+    info_regsadm integer,
+    info_fuentes_of integer,
+    info_progpresup integer,
+    info_padronben integer,
+    info_lineamientos integer,
+    info_guiasop integer,
+    info_normativa integer,
+    info_otro integer,
+    otra_info_disponible text
 );
 
 DROP TABLE IF EXISTS tipos_evaluacion;

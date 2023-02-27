@@ -110,29 +110,6 @@
                     </div>                
                     <input type="text" class="form-control" name="monto" id="monto" value="<?=$propuesta_evaluacion['monto']?>">
                 </div>
-                <div class="col-sm-6">
-                    <label for="recomendaciones_previas">
-                        Recomendaciones previas
-                        <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
-                            <i class="bi bi-info-circle texto-menor"></i>
-                        </a>
-                    </label>
-                    <div class="collapse" id="ayuda_recomendaciones_previas">
-                        <div class="texto-ayuda">
-                            <ul>
-                                <li>Seleccione la opción que mejor corresponda al avance en la atención de las recomendaciones de evaluaciones previas aplicadas al programa de acuerdo a lo señalado por la dependencia que lo propone. </li>
-                                <li>Seleccione N/A cuando el programa no cuente con evaluaciones previas. </li>
-                            </ul>
-                        </div>
-                    </div>                
-                    <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
-                        <option value=""></option>
-                        <option value="100" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '100') ? 'selected' : '' ?> >Todas atendidas</option>
-                        <option value="66" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '66') ? 'selected' : '' ?> >Atendidas más del 50%</option>
-                        <option value="33" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
-                        <option value="0" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
-                    </select>
-                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-sm-6">
@@ -162,6 +139,126 @@
                         </div>
                     </div>                
                     <textarea rows="4" class="form-control" name="observaciones" id="observaciones"><?=$propuesta_evaluacion['observaciones']?></textarea>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label for="recomendaciones_previas">
+                        Recomendaciones previas
+                        <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
+                            <i class="bi bi-info-circle texto-menor"></i>
+                        </a>
+                    </label>
+                    <div class="collapse" id="ayuda_recomendaciones_previas">
+                        <div class="texto-ayuda">
+                            <ul>
+                                <li>Seleccione la opción que mejor corresponda al avance en la atención de las recomendaciones de evaluaciones previas aplicadas al programa de acuerdo a lo señalado por la dependencia que lo propone. </li>
+                                <li>Seleccione N/A cuando el programa no cuente con evaluaciones previas. </li>
+                            </ul>
+                        </div>
+                    </div>                
+                    <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
+                        <option value=""></option>
+                        <option value="100" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '100') ? 'selected' : '' ?> >Todas atendidas</option>
+                        <option value="66" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '66') ? 'selected' : '' ?> >Atendidas más del 50%</option>
+                        <option value="33" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
+                        <option value="0" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="justificacion_no_atencion">
+                        Justificación de no atención
+                        <a data-bs-toggle="collapse" href="#ayuda_justificacion_no_atencion" role="button" aria-expanded="false" aria-controls="ayuda_justificacion_no_atencion">
+                            <i class="bi bi-info-circle texto-menor"></i>
+                        </a>
+                    </label>
+                    <div class="collapse" id="ayuda_justificacion_no_atencion">
+                        <div class="texto-ayuda">
+                            Si seleccionó “Sin atender” en la casilla previa, especifique las razones por las que no se han atendido las recomendaciones.
+                        </div>
+                    </div>                
+                    <input type="text" class="form-control" name="justificacion_no_atencion" id="justificacion_no_atencion" value="<?=$propuesta_evaluacion['justificacion_no_atencion']?>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label for="info_disponible">
+                        Información disponible
+                        <a data-bs-toggle="collapse" href="#ayuda_info_disponible" role="button" aria-expanded="false" aria-controls="ayuda_info_disponible">
+                            <i class="bi bi-info-circle texto-menor"></i>
+                        </a>
+                    </label>
+                    <div class="collapse" id="ayuda_info_disponible">
+                        <div class="texto-ayuda">
+                            De las siguientes opciones marque aquellas de que dispone el programa a evaluar:
+                        </div>
+                    </div>                
+                    <div class="row texto-menor">
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_diagnostico" id="info_diagnostico" value="1" <?= ($propuesta_evaluacion['info_diagnostico'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_diagnostico">Diagnóstico</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_mir" id="info_mir" value="1" <?= ($propuesta_evaluacion['info_mir'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_mir">MIR</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_reglasop" id="info_reglasop" value="1" <?= ($propuesta_evaluacion['info_reglasop'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_reglasop">Reglas de operación</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_regsadm" id="info_regsadm" value="1" <?= ($propuesta_evaluacion['info_regsadm'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_regsadm">Registros administrativos</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_fuentes_of" id="info_fuentes_of" value="1" <?= ($propuesta_evaluacion['info_fuentes_of'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_fuentes_of">Información de fuentes oficiales</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_progpresup" id="info_progpresup" value="1" <?= ($propuesta_evaluacion['info_progpresup'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_progpresup">Información programático presupuestaria</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_padronben" id="info_padronben" value="1" <?= ($propuesta_evaluacion['info_padronben'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_padronben">Padrón de beneficiarios</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_lineamientos" id="info_lineamientos" value="1" <?= ($propuesta_evaluacion['info_lineamientos'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_regsadm">Lineamientos</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_guiasop" id="info_guiasop" value="1" <?= ($propuesta_evaluacion['info_guiasop'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_guiasop">Guías operativas</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_normativa" id="info_normativa" value="1" <?= ($propuesta_evaluacion['info_normativa'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_normativa">Normativa</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="info_otro" id="info_otro" value="1" <?= ($propuesta_evaluacion['info_otro'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="info_otro">Otro</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="otra_info_disponible">
+                        Otra información disponible
+                        <a data-bs-toggle="collapse" href="#ayuda_otra_info_disponible" role="button" aria-expanded="false" aria-controls="ayuda_otra_info_disponible">
+                            <i class="bi bi-info-circle texto-menor"></i>
+                        </a>
+                    </label>
+                    <div class="collapse" id="ayuda_otra_info_disponible">
+                        <div class="texto-ayuda">
+                            Si seleccionó “Otro” en la casilla previa, especifique la fuente o documento que contiene información del programa a evaluar.
+                        </div>
+                    </div>                
+                    <input type="text" class="form-control" name="otra_info_disponible" id="otra_info_disponible" value="<?=$propuesta_evaluacion['otra_info_disponible']?>">
                 </div>
             </div>
 
