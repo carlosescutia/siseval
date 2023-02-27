@@ -10,7 +10,7 @@
                         <label for="evaluacion_obligatoria">
                             ¿La evaluación es obligatoria?
                             <a data-bs-toggle="collapse" href="#ayuda_evaluacion_obligatoria" role="button" aria-expanded="false" aria-controls="ayuda_evaluacion_obligatoria">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_evaluacion_obligatoria">
@@ -30,7 +30,7 @@
                         <label for="agenda2030">
                             Agenda 2030
                             <a data-bs-toggle="collapse" href="#ayuda_agenda2030" role="button" aria-expanded="false" aria-controls="ayuda_agenda2030">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_agenda2030">
@@ -50,7 +50,7 @@
                         <label for="pertinencia_evaluacion">
                             Pertinencia de evaluación
                             <a data-bs-toggle="collapse" href="#ayuda_pertinencia_evaluacion" role="button" aria-expanded="false" aria-controls="ayuda_pertinencia_evaluacion">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_pertinencia_evaluacion">
@@ -71,7 +71,7 @@
                         <label for="ciclo_evaluativo">
                             Ciclo evaluativo
                             <a data-bs-toggle="collapse" href="#ayuda_ciclo_evaluativo" role="button" aria-expanded="false" aria-controls="ayuda_ciclo_evaluativo">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_ciclo_evaluativo">
@@ -105,7 +105,7 @@
                         <label for="recomendaciones_previas">
                             Recomendaciones previas
                             <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_recomendaciones_previas">
@@ -131,7 +131,7 @@
                         <label for="informacion_disponible">
                             Información disponible
                             <a data-bs-toggle="collapse" href="#ayuda_informacion_disponible" role="button" aria-expanded="false" aria-controls="ayuda_informacion_disponible">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_informacion_disponible">
@@ -161,7 +161,7 @@
                         <label for="clasificacion_supervisor">
                             Clasificación del supervisor
                             <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_clasificacion_supervisor">
@@ -179,7 +179,7 @@
                         <label for="comentarios">
                             Comentarios
                             <a data-bs-toggle="collapse" href="#ayuda_comentarios" role="button" aria-expanded="false" aria-controls="ayuda_comentarios">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_comentarios">
