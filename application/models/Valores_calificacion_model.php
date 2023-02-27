@@ -6,7 +6,7 @@ class Valores_calificacion_model extends CI_Model {
     }
 
     public function get_valores_calificacion() {
-        $sql = 'select * from valores_calificacion order by puntaje;';
+        $sql = 'select * from valores_calificacion order by orden;';
         $query = $this->db->query($sql);
         return $query->result_array();
     }
