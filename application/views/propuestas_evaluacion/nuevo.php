@@ -9,7 +9,7 @@
                         <label for="id_tipo_evaluacion">
                             Tipo de evaluación
                             <a data-bs-toggle="collapse" href="#ayuda_id_tipo_evaluacion" role="button" aria-expanded="false" aria-controls="ayuda_id_tipo_evaluacion">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_id_tipo_evaluacion">
@@ -28,7 +28,7 @@
                         <label for="otro_tipo_evaluacion">
                             Especifique en caso de Otro tipo
                             <a data-bs-toggle="collapse" href="#ayuda_otro_tipo_evaluacion" role="button" aria-expanded="false" aria-controls="ayuda_otro_tipo_evaluacion">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_otro_tipo_evaluacion">
@@ -44,7 +44,7 @@
                         <label for="id_justificacion_evaluacion">
                             Justificación
                             <a data-bs-toggle="collapse" href="#ayuda_id_justificacion_evaluacion" role="button" aria-expanded="false" aria-controls="ayuda_id_justificacion_evaluacion">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_id_justificacion_evaluacion">
@@ -63,7 +63,7 @@
                         <label for="otra_justificacion_evaluacion">
                             Especifique en caso de Otra Justificación
                             <a data-bs-toggle="collapse" href="#ayuda_otra_justificacion_evaluacion" role="button" aria-expanded="false" aria-controls="ayuda_otra_justificacion_evaluacion">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_otra_justificacion_evaluacion">
@@ -79,7 +79,7 @@
                         <label for="recursos_propios">
                             ¿Se financiará con recursos propios?
                             <a data-bs-toggle="collapse" href="#ayuda_recursos_propios" role="button" aria-expanded="false" aria-controls="ayuda_recursos_propios">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_recursos_propios">
@@ -102,7 +102,7 @@
                         <label for="monto">
                             Monto
                             <a data-bs-toggle="collapse" href="#ayuda_monto" role="button" aria-expanded="false" aria-controls="ayuda_monto">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_monto">
@@ -116,7 +116,7 @@
                         <label for="recomendaciones_previas">
                             Recomendaciones previas
                             <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_recomendaciones_previas">
@@ -141,7 +141,7 @@
                         <label for="objetivo">
                             Objetivo
                             <a data-bs-toggle="collapse" href="#ayuda_objetivo" role="button" aria-expanded="false" aria-controls="ayuda_objetivo">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_objetivo">
@@ -155,7 +155,7 @@
                         <label for="observaciones">
                             Observaciones
                             <a data-bs-toggle="collapse" href="#ayuda_observaciones" role="button" aria-expanded="false" aria-controls="ayuda_observaciones">
-                                <i class="bi bi-info-circle"></i>
+                                <i class="bi bi-info-circle texto-menor"></i>
                             </a>
                         </label>
                         <div class="collapse" id="ayuda_observaciones">
