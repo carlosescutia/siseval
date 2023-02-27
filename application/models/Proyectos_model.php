@@ -57,4 +57,24 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function guardar($data, $id_proyecto)
+    {
+        if ($id_proyecto) {
+            $this->db->where('id_proyecto', $id_proyecto);
+            $this->db->update('proyectos', $data);
+            $id = $id_proyecto;
+        } else {
+            $this->db->insert('proyectos', $data);
+            $id = $this->db->insert_id();
+        }
+        return $id;
+    }
+
+    public function eliminar($id_proyecto)
+    {
+        $this->db->where('id_proyecto', $id_proyecto);
+        $result = $this->db->delete('proyectos');
+    }
+
+
 }
