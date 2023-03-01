@@ -144,9 +144,15 @@ class Proyectos extends CI_Controller {
                     }
                 } 
 
+                $cve_dependencia = $this->session->userdata('cve_dependencia');
+                $reg_consecutivo = $this->proyectos_model->get_consecutivo_dependencia($cve_dependencia);
+                $consecutivo = $reg_consecutivo['consecutivo'];
+                $consecutivo++;
+                $cve_proyecto_nuevo = 'PRN' . str_pad($consecutivo, 2, '0', STR_PAD_LEFT) ;
+
                 // guardado
                 $data = array(
-                    'cve_proyecto' => $proyecto['cve_proyecto'],
+                    'cve_proyecto' => $cve_proyecto_nuevo,
                     'nom_proyecto' => $proyecto['nom_proyecto'],
                     'periodo' => $periodo,
                     'presupuesto_aprobado' => $proyecto['presupuesto_aprobado'],
@@ -161,7 +167,7 @@ class Proyectos extends CI_Controller {
 				$nom_usuario = $this->session->userdata('nom_usuario');
 				$nom_dependencia = $this->session->userdata('nom_dependencia');
 				$entidad = 'proyectos';
-                $valor = $cve_proyecto . " " . $proyecto['nom_proyecto'];
+                $valor = $cve_proyecto_nuevo . " " . $proyecto['nom_proyecto'];
 				$data = array(
 					'fecha' => date("Y-m-d"),
 					'hora' => date("H:i"),
