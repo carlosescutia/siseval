@@ -15,12 +15,6 @@
 
         <div class="col-md-12">
             <div class="form-group row">
-                <label for="cve_proyecto" class="col-sm-2 col-form-label">Clave del proyecto</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="cve_proyecto" id="cve_proyecto">
-                </div>
-            </div>
-            <div class="form-group row">
                 <label for="nom_proyecto" class="col-sm-2 col-form-label">Nombre del proyecto</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="nom_proyecto" id="nom_proyecto">
@@ -28,7 +22,7 @@
             </div>
             <div class="form-group row">
                 <label for="presupuesto_aprobado" class="col-sm-2 col-form-label">Presupuesto aprobado</label>
-                <div class="col-sm-10">
+                <div class="col-sm-2">
                     <input type="text" class="form-control" name="presupuesto_aprobado" id="presupuesto_aprobado">
                 </div>
             </div>

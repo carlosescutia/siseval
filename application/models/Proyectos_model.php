@@ -57,6 +57,13 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_consecutivo_dependencia($cve_dependencia)
+    {
+        $sql = "select max(right(py.cve_proyecto, 2)) as consecutivo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where left(pg.cve_programa, 3) = 'PRO' and pg.cve_dependencia = ?";
+        $query = $this->db->query($sql, array($cve_dependencia));
+        return $query->row_array();
+    }
+
     public function guardar($data, $id_proyecto)
     {
         if ($id_proyecto) {
