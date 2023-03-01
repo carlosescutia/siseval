@@ -43,9 +43,9 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_programas_agenda_evaluacion() {
-        $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pcp.puntaje >= 200 ;';
-        $query = $this->db->query($sql);
+    public function get_programas_agenda_evaluacion($cve_dependencia) {
+        $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pg.cve_dependencia::text LIKE ? and pcp.puntaje >= 200 ;';
+        $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }
 

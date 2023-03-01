@@ -37,8 +37,9 @@ class Reportes extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
             $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
             $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
+            $data['cve_dependencia'] = $cve_dependencia;
             $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
             $data['cve_rol'] = $cve_rol;
             $data['nom_usuario'] = $this->session->userdata('nom_usuario');
@@ -46,7 +47,10 @@ class Reportes extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
-            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion();
+            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                $cve_dependencia = '%';
+            }
+            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/listado_programas_agenda_evaluacion_01', $data);
@@ -60,8 +64,9 @@ class Reportes extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
             $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
             $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
+            $data['cve_dependencia'] = $cve_dependencia;
             $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
             $data['cve_rol'] = $cve_rol;
             $data['nom_usuario'] = $this->session->userdata('nom_usuario');
@@ -73,8 +78,11 @@ class Reportes extends CI_Controller {
             $this->load->helper('file');
             $this->load->helper('download');
 
-            $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pcp.puntaje >= 200 ;';
-            $query = $this->db->query($sql);
+            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                $cve_dependencia = '%';
+            }
+            $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pg.cve_dependencia::text LIKE ? and pcp.puntaje >= 200 ;';
+            $query = $this->db->query($sql, array($cve_dependencia));
 
             $delimiter = ",";
             $newline = "\r\n";
