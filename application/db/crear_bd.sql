@@ -1,4 +1,4 @@
-/* Eliminar vistas para permitir eliminar tablas dependientes */
+    /* Eliminar vistas para permitir eliminar tablas dependientes */
 DROP VIEW IF EXISTS puntaje_calificacion_propuesta;
 DROP VIEW IF EXISTS puntaje_calificacion_dependencia;
 DROP VIEW IF EXISTS estadisticas_dependencia;
@@ -10,6 +10,7 @@ CREATE TABLE proyectos (
     id_proyecto serial,
     cve_proyecto text,
     cve_anterior_proyecto text,
+    cve_dependencia integer,
     nom_proyecto text,
     cve_programa text,
     periodo integer,
@@ -257,12 +258,11 @@ Se obtienen estadisticas por dependencia
  */
 CREATE VIEW estadisticas_dependencia AS
 SELECT 
-    pg.cve_dependencia,
+    py.cve_dependencia,
     count(py.cve_proyecto) as num_proyectos,
-    (select count(*) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto left join programas p on py.cve_programa = p.cve_programa where p.cve_dependencia = pg.cve_dependencia) as num_proyectos_propuesta,
-    (select count(*) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto left join programas p on p.cve_programa = py.cve_programa where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta ) and pg.cve_dependencia = p.cve_dependencia) as num_propuestas_calificadas
+    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where proy.cve_dependencia = py.cve_dependencia) as num_proyectos_propuesta,
+    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta) and proy.cve_dependencia = py.cve_dependencia) as num_propuestas_calificadas
 FROM 
     proyectos py  
-    left join programas pg on py.cve_programa = pg.cve_programa
 GROUP BY
-    pg.cve_dependencia ;
+    py.cve_dependencia ;

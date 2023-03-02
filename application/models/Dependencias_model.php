@@ -17,9 +17,32 @@ class Dependencias_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_dependencias_proyectos($cve_dependencia) {
-        $sql = 'select distinct pg.cve_dependencia, d.nom_dependencia, d.carga_evaluaciones from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on pg.cve_dependencia = d.cve_dependencia where pg.cve_dependencia::text LIKE ? order by d.nom_dependencia;';
-        $query = $this->db->query($sql, array($cve_dependencia));
+    public function get_dependencias_proyectos($cve_dependencia, $anexo_social, $evaluaciones_propuestas) {
+        $sql = ''
+			.'select  '
+			.'py.cve_dependencia, d.nom_dependencia, d.carga_evaluaciones, '
+			.'count(*) as num_proyectos '
+			.'from  '
+			.'proyectos py  '
+			.'left join dependencias d on py.cve_dependencia = d.cve_dependencia  '
+			.'where  '
+			.'py.cve_dependencia::text LIKE ?  '
+			.'';
+        $parametros = array();
+        array_push($parametros, "$cve_dependencia");
+        if ($anexo_social > 0) {
+            $sql .= ' and py.anexo_social = ?';
+            array_push($parametros, "$anexo_social");
+        }
+        if ($evaluaciones_propuestas == '1') {
+            $sql .= ' and (select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) > 0';
+        }
+        if ($evaluaciones_propuestas == '2') {
+            $sql .= ' and (select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) = 0';
+        }
+		$sql .= ' group by py.cve_dependencia, d.nom_dependencia, d.carga_evaluaciones  ';
+        $sql .= ' order by py.cve_dependencia;';
+        $query = $this->db->query($sql, $parametros);
         return $query->result_array();
     }
 
