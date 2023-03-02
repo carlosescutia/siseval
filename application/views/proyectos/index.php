@@ -38,13 +38,11 @@
                             </div>
             </form>
                             <?php if (in_array('99', $accesos_sistema_rol)) { ?>
-                                <?php if ( $cve_rol == 'usr' ) { ?>
-                                    <div class="col-sm-3 text-end">
-                                        <form method="post" action="<?= base_url() ?>proyectos/nuevo">
-                                            <button type="submit" class="btn btn-primary">Nuevo</button>
-                                        </form>
-                                    </div>
-                                <?php } ?>
+                                <div class="col-sm-3 text-end">
+                                    <form method="post" action="<?= base_url() ?>proyectos/nuevo">
+                                        <button type="submit" class="btn btn-primary">Nuevo</button>
+                                    </form>
+                                </div>
                             <?php } ?>
                         </div>
                     </div>
