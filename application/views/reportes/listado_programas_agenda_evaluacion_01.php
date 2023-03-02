@@ -8,6 +8,7 @@
                 <div class="col-sm-4 text-end">
                     <form>
                         <button formaction="<?= base_url() ?>reportes/listado_programas_agenda_evaluacion_01_csv" class="btn btn-primary">Exportar a excel</button>
+                        <a href="javascript:window.print()" class="btn btn-primary">Generar pdf</a>
                     </form>
                 </div>
             </div>

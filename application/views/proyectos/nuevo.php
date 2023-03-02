@@ -33,6 +33,12 @@
                         <option value=""></option>
                         <option value="P">P</option>
                         <option value="Q">Q</option>
+                        <option value="PP">PP</option>
+                        <option value="Politica">Política</option>
+                        <option value="Estrategia">Estrategia</option>
+                        <option value="Estudio">Estudio</option>
+                        <option value="Diagnostico">Diagnóstico</option>
+                        <option value="Ninguno">Ninguno</option>
                     </select>
                 </div>
             </div>

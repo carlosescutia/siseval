@@ -1,7 +1,8 @@
 <div class="card mt-0 mb-3 mx-5 border-0 texto-menor">
     <div class="card-body">
         <h4>Oficio de solicitud de evaluaciones</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Una vez cargada la propuesta de evaluaciones a realizar en 2023, favor de adjuntar el oficio mediante el que se hace la solicitud.</p>
+        <p>En caso de no solicitar evaluaciones para el ejercicio fiscal actual, de igual forma le solicitamos cargar el oficio de confirmación.</p>
         <div class="mt-3">
             <?php 
             $nombre_archivo = 'oficio_' . $nom_dependencia . '.pdf';
