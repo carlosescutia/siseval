@@ -163,6 +163,7 @@
                         <option value="66" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '66') ? 'selected' : '' ?> >Atendidas más del 50%</option>
                         <option value="33" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
                         <option value="0" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
+                        <option value="-1" <?= ($propuesta_evaluacion['recomendaciones_previas'] == '-1') ? 'selected' : '' ?> >N/A</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
@@ -305,13 +306,13 @@
                                             <div class="col-md-4">
                                                 <button type="submit" class="btn btn-primary btn-sm">Subir adjunto</button>
                                                 <span>
-                                                    <a data-bs-toggle="collapse" href="#ayuda_adjunto" role="button" aria-expanded="false" aria-controls="ayuda_adjunto">
+                                                    <a data-bs-toggle="collapse" href="#ayuda_adjunto" role="button" aria-expanded="true" aria-controls="ayuda_adjunto">
                                                         <i class="bi bi-info-circle texto-menor"></i></a>
                                                 </span>
                                             </div>
-                                            <div class="collapse" id="ayuda_adjunto">
+                                            <div class="collapse show" id="ayuda_adjunto">
                                                 <div class="texto-ayuda text-start">
-                                                    Adjunte varios documentos comprimidos en un archivo zip
+                                                    Adjunte varios documentos comprimidos en un archivo zip. Máximo 9 MB.
                                                 </div>
                                             </div>                
                                         </div>
