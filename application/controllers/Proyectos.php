@@ -154,6 +154,7 @@ class Proyectos extends CI_Controller {
                 $data = array(
                     'cve_proyecto' => $cve_proyecto_nuevo,
                     'nom_proyecto' => $proyecto['nom_proyecto'],
+                    'cve_dependencia' => $cve_dependencia,
                     'periodo' => $periodo,
                     'presupuesto_aprobado' => $proyecto['presupuesto_aprobado'],
                     'cve_tipo_gasto' => $proyecto['cve_tipo_gasto'],
