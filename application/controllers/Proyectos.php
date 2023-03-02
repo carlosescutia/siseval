@@ -52,12 +52,12 @@ class Proyectos extends CI_Controller {
             $data['evaluaciones_propuestas'] = $evaluaciones_propuestas;
 
             $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
-            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro);
+            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
 
-            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia);
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
