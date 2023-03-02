@@ -57,7 +57,7 @@
                     <?php
                     $liga_conag = $evaluacion['liga_conag'];
                     ?>
-                    <label class="form-label">Liga conag</label>
+                    <label class="form-label">Liga CONAC</label>
                     <label class="form-control"><a href="<?=$liga_conag?>" target="_blank"><?= $liga_conag ?></a></label>
                 </div>
             </div>

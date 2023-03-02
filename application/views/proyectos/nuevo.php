@@ -23,7 +23,7 @@
             <div class="form-group row">
                 <label for="presupuesto_aprobado" class="col-sm-2 col-form-label">Presupuesto aprobado</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" name="presupuesto_aprobado" id="presupuesto_aprobado">
+                    <input type="number" class="form-control" name="presupuesto_aprobado" id="presupuesto_aprobado">
                 </div>
             </div>
             <div class="form-group row">

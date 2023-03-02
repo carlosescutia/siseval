@@ -165,6 +165,7 @@
                             <option value="66">Atendidas más del 50%</option>
                             <option value="33">Atendidas menos del 50%</option>
                             <option value="0">Sin atender</option>
+                            <option value="-1">N/A</option>
                         </select>
                     </div>
 

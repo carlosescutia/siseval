@@ -2,7 +2,9 @@
     <div class="card-body">
         <h4>Oficio de solicitud de evaluaciones</h4>
         <p>Una vez cargada la propuesta de evaluaciones a realizar en 2023, favor de adjuntar el oficio mediante el que se hace la solicitud.</p>
+        <p>Cargar un sólo documento en formato PDF incluyendo el oficio y el reporte de propuestas de evaluación.</p>
         <p>En caso de no solicitar evaluaciones para el ejercicio fiscal actual, de igual forma le solicitamos cargar el oficio de confirmación.</p>
+        <p class="text-end">Máximo 9 MB.</p>
         <div class="mt-3">
             <?php 
             $nombre_archivo = 'oficio_' . $nom_dependencia . '.pdf';
