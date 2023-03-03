@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://iplaneg.guanajuato.gob.mx/siseval/';
+$config['base_url'] = 'https://iplaneg.guanajuato.gob.mx/siseval/';
 
 /*
 |--------------------------------------------------------------------------
