@@ -39,7 +39,8 @@ CREATE TABLE evaluaciones (
     dependencia_responsable text,
     liga_general_informe_evaluacion text,
     liga_directa_informe_evaluacion text,
-    liga_conag text
+    liga_conac text,
+    observaciones text
 );
 
 DROP TABLE IF EXISTS propuestas_evaluacion;

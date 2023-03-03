@@ -34,33 +34,50 @@
                 </div>
             </div>
             <hr class="pb-3"/>
+            <?php if ($evaluacion['liga_general_informe_evaluacion'] or $evaluacion['liga_directa_informe_evaluacion'] or $evaluacion['liga_conac'] or $evaluacion['observaciones'] ) { ?>
+            <h4 class="mb-3">Informe de la evaluación</h4>
+            <?php } ?>
+            <?php if ($evaluacion['liga_general_informe_evaluacion']) { ?>
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <?php
                     $liga_general_informe_evaluacion = $evaluacion['liga_general_informe_evaluacion'];
                     ?>
-                    <label class="form-label">Liga general del informe de la evaluacion</label>
-                    <label class="form-control"><a href="<?=$liga_general_informe_evaluacion?>" target="_blank"><?= $liga_general_informe_evaluacion ?></a></label>
+                    <label class="form-label">Liga general</label>
+                    <label class="form-control border-0"><a href="<?=$liga_general_informe_evaluacion?>" target="_blank"><?= $liga_general_informe_evaluacion ?></a></label>
                 </div>
             </div>
+            <?php } ?>
+            <?php if ($evaluacion['liga_directa_informe_evaluacion']) { ?>
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <?php
                     $liga_directa_informe_evaluacion = $evaluacion['liga_directa_informe_evaluacion'];
                     ?>
-                    <label class="form-label">Liga directa del informe de la evaluacion</label>
-                    <label class="form-control"><a href="<?=$liga_directa_informe_evaluacion?>" target="_blank"><?= $liga_directa_informe_evaluacion ?></a></label>
+                    <label class="form-label">Liga directa</label>
+                    <label class="form-control border-0"><a href="<?=$liga_directa_informe_evaluacion?>" target="_blank"><?= $liga_directa_informe_evaluacion ?></a></label>
                 </div>
             </div>
+            <?php } ?>
+            <?php if ($evaluacion['liga_conac']) { ?>
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <?php
-                    $liga_conag = $evaluacion['liga_conag'];
+                    $liga_conac = $evaluacion['liga_conac'];
                     ?>
                     <label class="form-label">Liga CONAC</label>
-                    <label class="form-control"><a href="<?=$liga_conag?>" target="_blank"><?= $liga_conag ?></a></label>
+                    <label class="form-control border-0"><a href="<?=$liga_conac?>" target="_blank"><?= $liga_conac ?></a></label>
                 </div>
             </div>
+            <?php } ?>
+            <?php if ($evaluacion['observaciones']) { ?>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <label class="form-label">Observaciones</label>
+                    <label class="form-control border-0"><?= $evaluacion['observaciones'] ?></label>
+                </div>
+            </div>
+            <?php } ?>
         </div>
     </div>
 
