@@ -316,6 +316,7 @@
                                                 </div>
                                             </div>                
                                         </div>
+                                        <input type="hidden" name="id_propuesta_evaluacion" value="<?=$id_propuesta_evaluacion?>">
                                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                                     </form>
                                 </div>

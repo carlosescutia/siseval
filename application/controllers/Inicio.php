@@ -40,7 +40,7 @@ class Inicio extends CI_Controller {
             $this->load->view('inicio/inicio', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->login();
+            redirect('inicio/login');
         }
     }
 
@@ -108,7 +108,7 @@ class Inicio extends CI_Controller {
                 redirect('inicio/login');
             }
         } else {
-            $this->login();
+            redirect('inicio/login');
         }
     }
 }
