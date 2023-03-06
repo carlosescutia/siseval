@@ -91,7 +91,7 @@ class Proyectos extends CI_Controller {
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia);
-            $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
+            $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas')['valor_parametro_sistema'];
             $data['metas'] = $this->metas_ods_model->get_metas_proyecto($cve_proyecto);
 
             $this->load->view('templates/header', $data);
@@ -137,12 +137,7 @@ class Proyectos extends CI_Controller {
                     $accion = 'agregó';
                 }
 
-                $parametros_sistema = $this->parametros_sistema_model->get_parametros_sistema();
-                foreach ($parametros_sistema as $parametros_sistema_item) {
-                    if ($parametros_sistema_item['nom_parametro_sistema'] == 'anio_propuestas') {
-                        $periodo = $parametros_sistema_item['valor_parametro_sistema'];
-                    }
-                } 
+                $periodo = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas')['valor_parametro_sistema'];
 
                 $cve_dependencia = $this->session->userdata('cve_dependencia');
                 $reg_consecutivo = $this->proyectos_model->get_consecutivo_dependencia($cve_dependencia);

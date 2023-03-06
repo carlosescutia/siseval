@@ -1,9 +1,4 @@
 <div class="card mt-0 mb-3 tabla-datos">
-    <?php foreach ($parametros_sistema as $parametros_sistema_item) {
-        if ($parametros_sistema_item['nom_parametro_sistema'] == 'anio_propuestas') {
-                $anio_propuestas = $parametros_sistema_item['valor_parametro_sistema'];
-        }
-    } ?>
     <div class="card-header text-white bg-primary">Propuestas de evaluación <?= $anio_propuestas ?></div>
     <div class="card-body">
         <?php foreach ($propuestas_evaluacion as $propuestas_evaluacion_item) { ?>
