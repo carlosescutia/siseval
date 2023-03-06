@@ -108,7 +108,7 @@
                             En caso de que su respuesta en el apartado anterior haya sido “Sí”, especifique el presupuesto con el que cuenta su dependencia para realizar la evaluación.
                         </div>
                     </div>                
-                    <input type="text" class="form-control" name="monto" id="monto" value="<?=$propuesta_evaluacion['monto']?>">
+                    <input type="number" class="form-control" name="monto" id="monto" value="<?=$propuesta_evaluacion['monto']?>">
                 </div>
             </div>
             <div class="row mb-3">
