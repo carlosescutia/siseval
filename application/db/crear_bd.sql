@@ -224,11 +224,22 @@ Se obtiene puntaje de dependencia de calificación de propuesta
  */
 CREATE VIEW puntaje_calificacion_dependencia AS
 SELECT 
-    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
-    (case
-        when evaluacion_obligatoria = 1 then 500
-        else (agenda2030 + pertinencia_evaluacion + ciclo_evaluativo + cp.recomendaciones_previas + informacion_disponible)
-    end) / 5 as puntaje
+    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, 
+    pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
+	(case when cp.evaluacion_obligatoria = 1 then 100
+	else (
+		(case when cp.agenda2030 >= 0 then cp.agenda2030 else 0 end)
+		+ (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end)
+		+ (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end)
+		+ (case when cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end)
+		+ (case when cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end)
+	) / (
+		(case when cp.agenda2030 >= 0 then 1 else 0 end)
+		+ (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end)
+		+ (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end)
+		+ (case when cp.recomendaciones_previas >= 0 then 1 else 0 end)
+		+ (case when cp.informacion_disponible >= 0 then 1 else 0 end)
+	) end) as puntaje
 FROM 
     calificaciones_propuesta cp
     left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
