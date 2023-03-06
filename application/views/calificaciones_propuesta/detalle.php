@@ -45,7 +45,7 @@
                         <select class="form-select" name="agenda2030" id="agenda2030">
                             <option value="100" <?= ($calificacion_propuesta['agenda2030'] == '100') ? 'selected' : '' ?> >Si</option>
                             <option value="50" <?= ($calificacion_propuesta['agenda2030'] == '50') ? 'selected' : '' ?> >Parcialmente</option>
-                            <option value="null" <?= ($calificacion_propuesta['agenda2030'] == '50') ? 'selected' : '' ?> >Parcialmente</option>
+                            <option value="-1" <?= ($calificacion_propuesta['agenda2030'] == '-1') ? 'selected' : '' ?> >N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -67,6 +67,7 @@
                         <select class="form-select" name="pertinencia_evaluacion" id="pertinencia_evaluacion">
                             <option value="100" <?= ($calificacion_propuesta['pertinencia_evaluacion'] == '100') ? 'selected' : '' ?> >Si</option>
                             <option value="0" <?= ($calificacion_propuesta['pertinencia_evaluacion'] == '0') ? 'selected' : '' ?> >No</option>
+                            <option value="-1" <?= ($calificacion_propuesta['pertinencia_evaluacion'] == '-1') ? 'selected' : '' ?> >N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -100,6 +101,7 @@
                         <select class="form-select" name="ciclo_evaluativo" id="ciclo_evaluativo">
                             <option value="100" <?= ($calificacion_propuesta['ciclo_evaluativo'] == '100') ? 'selected' : '' ?> >Si</option>
                             <option value="0" <?= ($calificacion_propuesta['ciclo_evaluativo'] == '0') ? 'selected' : '' ?> >No</option>
+                            <option value="-1" <?= ($calificacion_propuesta['ciclo_evaluativo'] == '-1') ? 'selected' : '' ?> >N/A</option>
                         </select>
                     </div>
                 </div>
@@ -124,6 +126,7 @@
                             <option value="66" <?= ($calificacion_propuesta['recomendaciones_previas'] == '66') ? 'selected' : '' ?> >Atendidas más del 50%</option>
                             <option value="33" <?= ($calificacion_propuesta['recomendaciones_previas'] == '33') ? 'selected' : '' ?> >Atendidas menos del 50%</option>
                             <option value="0" <?= ($calificacion_propuesta['recomendaciones_previas'] == '0') ? 'selected' : '' ?> >Sin atender</option>
+                            <option value="-1" <?= ($calificacion_propuesta['recomendaciones_previas'] == '-1') ? 'selected' : '' ?> >N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -153,6 +156,7 @@
                             <option value="100" <?= ($calificacion_propuesta['informacion_disponible'] == '100') ? 'selected' : '' ?> >Alta</option>
                             <option value="50" <?= ($calificacion_propuesta['informacion_disponible'] == '50') ? 'selected' : '' ?> >Media</option>
                             <option value="0" <?= ($calificacion_propuesta['informacion_disponible'] == '0') ? 'selected' : '' ?> >Baja</option>
+                            <option value="-1" <?= ($calificacion_propuesta['informacion_disponible'] == '-1') ? 'selected' : '' ?> >N/A</option>
                         </select>
                     </div>
                 </div>

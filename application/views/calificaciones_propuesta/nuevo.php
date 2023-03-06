@@ -44,6 +44,7 @@
                         <select class="form-select" name="agenda2030" id="agenda2030">
                             <option value="100">Si</option>
                             <option value="50">Parcialmente</option>
+                            <option value="-1" selected>N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -65,6 +66,7 @@
                         <select class="form-select" name="pertinencia_evaluacion" id="pertinencia_evaluacion">
                             <option value="100">Si</option>
                             <option value="0">No</option>
+                            <option value="-1" selected>N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -97,6 +99,7 @@
                         <select class="form-select" name="ciclo_evaluativo" id="ciclo_evaluativo">
                             <option value="100">Si</option>
                             <option value="0">No</option>
+                            <option value="-1" selected>N/A</option>
                         </select>
                     </div>
                 </div>
@@ -121,6 +124,7 @@
                             <option value="66">Atendidas más del 50%</option>
                             <option value="33">Atendidas menos del 50%</option>
                             <option value="0">Sin atender</option>
+                            <option value="-1" selected>N/A</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -148,6 +152,7 @@
                             <option value="100">Alta</option>
                             <option value="50">Media</option>
                             <option value="0">Baja</option>
+                            <option value="-1" selected>N/A</option>
                         </select>
                     </div>
                 </div>
