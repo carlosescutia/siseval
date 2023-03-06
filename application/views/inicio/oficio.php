@@ -26,7 +26,7 @@
                 <div class="col-md-8">
                     <input type="file" class="form-control-file" name="subir_archivo">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 text-end">
                     <button type="submit" class="btn btn-primary btn-sm">Subir oficio</button>
                 </div>
             </div>

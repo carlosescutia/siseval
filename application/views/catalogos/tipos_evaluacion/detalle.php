@@ -7,7 +7,7 @@
                 <div class="col-md-10">
                     <h1 class="h2">Editar justificación de evaluación</h1>
                 </div>
-                <div class="col-md-2 text-right">
+                <div class="col-md-2 text-end">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </div>
