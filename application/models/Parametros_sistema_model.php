@@ -11,9 +11,15 @@ class Parametros_sistema_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_parametro_sistema($cve_parametro_sistema) {
+    public function get_parametro_sistema_cve($cve_parametro_sistema) {
         $sql = 'select * from parametros_sistema where cve_parametro_sistema = ?;';
         $query = $this->db->query($sql, array($cve_parametro_sistema));
+        return $query->row_array();
+    }
+
+    public function get_parametro_sistema_nom($nom_parametro_sistema) {
+        $sql = 'select * from parametros_sistema where nom_parametro_sistema = ?;';
+        $query = $this->db->query($sql, array($nom_parametro_sistema));
         return $query->row_array();
     }
 

@@ -57,7 +57,7 @@ class Parametros_sistema extends CI_Controller {
                 redirect('inicio');
             }
 
-            $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametro_sistema($cve_parametro_sistema);
+            $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametro_sistema_cve($cve_parametro_sistema);
 
             $this->load->view('templates/header', $data);
             $this->load->view('catalogos/parametros_sistema/detalle', $data);
@@ -146,7 +146,7 @@ class Parametros_sistema extends CI_Controller {
         if ($this->session->userdata('logueado')) {
 
             // registro en bitacora
-            $parametro_sistema = $this->parametros_sistema_model->get_parametro_sistema($cve_parametro_sistema);
+            $parametro_sistema = $this->parametros_sistema_model->get_parametro_sistema_cve($cve_parametro_sistema);
             $separador = ' -> ';
             $usuario = $this->session->userdata('usuario');
             $nom_usuario = $this->session->userdata('nom_usuario');
