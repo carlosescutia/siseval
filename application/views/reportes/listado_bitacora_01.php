@@ -22,15 +22,27 @@
                                     <option value="agregó" <?= ($accion == 'agregó') ? 'selected' : '' ?>>agregó</option>
                                     <option value="modificó" <?= ($accion == 'modificó') ? 'selected' : '' ?>>modificó</option>
                                     <option value="eliminó" <?= ($accion == 'eliminó') ? 'selected' : '' ?>>eliminó</option>
+                                    <option value="adjuntó" <?= ($accion == 'adjuntó') ? 'selected' : '' ?>>adjuntó</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <select class="form-select form-select-sm" name="entidad">
                                     <option value="" <?= ($entidad == '') ? 'selected' : '' ?>>Todas las entidades</option>
-                                    <option value="usuarios" <?= ($entidad == 'usuarios') ? 'selected' : '' ?>>usuarios</option>
-                                    <option value="opciones_sistema" <?= ($entidad == 'opciones_sistema') ? 'selected' : '' ?>>opciones_sistema</option>
-                                    <option value="accesos_sistema" <?= ($entidad == 'accesos_sistema') ? 'selected' : '' ?>>accesos_sistema</option>
+                                    <option value="proyectos" <?= ($entidad == 'proyectos') ? 'selected' : '' ?>>proyectos</option>
+                                    <option value="propuestas_evaluacion" <?= ($entidad == 'propuestas_evaluacion') ? 'selected' : '' ?>>propuestas_evaluacion</option>
+                                    <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
+                                        <option value="calificaciones_propuesta" <?= ($entidad == 'calificaciones_propuesta') ? 'selected' : '' ?>>calificaciones_propuesta</option>
+                                    <?php } ?>
                                     <option value="dependencias" <?= ($entidad == 'dependencias') ? 'selected' : '' ?>>dependencias</option>
+                                    <option value="archivos" <?= ($entidad == 'archivos') ? 'selected' : '' ?>>archivos</option>
+                                    <?php if ($cve_rol == 'adm') { ?>
+                                        <option value="usuarios" <?= ($entidad == 'usuarios') ? 'selected' : '' ?>>usuarios</option>
+                                        <option value="opciones_sistema" <?= ($entidad == 'opciones_sistema') ? 'selected' : '' ?>>opciones_sistema</option>
+                                        <option value="accesos_sistema" <?= ($entidad == 'accesos_sistema') ? 'selected' : '' ?>>accesos_sistema</option>
+                                        <option value="justificaciones_evaluacion" <?= ($entidad == 'justificaciones_evaluacion') ? 'selected' : '' ?>>justificaciones_evaluacion</option>
+                                        <option value="tipos_evaluacion" <?= ($entidad == 'tipos_evaluacion') ? 'selected' : '' ?>>tipos_evaluacion</option>
+                                        <option value="parametros_sistema" <?= ($entidad == 'parametros_sistema') ? 'selected' : '' ?>>parametros_sistema</option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div class="col-1">
