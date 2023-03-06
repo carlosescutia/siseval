@@ -46,6 +46,12 @@ class Dependencias_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_dependencias_sin_propuestas() {
+        $sql = 'select * from dependencias where carga_evaluaciones = 0 ;';
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function guardar($data, $cve_dependencia)
     {
         if ($cve_dependencia) {

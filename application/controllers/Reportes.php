@@ -10,6 +10,8 @@ class Reportes extends CI_Controller {
         $this->load->model('bitacora_model');
 
         $this->load->model('proyectos_model');
+        $this->load->model('parametros_sistema_model');
+        $this->load->model('dependencias_model');
     }
 
     public function index()
@@ -24,6 +26,8 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+
+            $data['periodo'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas')['valor_parametro_sistema'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/index', $data);
@@ -55,6 +59,39 @@ class Reportes extends CI_Controller {
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/listado_programas_agenda_evaluacion_01', $data);
             $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function listado_programas_agenda_evaluacion_01_csv()
+    {
+        if ($this->session->userdata('logueado')) {
+            $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
+            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+            $data['cve_dependencia'] = $cve_dependencia;
+            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+            $data['cve_rol'] = $cve_rol;
+            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+            $data['error'] = $this->session->flashdata('error');
+            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
+            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+
+            $this->load->dbutil();
+            $this->load->helper('file');
+            $this->load->helper('download');
+
+            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                $cve_dependencia = '%';
+            }
+            $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pg.cve_dependencia::text LIKE ? and pcp.puntaje >= 200 ;';
+            $query = $this->db->query($sql, array($cve_dependencia));
+
+            $delimiter = ",";
+            $newline = "\r\n";
+            $data = $this->dbutil->csv_from_result($query, $delimiter, $newline);
+            force_download("programas_agenda_anual_evaluacion.csv", $data);
         } else {
             redirect('inicio/login');
         }
@@ -134,7 +171,34 @@ class Reportes extends CI_Controller {
         }
     }
 
-    public function listado_programas_agenda_evaluacion_01_csv()
+    public function listado_dependencias_sin_propuestas_01()
+    {
+        if ($this->session->userdata('logueado')) {
+            $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
+            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+            $data['cve_dependencia'] = $cve_dependencia;
+            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+            $data['cve_rol'] = $cve_rol;
+            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+            $data['error'] = $this->session->flashdata('error');
+            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
+            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+
+            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                $cve_dependencia = '%';
+            }
+            $data['dependencias_sin_propuestas'] = $this->dependencias_model->get_dependencias_sin_propuestas();
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('reportes/listado_dependencias_sin_propuestas_01', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function listado_dependencias_sin_propuestas_01_csv()
     {
         if ($this->session->userdata('logueado')) {
             $cve_rol = $this->session->userdata('cve_rol');
@@ -155,13 +219,13 @@ class Reportes extends CI_Controller {
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
-            $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pg.cve_dependencia::text LIKE ? and pcp.puntaje >= 200 ;';
-            $query = $this->db->query($sql, array($cve_dependencia));
+            $sql = 'select nom_dependencia, nom_completo_dependencia from dependencias where carga_evaluaciones = 0 ;';
+			$query = $this->db->query($sql);
 
             $delimiter = ",";
             $newline = "\r\n";
             $data = $this->dbutil->csv_from_result($query, $delimiter, $newline);
-            force_download("programas_agenda_anual_evaluacion.csv", $data);
+            force_download("dependencias_sin_propuestas.csv", $data);
         } else {
             redirect('inicio/login');
         }
