@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12 alternate-color">
             <div class="row">
-                <div class="col-sm-10 text-left">
+                <div class="col-sm-10 text-start">
                     <h1 class="h2">Roles</h1>
                 </div>
             </div>
