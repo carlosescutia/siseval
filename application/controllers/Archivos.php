@@ -31,8 +31,8 @@ class Archivos extends CI_Controller {
                 $usuario = $this->session->userdata('usuario');
                 $nom_usuario = $this->session->userdata('nom_usuario');
                 $nom_dependencia = $this->session->userdata('nom_dependencia');
-                $entidad = 'dependencias';
-                $valor = $nombre_archivo;
+                $entidad = 'archivos';
+                $valor = $nom_dependencia . $separador . $nombre_archivo;
                 $accion = 'adjuntó';
                 $data = array(
                     'fecha' => date("Y-m-d"),
@@ -74,8 +74,8 @@ class Archivos extends CI_Controller {
                 $usuario = $this->session->userdata('usuario');
                 $nom_usuario = $this->session->userdata('nom_usuario');
                 $nom_dependencia = $this->session->userdata('nom_dependencia');
-                $entidad = 'propuestas_evaluacion';
-                $valor = $nombre_archivo;
+                $entidad = 'archivos';
+                $valor = 'propuestas_eval.' . $separador . $nombre_archivo;
                 $accion = 'adjuntó';
                 $data = array(
                     'fecha' => date("Y-m-d"),
