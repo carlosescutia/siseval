@@ -47,7 +47,7 @@
                     <ul class="navbar-nav mr-auto">
                         <?php foreach ($opciones_sistema as $opciones_sistema_item) {
                             if (in_array($opciones_sistema_item['cod_opcion'], $accesos_sistema_rol) && $opciones_sistema_item['es_menu'] ) { ?>
-                                <li class="nav-item"><a class="nav-link" href="<?=base_url()?><?=$opciones_sistema_item['url'] ?>"><?=$opciones_sistema_item['nom_opcion'] ?></a></li>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?><?=$opciones_sistema_item['url'] ?>"><?=$opciones_sistema_item['nom_opcion'] ?></a></li>
                             <?php } 
                         } ?>
                     </ul>
@@ -58,3 +58,5 @@
             </div> <!-- opciones del menu -->
         </nav>
         <div class="container-fluid">
+        <div class="printer_margin d-none d-print-block">
+        </div>
