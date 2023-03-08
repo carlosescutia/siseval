@@ -4,7 +4,7 @@
         <div class="card-body">
             <form method="post" action="<?= base_url() ?>calificaciones_propuesta/guardar/">
                 <div class="row mb-3">
-                    <div class="col-sm-4">
+                    <div class="col-sm-1">
                     </div>
                     <div class="col-sm-4 text-center">
                         <label for="evaluacion_obligatoria">
@@ -20,6 +20,25 @@
                         </div>                
                         <select class="form-select" name="evaluacion_obligatoria" id="evaluacion_obligatoria">
                             <option value="1">Si</option>
+                            <option value="0" selected>No</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <label for="criterio_institucional">
+                            Criterio institucional del Supervisor
+                            <a data-bs-toggle="collapse" href="#ayuda_criterio_institucional" role="button" aria-expanded="false" aria-controls="ayuda_criterio_institucional">
+                                <i class="bi bi-info-circle texto-menor"></i>
+                            </a>
+                        </label>
+                        <div class="collapse" id="ayuda_criterio_institucional">
+                            <div class="texto-ayuda">
+                                Seleccione "Si" si considera que el programa debe incorporarse en la Agenda Anual de Evaluación.
+                            </div>
+                        </div>                
+                        <select class="form-select" name="criterio_institucional" id="criterio_institucional">
+                            <option value="50">Si</option>
                             <option value="0" selected>No</option>
                         </select>
                     </div>
@@ -104,33 +123,36 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-sm-4">
-                        <label for="recomendaciones_previas">
-                            Recomendaciones previas
-                            <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
-                                <i class="bi bi-info-circle texto-menor"></i>
-                            </a>
-                        </label>
-                        <div class="collapse" id="ayuda_recomendaciones_previas">
-                            <div class="texto-ayuda">
-                                <ul>
-                                    <li>Seleccione la opción que mejor corresponda al avance en la atención de las recomendaciones de evaluaciones previas aplicadas al programa de acuerdo a lo señalado por la dependencia que lo propone. </li>
-                                    <li>Seleccione N/A cuando el programa no cuente con evaluaciones previas. </li>
-                                </ul>
-                            </div>
-                        </div>                
-                        <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
-                            <option value="100">Todas atendidas</option>
-                            <option value="66">Atendidas más del 50%</option>
-                            <option value="33">Atendidas menos del 50%</option>
-                            <option value="0">Sin atender</option>
-                            <option value="-1" selected>N/A</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="justificacion_no_atencion">Justificación de no atención</label>
-                        <input type="text" class="form-control" name="justificacion_no_atencion" id="justificacion_no_atencion">
-                    </div>
+                    <!-- se desactivan campos recomendaciones_previas y justificacion_no_atencion -->
+                    <!--
+                        <div class="col-sm-4">
+                            <label for="recomendaciones_previas">
+                                Recomendaciones previas
+                                <a data-bs-toggle="collapse" href="#ayuda_recomendaciones_previas" role="button" aria-expanded="false" aria-controls="ayuda_recomendaciones_previas">
+                                    <i class="bi bi-info-circle texto-menor"></i>
+                                </a>
+                            </label>
+                            <div class="collapse" id="ayuda_recomendaciones_previas">
+                                <div class="texto-ayuda">
+                                    <ul>
+                                        <li>Seleccione la opción que mejor corresponda al avance en la atención de las recomendaciones de evaluaciones previas aplicadas al programa de acuerdo a lo señalado por la dependencia que lo propone. </li>
+                                        <li>Seleccione N/A cuando el programa no cuente con evaluaciones previas. </li>
+                                    </ul>
+                                </div>
+                            </div>                
+                            <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
+                                <option value="100">Todas atendidas</option>
+                                <option value="66">Atendidas más del 50%</option>
+                                <option value="33">Atendidas menos del 50%</option>
+                                <option value="0">Sin atender</option>
+                                <option value="-1" selected>N/A</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="justificacion_no_atencion">Justificación de no atención</label>
+                            <input type="text" class="form-control" name="justificacion_no_atencion" id="justificacion_no_atencion">
+                        </div>
+                    -->
                     <div class="col-sm-4">
                         <label for="informacion_disponible">
                             Información disponible

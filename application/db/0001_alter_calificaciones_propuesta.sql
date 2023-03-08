@@ -1,0 +1,2 @@
+ALTER TABLE calificaciones_propuesta
+ADD COLUMN criterio_institucional integer;
