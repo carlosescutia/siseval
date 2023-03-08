@@ -23,6 +23,7 @@
                         <tr>
                             <th scope="col">Siglas</th>
                             <th scope="col">Nombre Dependencia</th>
+                            <th scope="col">Oficio</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,6 +31,16 @@
                         <tr>
                             <td><?= $dependencias_sin_propuestas_item['nom_dependencia'] ?></td>
                             <td><?= $dependencias_sin_propuestas_item['nom_completo_dependencia'] ?></td>
+                            <td>
+                            <?php 
+                            $nombre_archivo = 'oficio_' . $dependencias_sin_propuestas_item['nom_dependencia'] . '.pdf';
+                            $nombre_archivo_fs = './oficios/' . $nombre_archivo;
+                            $nombre_archivo_url = base_url() . 'oficios/' . $nombre_archivo;
+                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="20"></span>Ver</a>
+                            <?php } ?>
+                            </td>
+
                         </tr>
                         <?php } ?>
                     </tbody>
