@@ -73,7 +73,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=base_url()?>usuarios" class="btn btn-secondary">Volver</a>
+            <a href="<?=base_url()?>usuarios" class="btn btn-secondary boton">Volver</a>
         </div>
     </div>
 

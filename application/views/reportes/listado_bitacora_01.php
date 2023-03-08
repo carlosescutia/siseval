@@ -6,9 +6,9 @@
                     <div class="col-sm-8 text-start">
                         <h1 class="h2">Bitácora de actividad</h1>
                     </div>
-                    <div class="col-sm-4 text-end">
+                    <div class="col-sm-4 text-end d-print-none">
                         <button formaction="<?= base_url() ?>reportes/listado_bitacora_01_csv" class="btn btn-primary">Exportar a excel</button>
-                        <a href="javascript:window.print()" class="btn btn-primary">Generar pdf</a>
+                        <a href="javascript:window.print()" class="btn btn-primary boton">Generar pdf</a>
                     </div>
                 </div>
                 <div class="row">

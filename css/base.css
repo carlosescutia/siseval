@@ -80,6 +80,10 @@ body a:hover {
 }
 /* MENU */
 
+.printer_margin {
+    height: 10px; 
+}
+
 
 /* FOOTER */
 .footer {

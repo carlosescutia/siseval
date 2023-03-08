@@ -5,10 +5,10 @@
                 <div class="col-sm-8 text-start">
 					<h1 class="h2">Dependencias que no solicitan evaluaciones</h1>
                 </div>
-                <div class="col-sm-4 text-end">
+                <div class="col-sm-4 text-end d-print-none">
                     <form>
                         <button formaction="<?= base_url() ?>reportes/listado_dependencias_sin_propuestas_01_csv" class="btn btn-primary">Exportar a excel</button>
-                        <a href="javascript:window.print()" class="btn btn-primary">Generar pdf</a>
+                        <a href="javascript:window.print()" class="btn btn-primary boton">Generar pdf</a>
                     </form>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                             $nombre_archivo_fs = './oficios/' . $nombre_archivo;
                             $nombre_archivo_url = base_url() . 'oficios/' . $nombre_archivo;
                             if ( file_exists($nombre_archivo_fs) ) { ?>
-                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="20"></span>Ver</a>
+                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="20"></span><span class="d-print-none">Ver</span></a>
                             <?php } ?>
                             </td>
 

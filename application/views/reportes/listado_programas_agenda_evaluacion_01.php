@@ -5,10 +5,10 @@
                 <div class="col-sm-8 text-start">
                     <h1 class="h2">Proyecto de programas a integrar la Agenda anual de evaluación</h1>
                 </div>
-                <div class="col-sm-4 text-end">
+                <div class="col-sm-4 text-end d-print-none">
                     <form>
                         <button formaction="<?= base_url() ?>reportes/listado_programas_agenda_evaluacion_01_csv" class="btn btn-primary">Exportar a excel</button>
-                        <a href="javascript:window.print()" class="btn btn-primary">Generar pdf</a>
+                        <a href="javascript:window.print()" class="btn btn-primary boton">Generar pdf</a>
                     </form>
                 </div>
             </div>
