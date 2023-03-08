@@ -1,11 +1,6 @@
-    /* Eliminar vistas para permitir eliminar tablas dependientes */
-DROP VIEW IF EXISTS puntaje_calificacion_propuesta;
-DROP VIEW IF EXISTS puntaje_calificacion_dependencia;
-DROP VIEW IF EXISTS estadisticas_dependencia;
-
 /* Tablas de información del sistema */
 
-DROP TABLE IF EXISTS proyectos;
+DROP TABLE IF EXISTS proyectos CASCADE;
 CREATE TABLE proyectos (
     id_proyecto serial,
     cve_proyecto text,
@@ -19,7 +14,7 @@ CREATE TABLE proyectos (
     anexo_social integer
 );
 
-DROP TABLE IF EXISTS programas;
+DROP TABLE IF EXISTS programas CASCADE;
 CREATE TABLE programas (
     id_programa serial,
     cve_programa text,
@@ -27,7 +22,7 @@ CREATE TABLE programas (
     cve_dependencia integer
 );
 
-DROP TABLE IF EXISTS evaluaciones;
+DROP TABLE IF EXISTS evaluaciones CASCADE;
 CREATE TABLE evaluaciones (
     id_evaluacion serial,
     cve_proyecto text,
@@ -43,7 +38,7 @@ CREATE TABLE evaluaciones (
     observaciones text
 );
 
-DROP TABLE IF EXISTS propuestas_evaluacion;
+DROP TABLE IF EXISTS propuestas_evaluacion CASCADE;
 CREATE TABLE propuestas_evaluacion (
     id_propuesta_evaluacion serial,
     cve_proyecto text,
@@ -72,21 +67,21 @@ CREATE TABLE propuestas_evaluacion (
     otra_info_disponible text
 );
 
-DROP TABLE IF EXISTS tipos_evaluacion;
+DROP TABLE IF EXISTS tipos_evaluacion CASCADE;
 CREATE TABLE tipos_evaluacion (
     id_tipo_evaluacion serial,
     nom_tipo_evaluacion text,
     orden integer
 );
 
-DROP TABLE IF EXISTS justificaciones_evaluacion;
+DROP TABLE IF EXISTS justificaciones_evaluacion CASCADE;
 CREATE TABLE justificaciones_evaluacion (
     id_justificacion_evaluacion serial,
     nom_justificacion_evaluacion text,
     orden integer
 );
 
-DROP TABLE IF EXISTS calificaciones_propuesta;
+DROP TABLE IF EXISTS calificaciones_propuesta CASCADE;
 CREATE TABLE calificaciones_propuesta (
     id_calificacion_propuesta serial,
     id_propuesta_evaluacion integer,
@@ -102,7 +97,7 @@ CREATE TABLE calificaciones_propuesta (
     comentarios text
 );
 
-DROP TABLE IF EXISTS valores_calificacion;
+DROP TABLE IF EXISTS valores_calificacion CASCADE;
 CREATE TABLE valores_calificacion (
     id_valor_calificacion serial,
     puntaje integer,
@@ -110,7 +105,7 @@ CREATE TABLE valores_calificacion (
     orden integer
 );
 
-DROP TABLE IF EXISTS clasificaciones_supervisor;
+DROP TABLE IF EXISTS clasificaciones_supervisor CASCADE;
 CREATE TABLE clasificaciones_supervisor (
     id_clasificacion_supervisor serial,
     cve_clasificacion_supervisor integer,
@@ -118,7 +113,7 @@ CREATE TABLE clasificaciones_supervisor (
     orden integer
 );
 
-DROP TABLE IF EXISTS probabilidades_inclusion;
+DROP TABLE IF EXISTS probabilidades_inclusion CASCADE;
 CREATE TABLE probabilidades_inclusion (
     id_probabilidad_inclusion serial,
     min integer,
@@ -127,14 +122,14 @@ CREATE TABLE probabilidades_inclusion (
     orden integer
 );
 
-DROP TABLE IF EXISTS objetivos_desarrollo;
+DROP TABLE IF EXISTS objetivos_desarrollo CASCADE;
 CREATE TABLE objetivos_desarrollo (
     id_objetivo_desarrollo serial,
     cve_objetivo_desarrollo integer,
     nom_objetivo_desarrollo text
 );
 
-DROP TABLE IF EXISTS metas_ods;
+DROP TABLE IF EXISTS metas_ods CASCADE;
 CREATE TABLE metas_ods (
     id_meta_ods serial,
     cve_meta_ods text,
@@ -142,7 +137,7 @@ CREATE TABLE metas_ods (
     nom_meta_ods text
 );
 
-DROP TABLE IF EXISTS programas_metas;
+DROP TABLE IF EXISTS programas_metas CASCADE;
 CREATE TABLE programas_metas (
     id_programa_meta serial,
     cve_programa text,
@@ -153,7 +148,7 @@ CREATE TABLE programas_metas (
 
 /* Tablas de administración del sistema */
 
-DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS usuarios CASCADE;
 CREATE TABLE usuarios (
     cve_usuario serial, 
     cve_dependencia integer,
@@ -164,13 +159,13 @@ CREATE TABLE usuarios (
     activo integer
 );
 
-DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE roles (
     cve_rol text,
     nom_rol text
 );
 
-DROP TABLE IF EXISTS opciones_sistema;
+DROP TABLE IF EXISTS opciones_sistema CASCADE;
 CREATE TABLE opciones_sistema (
     cve_opcion serial,
     cod_opcion text,
@@ -179,14 +174,14 @@ CREATE TABLE opciones_sistema (
     es_menu integer
 );
 
-DROP TABLE IF EXISTS accesos_sistema;
+DROP TABLE IF EXISTS accesos_sistema CASCADE;
 CREATE TABLE accesos_sistema (
     cve_acceso serial,
     cve_rol text,
     cod_opcion text
 );
 
-DROP TABLE IF EXISTS dependencias;
+DROP TABLE IF EXISTS dependencias CASCADE;
 CREATE TABLE dependencias (
     cve_dependencia serial,
     nom_dependencia text,
@@ -194,7 +189,7 @@ CREATE TABLE dependencias (
     carga_evaluaciones integer
 );
 
-DROP TABLE IF EXISTS bitacora;
+DROP TABLE IF EXISTS bitacora CASCADE;
 CREATE TABLE bitacora (
     cve_evento serial,
     fecha date,
@@ -208,73 +203,9 @@ CREATE TABLE bitacora (
     valor text
 );
 
-DROP TABLE IF EXISTS parametros_sistema;
+DROP TABLE IF EXISTS parametros_sistema CASCADE;
 CREATE TABLE parametros_sistema (
     cve_parametro_sistema serial,
     nom_parametro_sistema text,
     valor_parametro_sistema text
 );
-
-/* Vistas para reportes */
-
-/*
-Vista puntaje_calificacion_dependencia
------------------------
-Se obtiene puntaje de dependencia de calificación de propuesta
- */
-CREATE VIEW puntaje_calificacion_dependencia AS
-SELECT 
-    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, 
-    pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
-	(case when cp.evaluacion_obligatoria = 1 then 100
-	else (
-		(case when cp.agenda2030 >= 0 then cp.agenda2030 else 0 end)
-		+ (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end)
-		+ (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end)
-		+ (case when cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end)
-		+ (case when cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end)
-	) / (
-		(case when cp.agenda2030 >= 0 then 1 else 0 end)
-		+ (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end)
-		+ (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end)
-		+ (case when cp.recomendaciones_previas >= 0 then 1 else 0 end)
-		+ (case when cp.informacion_disponible >= 0 then 1 else 0 end)
-	) end) as puntaje
-FROM 
-    calificaciones_propuesta cp
-    left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
-    left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
-    left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
-
-
-/*
-Vista puntaje_calificacion_propuesta
------------------------
-Se obtiene puntaje de calificaciones de propuestas
- */
-CREATE VIEW puntaje_calificacion_propuesta AS
-SELECT 
-    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, 
-    sum(pcd.puntaje) as puntaje,
-    (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max) as probabilidad
-FROM 
-    puntaje_calificacion_dependencia pcd
-GROUP BY 
-    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion ;
-
-
-/*
-Vista estadisticas_dependencia
------------------------
-Se obtienen estadisticas por dependencia
- */
-CREATE VIEW estadisticas_dependencia AS
-SELECT 
-    py.cve_dependencia,
-    count(py.cve_proyecto) as num_proyectos,
-    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where proy.cve_dependencia = py.cve_dependencia) as num_proyectos_propuesta,
-    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta) and proy.cve_dependencia = py.cve_dependencia) as num_propuestas_calificadas
-FROM 
-    proyectos py  
-GROUP BY
-    py.cve_dependencia ;

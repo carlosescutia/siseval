@@ -96,7 +96,8 @@ class Calificaciones_propuesta extends CI_Controller {
                     'justificacion_no_atencion' => $calificacion_propuesta['justificacion_no_atencion'],
                     'informacion_disponible' => $calificacion_propuesta['informacion_disponible'],
                     'clasificacion_supervisor' => $calificacion_propuesta['clasificacion_supervisor'],
-                    'comentarios' => $calificacion_propuesta['comentarios']
+                    'comentarios' => $calificacion_propuesta['comentarios'],
+                    'criterio_institucional' => $calificacion_propuesta['criterio_institucional']
                 );
                 $id_calificacion_propuesta = $this->calificaciones_propuesta_model->guardar($data, $id_calificacion_propuesta);
                 
