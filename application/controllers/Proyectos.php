@@ -81,6 +81,7 @@ class Proyectos extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
 
             $data['proyecto'] = $this->proyectos_model->get_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
             $cve_proyecto = $data['proyecto']['cve_proyecto'];
