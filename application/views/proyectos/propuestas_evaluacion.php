@@ -3,6 +3,12 @@
     <div class="card-body">
         <?php foreach ($propuestas_evaluacion as $propuestas_evaluacion_item) { ?>
             <div class="col-sm-12 ps-3 alternate-color">
+                <?php if ($err_propuestas_evaluacion) { ?>
+				<div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
+					<?php echo $err_propuestas_evaluacion ?>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+                <?php } ?>
                 <div class="row">
                     <p>
                         <a href="<?=base_url()?>propuestas_evaluacion/detalle/<?= $propuestas_evaluacion_item['id_propuesta_evaluacion'] ?>"><?= $propuestas_evaluacion_item['nom_dependencia'] ?> - <?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></a>

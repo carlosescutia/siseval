@@ -149,34 +149,36 @@ class Propuestas_evaluacion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            // registro en bitacora
             $propuesta_evaluacion = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $calificaciones = $this->calificaciones_propuesta_model->get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion);
+            if ($calificaciones) {
+                $this->session->set_flashdata('err_propuestas_evaluacion', 'Esta propuesta ya está calificada, no se puede eliminar');
+            } else {
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $accion = 'eliminó';
+                $entidad = 'propuestas_evaluacion';
+                $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
 
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
-            $accion = 'eliminó';
-            $entidad = 'propuestas_evaluacion';
-            $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
-
-            // eliminado
-            $this->propuestas_evaluacion_model->eliminar($id_propuesta_evaluacion);
-
+                // eliminado
+                $this->propuestas_evaluacion_model->eliminar($id_propuesta_evaluacion);
+            }
             redirect('proyectos/detalle/'.$propuesta_evaluacion['cve_proyecto']);
-
         } else {
             redirect('inicio/login');
         }
