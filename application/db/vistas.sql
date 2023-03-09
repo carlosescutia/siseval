@@ -1,33 +1,51 @@
 /*
+Vista totales_calificaciones
+-----------------------
+Se obtiene suma y conteo de criterios de calificación de propuesta
+ */
+DROP VIEW IF EXISTS totales_calificacion CASCADE;
+CREATE VIEW totales_calificacion AS
+SELECT
+	cp.id_calificacion_propuesta,
+	(
+	(case when cp.agenda2030 >= 0 then cp.agenda2030 else 0 end) 
+	+ (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
+	+ (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) 
+	+ (case when cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end) 
+	+ (case when cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end) 
+	) as suma,
+	(
+	(case when cp.agenda2030 >= 0 then 1 else 0 end) 
+	+ (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
+	+ (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end) 
+	+ (case when cp.recomendaciones_previas >= 0 then 1 else 0 end)
+	+ (case when cp.informacion_disponible >= 0 then 1 else 0 end) 
+	) as conteo
+FROM 
+	calificaciones_propuesta cp ;
+
+
+/*
 Vista puntaje_calificacion_dependencia
 -----------------------
 Se obtiene puntaje de dependencia de calificación de propuesta
  */
 DROP VIEW IF EXISTS puntaje_calificacion_dependencia CASCADE;
 CREATE VIEW puntaje_calificacion_dependencia AS
-SELECT
-    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia,
-    pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion,
-    (case when cp.evaluacion_obligatoria = 1 then 100
-    else (
-        (case when cp.agenda2030 >= 0 then cp.agenda2030 else 0 end)
-        + (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end)
-        + (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end)
-        + (case when cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end)
-        + (case when cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end)
-    ) / (
-        (case when cp.agenda2030 >= 0 then 1 else 0 end)
-        + (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end)
-        + (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end)
-        + (case when cp.recomendaciones_previas >= 0 then 1 else 0 end)
-        + (case when cp.informacion_disponible >= 0 then 1 else 0 end)
-    ) end) + cp.criterio_institucional as puntaje
-FROM
+SELECT 
+    cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, 
+    pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion, 
+    (case 
+        when cp.evaluacion_obligatoria = 1 then 100
+        when conteo = 0 then 0
+        else suma / conteo 
+    end) + coalesce(cp.criterio_institucional, 0) as puntaje
+FROM 
     calificaciones_propuesta cp
+    left join totales_calificacion tc on cp.id_calificacion_propuesta = tc.id_calificacion_propuesta
     left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
-    left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion
+    left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
     left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
-
 /*
 Vista puntaje_calificacion_propuesta
 -----------------------
