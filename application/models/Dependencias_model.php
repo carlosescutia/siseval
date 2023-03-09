@@ -46,9 +46,31 @@ class Dependencias_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_dependencias_sin_propuestas() {
-        $sql = 'select * from dependencias where carga_evaluaciones = 0 ;';
-        $query = $this->db->query($sql);
+    public function get_status_dependencias($evaluaciones, $propuestas) {
+        $sql = ""
+            ."select  "
+            ."d.cve_dependencia, d.nom_dependencia,  "
+            ."d.nom_completo_dependencia, "
+            ."(case when d.carga_evaluaciones = 1 then 'si' else 'no' end) as solicita_evaluaciones, "
+            ."(select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) as num_propuestas "
+            ."from  "
+            ."dependencias d "
+            ."where "
+            ."true "
+            ."";
+        $parametros = array();
+        if ($evaluaciones <> "") {
+            $sql .= "and d.carga_evaluaciones = ? ";
+            array_push($parametros, "$evaluaciones");
+        } 
+        if ($propuestas == '0') {
+            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) = 0";
+        } 
+        if ($propuestas > '0') {
+            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) > 0";
+        } 
+        $sql .= ' order by d.nom_dependencia;';
+        $query = $this->db->query($sql, $parametros);
         return $query->result_array();
     }
 

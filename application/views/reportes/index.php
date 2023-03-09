@@ -8,7 +8,7 @@
                 <h3>Listados</h3>
                 <?php if (in_array('04101', $accesos_sistema_rol)) include "btn_listado_programas_agenda_evaluacion_01.php" ?>
                 <?php if (in_array('04103', $accesos_sistema_rol)) include "btn_listado_propuestas_evaluacion_01.php" ?>
-                <?php if (in_array('04102', $accesos_sistema_rol)) include "btn_listado_dependencias_sin_propuestas_01.php" ?>
+                <?php if (in_array('04102', $accesos_sistema_rol)) include "btn_listado_status_dependencias.php" ?>
                 <?php if (in_array('04104', $accesos_sistema_rol)) include "btn_listado_bitacora_01.php" ?>
             </div>
         </div>
