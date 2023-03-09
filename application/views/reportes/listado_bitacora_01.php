@@ -45,7 +45,7 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="col-1">
+                            <div class="col-1 d-print-none">
                                 <button class="btn btn-success btn-sm">Filtrar</button>
                             </div>
                         </div>

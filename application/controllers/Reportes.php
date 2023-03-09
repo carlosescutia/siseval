@@ -171,7 +171,7 @@ class Reportes extends CI_Controller {
         }
     }
 
-    public function listado_dependencias_sin_propuestas_01()
+    public function listado_status_dependencias()
     {
         if ($this->session->userdata('logueado')) {
             $cve_rol = $this->session->userdata('cve_rol');
@@ -185,20 +185,32 @@ class Reportes extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
+            $filtros = $this->input->post();
+            if ($filtros) {
+                $evaluaciones = $filtros['evaluaciones'];
+                $propuestas = $filtros['propuestas'];
+            } else {
+                $evaluaciones = '';
+                $propuestas = '';
+            }
+
+            $data['evaluaciones'] = $evaluaciones;
+            $data['propuestas'] = $propuestas;
+
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
-            $data['dependencias_sin_propuestas'] = $this->dependencias_model->get_dependencias_sin_propuestas();
+            $data['status_dependencias'] = $this->dependencias_model->get_status_dependencias($evaluaciones, $propuestas);
 
             $this->load->view('templates/header', $data);
-            $this->load->view('reportes/listado_dependencias_sin_propuestas_01', $data);
+            $this->load->view('reportes/listado_status_dependencias', $data);
             $this->load->view('templates/footer');
         } else {
             redirect('inicio/login');
         }
     }
 
-    public function listado_dependencias_sin_propuestas_01_csv()
+    public function listado_status_dependencias_csv()
     {
         if ($this->session->userdata('logueado')) {
             $cve_rol = $this->session->userdata('cve_rol');
@@ -225,7 +237,7 @@ class Reportes extends CI_Controller {
             $delimiter = ",";
             $newline = "\r\n";
             $data = $this->dbutil->csv_from_result($query, $delimiter, $newline);
-            force_download("dependencias_sin_propuestas.csv", $data);
+            force_download("status_dependencias.csv", $data);
         } else {
             redirect('inicio/login');
         }
