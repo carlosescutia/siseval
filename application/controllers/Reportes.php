@@ -12,6 +12,7 @@ class Reportes extends CI_Controller {
         $this->load->model('proyectos_model');
         $this->load->model('parametros_sistema_model');
         $this->load->model('dependencias_model');
+        $this->load->model('probabilidades_inclusion_model');
     }
 
     public function index()
@@ -54,7 +55,8 @@ class Reportes extends CI_Controller {
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
-            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia);
+            $puntaje_min = $this->probabilidades_inclusion_model->get_puntaje_min()['puntaje_min'];
+            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia, $puntaje_min);
 
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/listado_programas_agenda_evaluacion_01', $data);

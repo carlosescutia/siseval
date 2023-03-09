@@ -11,4 +11,11 @@ class Probabilidades_inclusion_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_puntaje_min()
+    {
+        $sql = "select min as puntaje_min from probabilidades_inclusion where nom_probabilidad_inclusion = 'Media' ";
+        $query = $this->db->query($sql);
+        return $query->row_array();
+    }
+
 }
