@@ -52,7 +52,7 @@ class Dependencias_model extends CI_Model {
             ."d.cve_dependencia, d.nom_dependencia,  "
             ."d.nom_completo_dependencia, "
             ."(case when d.carga_evaluaciones = 1 then 'si' else 'no' end) as solicita_evaluaciones, "
-            ."(select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) as num_propuestas "
+            ."(select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto where py.cve_dependencia = d.cve_dependencia) as num_propuestas "
             ."from  "
             ."dependencias d "
             ."where "
@@ -64,10 +64,10 @@ class Dependencias_model extends CI_Model {
             array_push($parametros, "$evaluaciones");
         } 
         if ($propuestas == '0') {
-            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) = 0";
+            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto where py.cve_dependencia = d.cve_dependencia) = 0";
         } 
         if ($propuestas > '0') {
-            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe where pe.cve_dependencia = d.cve_dependencia) > 0";
+            $sql .= "and (select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe left join proyectos py on pe.cve_proyecto = py.cve_proyecto where py.cve_dependencia = d.cve_dependencia) > 0";
         } 
         $sql .= ' order by d.nom_dependencia;';
         $query = $this->db->query($sql, $parametros);
