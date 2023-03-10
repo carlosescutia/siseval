@@ -33,6 +33,7 @@ class Proyectos extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['err_proyectos'] = $this->session->flashdata('err_proyectos');
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -152,7 +153,7 @@ class Proyectos extends CI_Controller {
                     'nom_proyecto' => $proyecto['nom_proyecto'],
                     'cve_dependencia' => $cve_dependencia,
                     'periodo' => $periodo,
-                    'presupuesto_aprobado' => $proyecto['presupuesto_aprobado'],
+                    'presupuesto_aprobado' => empty($proyecto['presupuesto_aprobado']) ? null : $proyecto['presupuesto_aprobado'],
                     'cve_tipo_gasto' => $proyecto['cve_tipo_gasto'],
                     'cve_programa' => $proyecto['cve_programa']
                 );
@@ -191,33 +192,38 @@ class Proyectos extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            // registro en bitacora
             $cve_rol = $this->session->userdata('cve_rol');
             $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $proyecto = $this->proyectos_model->get_proyecto($id_proyecto, $cve_dependencia, $cve_rol);
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
-            $accion = 'eliminó';
-            $entidad = 'proyectos';
-            $valor = $proyecto['cve_proyecto'] . " " . $proyecto['nom_proyecto'];
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $proyecto = $this->proyectos_model->get_proyecto_id($id_proyecto);
+            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['cve_proyecto']);
+            if ($propuestas) {
+                $err_proyectos = array('cve_proyecto' => $proyecto['cve_proyecto'], 'error' => 'Este proyecto tiene propuestas de evaluación, no se puede eliminar');
+                $this->session->set_flashdata('err_proyectos', $err_proyectos);
+            } else {
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $accion = 'eliminó';
+                $entidad = 'proyectos';
+                $valor = $proyecto['cve_proyecto'] . " " . $proyecto['nom_proyecto'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
 
-            // eliminado
-            $this->proyectos_model->eliminar($id_proyecto);
-
+                // eliminado
+                $this->proyectos_model->eliminar($id_proyecto);
+            }
             redirect('proyectos');
 
         } else {

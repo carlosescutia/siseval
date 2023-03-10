@@ -45,6 +45,12 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_proyecto_id($id_proyecto) {
+        $sql = 'select * from proyectos where id_proyecto = ?';
+        $query = $this->db->query($sql, array($id_proyecto));
+        return $query->row_array();
+    }
+
     public function get_proyecto_anterior($cve_anterior_proyecto, $cve_dependencia, $cve_rol) {
         if ($cve_rol == 'adm' || $cve_rol == 'sup') {
             $cve_dependencia = '%';
