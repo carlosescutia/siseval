@@ -7,16 +7,17 @@ class Proyectos_model extends CI_Model {
 
     public function get_proyectos_dependencia($cve_dependencia, $anexo_social, $evaluaciones_propuestas) {
         $sql = ''
-            .'select  '
+			.'select '
             .'py.*, pg.*,  '
-            .'(select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual,  '
-            .'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as propuestas_calificadas,  '
-            .'(select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo  '
-            .'from  '
-            .'proyectos py  '
-            .'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
-            .'where  '
-            .'pg.cve_dependencia::text LIKE ? '
+			.'(select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual, '
+			.'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp. id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as propuestas_calificadas, '
+			.'(select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo, '
+			.'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as num_calif_dependencias '
+			.'from '
+			.'proyectos py '
+			.'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
+			.'where '
+			.'pg.cve_dependencia::text LIKE ? '
             .'';
 
         $parametros = array();

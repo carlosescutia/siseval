@@ -124,16 +124,28 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <?php
+
                                         if ($proyectos_item['status_actual'] == '0') {
                                             $fondo_actual = 'bg-secondary';
                                         } else{
                                             $fondo_actual = 'bg-primary';
                                         }
-                                        if ($proyectos_item['propuestas_calificadas'] == '0') {
-                                            $fondo_calificadas = 'bg-secondary';
-                                        } else{
+
+                                        if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
+                                        ($proyectos_item['num_calif_dependencias'] == $proyectos_item['propuestas_calificadas'] * 6)) {
                                             $fondo_calificadas = 'bg-success';
                                         }
+                                        if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
+                                        ($proyectos_item['num_calif_dependencias'] < $proyectos_item['propuestas_calificadas'] * 6)) {
+                                            $fondo_calificadas = 'bg-warning';
+                                        }
+                                        if ($proyectos_item['status_actual'] > $proyectos_item['propuestas_calificadas']) {
+                                            $fondo_calificadas = 'bg-danger';
+                                        }
+                                        if (($proyectos_item['propuestas_calificadas'] == '0') and ($proyectos_item['status_actual'] == '0')) {
+                                            $fondo_calificadas = 'bg-secondary';
+                                        }
+
                                         if ($proyectos_item['status_previo'] == '0') {
                                             $fondo_previo = 'bg-secondary';
                                         } else{
