@@ -97,14 +97,6 @@ CREATE TABLE calificaciones_propuesta (
     comentarios text
 );
 
-DROP TABLE IF EXISTS valores_calificacion CASCADE;
-CREATE TABLE valores_calificacion (
-    id_valor_calificacion serial,
-    puntaje integer,
-    nom_valor_calificacion text,
-    orden integer
-);
-
 DROP TABLE IF EXISTS clasificaciones_supervisor CASCADE;
 CREATE TABLE clasificaciones_supervisor (
     id_clasificacion_supervisor serial,
