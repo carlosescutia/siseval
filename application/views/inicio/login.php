@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="icon" href="<?php echo base_url('img/favicon.ico'); ?>" sizes="16x16" type="image/png" />
+        <link rel="icon" href="<?=base_url()?>img/favicon.png" sizes="16x16" type="image/png" />
 
         <title>Sistema de Evaluación de Guanajuato</title>
 
@@ -81,7 +81,7 @@
             <label for="inputPassword" class="sr-only">Contraseña</label>
             <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
-            <p class="mt-5 mb-3 text-muted">&copy; Iplaneg 2022</p>
+            <p class="mt-5 mb-3 text-muted">&copy; Iplaneg 2023</p>
         </form>
     </body>
 </html>
