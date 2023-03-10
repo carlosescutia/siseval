@@ -11,7 +11,6 @@ class Calificaciones_propuesta extends CI_Controller {
         $this->load->model('bitacora_model');
 
         $this->load->model('calificaciones_propuesta_model');
-        $this->load->model('valores_calificacion_model');
         $this->load->model('clasificaciones_supervisor_model');
         $this->load->model('probabilidades_inclusion_model');
     }
@@ -31,7 +30,6 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
-            $data['valores_calificacion'] = $this->valores_calificacion_model->get_valores_calificacion();
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['probabilidades_inclusion'] = $this->probabilidades_inclusion_model->get_probabilidades_inclusion();
 
@@ -57,7 +55,6 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
-            $data['valores_calificacion'] = $this->valores_calificacion_model->get_valores_calificacion();
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
             $data['cve_dependencia'] = $cve_dependencia;
