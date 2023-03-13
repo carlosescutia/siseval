@@ -27,6 +27,8 @@
                             <th scope="col">Clave P/Q</th>
                             <th scope="col">Nombre P/Q</th>
                             <th scope="col">Tipo de evaluación</th>
+                            <th scope="col">Puntaje</th>
+                            <th scope="col">Prob. inclusión</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,6 +40,8 @@
                             <td><?= $programas_agenda_evaluacion_item['cve_proyecto'] ?></td>
                             <td><?= $programas_agenda_evaluacion_item['nom_proyecto'] ?></td>
                             <td><?= $programas_agenda_evaluacion_item['nom_tipo_evaluacion'] ?></td>
+                            <td><?= $programas_agenda_evaluacion_item['puntaje'] ?></td>
+                            <td><?= $programas_agenda_evaluacion_item['probabilidad'] ?></td>
                         </tr>
                         <?php } ?>
                     </tbody>
