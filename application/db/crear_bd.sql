@@ -94,7 +94,8 @@ CREATE TABLE calificaciones_propuesta (
     justificacion_no_atencion text,
     informacion_disponible integer,
     clasificacion_supervisor integer,
-    comentarios text
+    comentarios text,
+    criterio_institucional integer
 );
 
 DROP TABLE IF EXISTS clasificaciones_supervisor CASCADE;
@@ -134,6 +135,13 @@ CREATE TABLE programas_metas (
     id_programa_meta serial,
     cve_programa text,
     cve_meta_ods text
+);
+
+DROP TABLE IF EXISTS semaforo_proyectos CASCADE;
+CREATE TABLE semaforo_proyectos (
+    id_semaforo_proyectos serial,
+    cve_proyecto text,
+    semaforo_22 text
 );
 
 

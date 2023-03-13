@@ -13,6 +13,8 @@ class Calificaciones_propuesta extends CI_Controller {
         $this->load->model('calificaciones_propuesta_model');
         $this->load->model('clasificaciones_supervisor_model');
         $this->load->model('probabilidades_inclusion_model');
+        $this->load->model('propuestas_evaluacion_model');
+        $this->load->model('semaforo_proyectos_model');
     }
 
     public function detalle($id_calificacion_propuesta)
@@ -32,6 +34,9 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['probabilidades_inclusion'] = $this->probabilidades_inclusion_model->get_probabilidades_inclusion();
+
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($data['calificacion_propuesta']['id_propuesta_evaluacion']);
+            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
 
             $this->load->view('templates/header', $data);
             $this->load->view('calificaciones_propuesta/detalle', $data);
@@ -58,6 +63,9 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
             $data['cve_dependencia'] = $cve_dependencia;
+
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
 
             $this->load->view('templates/header', $data);
             $this->load->view('calificaciones_propuesta/nuevo', $data);
