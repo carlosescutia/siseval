@@ -55,8 +55,7 @@ class Reportes extends CI_Controller {
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
-            $puntaje_min = $this->probabilidades_inclusion_model->get_puntaje_min()['puntaje_min'];
-            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia, $puntaje_min);
+            $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/listado_programas_agenda_evaluacion_01', $data);
@@ -87,7 +86,22 @@ class Reportes extends CI_Controller {
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
-            $sql = 'select d.nom_dependencia, pg.cve_programa, pg.nom_programa as nom_programa, pcp.cve_proyecto, py.nom_proyecto as nom_proyecto, pcp.nom_tipo_evaluacion from puntaje_calificacion_propuesta pcp left join proyectos py on pcp.cve_proyecto = py.cve_proyecto left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on d.cve_dependencia = pg.cve_dependencia where pg.cve_dependencia::text LIKE ? and pcp.puntaje >= 200 ;';
+            $sql = ""
+                ."select "
+                ."d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto, "
+                ."py.nom_proyecto, te.nom_tipo_evaluacion, pcp.puntaje, pcp.probabilidad "
+                ."from "
+                ."propuestas_evaluacion pe "
+                ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+                ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+                ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+                ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+                ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto "
+                ."where "
+                ."py.cve_dependencia::text LIKE '%' "
+                ."order by "
+                ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto "
+                ."";
             $query = $this->db->query($sql, array($cve_dependencia));
 
             $delimiter = ",";

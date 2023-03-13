@@ -61,25 +61,24 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_programas_agenda_evaluacion($cve_dependencia, $puntaje_min) {
+    public function get_programas_agenda_evaluacion($cve_dependencia) {
         $sql = ""
-			."select  "
-			."d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto,  "
-			."py.nom_proyecto, te.nom_tipo_evaluacion "
-			."from  "
-			."propuestas_evaluacion pe  "
-			."left join proyectos py on pe.cve_proyecto = py.cve_proyecto  "
-			."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
-			."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
-			."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
-			."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto "
-			."where  "
-			."pcp.puntaje >= ? "
-			."and py.cve_dependencia::text LIKE ? "
-			."order by "
-			."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto "
+            ."select "
+            ."d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto, "
+            ."py.nom_proyecto, te.nom_tipo_evaluacion, pcp.puntaje, pcp.probabilidad "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto "
+            ."where "
+            ."py.cve_dependencia::text LIKE '%' "
+            ."order by "
+            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto "
 			."";
-        $query = $this->db->query($sql, array($puntaje_min, $cve_dependencia));
+        $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }
 
