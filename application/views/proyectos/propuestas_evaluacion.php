@@ -10,16 +10,32 @@
 				</div>
                 <?php } ?>
                 <div class="row">
-                    <p>
-                        <a href="<?=base_url()?>propuestas_evaluacion/detalle/<?= $propuestas_evaluacion_item['id_propuesta_evaluacion'] ?>"><?= $propuestas_evaluacion_item['nom_dependencia'] ?> - <?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></a>
-                        <?php if (in_array('99', $accesos_sistema_rol)) {
-                            if ($cve_dependencia == $propuestas_evaluacion_item['cve_dependencia']) { 
-                                $item_eliminar = 'Propuesta de evaluación '.$propuestas_evaluacion_item['nom_dependencia']. ' ' . $propuestas_evaluacion_item['nom_tipo_evaluacion']; 
-                                $url = base_url() . "propuestas_evaluacion/eliminar/". $propuestas_evaluacion_item['id_propuesta_evaluacion']; ?>
-                                <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
-                            <?php } 
+                    <div class="col-sm-8">
+                        <p>
+                            <a href="<?=base_url()?>propuestas_evaluacion/detalle/<?= $propuestas_evaluacion_item['id_propuesta_evaluacion'] ?>"><?= $propuestas_evaluacion_item['nom_dependencia'] ?> - <?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></a>
+
+                            <?php if (in_array('99', $accesos_sistema_rol)) {
+                                if ($cve_dependencia == $propuestas_evaluacion_item['cve_dependencia']) { 
+                                    $item_eliminar = 'Propuesta de evaluación '.$propuestas_evaluacion_item['nom_dependencia']. ' ' . $propuestas_evaluacion_item['nom_tipo_evaluacion']; 
+                                    $url = base_url() . "propuestas_evaluacion/eliminar/". $propuestas_evaluacion_item['id_propuesta_evaluacion']; ?>
+                                    <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
+                                <?php } 
+                            } ?>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <?php switch($propuestas_evaluacion_item['num_calificaciones']) {
+                            case 0:
+                                $fondo_actual = 'bg-danger'; 
+                                break;
+                            case 6:
+                                $fondo_actual = 'bg-success'; 
+                                break;
+                            default:
+                                $fondo_actual = 'bg-warning'; 
                         } ?>
-                    </p>
+                        <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $propuestas_evaluacion_item['num_calificaciones'] ?></span> calificaciones</p>
+                    </div>
                 </div>
             </div>
         <?php } ?>
