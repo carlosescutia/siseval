@@ -145,7 +145,7 @@ class Proyectos extends CI_Controller {
                 $reg_consecutivo = $this->proyectos_model->get_consecutivo_dependencia($cve_dependencia);
                 $consecutivo = $reg_consecutivo['consecutivo'];
                 $consecutivo++;
-                $cve_proyecto_nuevo = 'PRN' . str_pad($consecutivo, 2, '0', STR_PAD_LEFT) ;
+                $cve_proyecto_nuevo = 'P' . str_pad($cve_dependencia, 2, '0', STR_PAD_LEFT) . str_pad($consecutivo, 2, '0', STR_PAD_LEFT) ;
 
                 // guardado
                 $data = array(
