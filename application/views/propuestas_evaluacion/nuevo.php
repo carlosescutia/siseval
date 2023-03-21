@@ -159,7 +159,7 @@
                                 </ul>
                             </div>
                         </div>                
-                        <select class="form-select" name="recursos_propios" id="recursos_propios">
+                        <select class="form-select" name="recomendaciones_previas" id="recomendaciones_previas">
                             <option value=""></option>
                             <option value="100">Todas atendidas</option>
                             <option value="66">Atendidas más del 50%</option>
