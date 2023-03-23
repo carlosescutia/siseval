@@ -40,14 +40,33 @@ class Proyectos extends CI_Controller {
                 $cve_dependencia_filtro = $filtros['cve_dependencia_filtro'];
                 $anexo_social = $filtros['anexo_social'];
                 $evaluaciones_propuestas = $filtros['evaluaciones_propuestas'];
+                $filtros_proyectos = array(
+                    'cve_dependencia_filtro' => $cve_dependencia_filtro,
+                    'anexo_social' => $anexo_social,
+                    'evaluaciones_propuestas' => $evaluaciones_propuestas,
+                );
+                $this->session->set_userdata($filtros_proyectos);
             } else {
-                $cve_dependencia_filtro = $cve_dependencia;
-                if ($cve_rol == 'sup') {
-                    $cve_dependencia_filtro = '%';
+                if ($this->session->userdata('cve_dependencia_filtro')) {
+                    $cve_dependencia_filtro = $this->session->userdata('cve_dependencia_filtro');
+                } else {
+                    $cve_dependencia_filtro = $cve_dependencia;
+                    if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                        $cve_dependencia_filtro = '%';
+                    }
                 }
-                $anexo_social = '0';
-                $evaluaciones_propuestas = '0';
+                if ($this->session->userdata('anexo_social')) {
+                    $anexo_social = $this->session->userdata('anexo_social');
+                } else {
+                    $anexo_social = '0';
+                }
+                if ($this->session->userdata('evaluaciones_propuestas')) {
+                    $evaluaciones_propuestas = $this->session->userdata('evaluaciones_propuestas');
+                } else {
+                    $evaluaciones_propuestas = '0';
+                }
 			}
+
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
             $data['anexo_social'] = $anexo_social;
             $data['evaluaciones_propuestas'] = $evaluaciones_propuestas;
