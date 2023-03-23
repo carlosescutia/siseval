@@ -221,24 +221,6 @@
                 <div class="row mb-3">
                     <div class="col-sm-2 text-center">
                     </div>
-                    <div class="col-sm-4">
-                        <label for="clasificacion_supervisor">
-                            Clasificación del supervisor
-                            <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
-                                <i class="bi bi-info-circle texto-menor"></i>
-                            </a>
-                        </label>
-                        <div class="collapse" id="ayuda_clasificacion_supervisor">
-                            <div class="texto-ayuda">
-                                Seleccione la sección de la Agenda Anual de Evaluación en la deberá integrarse el programa a evaluar.
-                            </div>
-                        </div>                
-                        <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
-                            <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
-                            <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>"><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
                     <div class="col-sm-6">
                         <label for="comentarios">
                             Comentarios
@@ -257,6 +239,7 @@
 
                 <input type="hidden" name="id_propuesta_evaluacion" value="<?= $id_propuesta_evaluacion ?>">
                 <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                <input type="hidden" name="clasificacion_supervisor" value="0">
 
                 <div class="card-footer text-end">
                     <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
