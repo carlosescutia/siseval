@@ -14,6 +14,7 @@ class Propuestas_evaluacion extends CI_Controller {
         $this->load->model('justificaciones_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('calificaciones_propuesta_model');
+        $this->load->model('clasificaciones_supervisor_model');
     }
 
     public function detalle($id_propuesta_evaluacion)
@@ -37,6 +38,7 @@ class Propuestas_evaluacion extends CI_Controller {
             $data['calificacion_final_propuesta_evaluacion'] = $this->calificaciones_propuesta_model->get_calificacion_final_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['num_calificaciones_propuesta_dependencia'] = $this->calificaciones_propuesta_model->get_num_calificaciones_propuesta_dependencia($id_propuesta_evaluacion, $cve_dependencia);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
+            $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -135,6 +137,51 @@ class Propuestas_evaluacion extends CI_Controller {
 					'valor' => $valor
 				);
 				$this->bitacora_model->guardar($data);
+
+            }
+
+            redirect('proyectos/detalle/'.$propuesta_evaluacion['cve_proyecto']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function guardar_clasificacion()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $propuesta_evaluacion = $this->input->post();
+            if ($propuesta_evaluacion) {
+
+                $id_propuesta_evaluacion = $propuesta_evaluacion['id_propuesta_evaluacion'];
+
+                // guardado
+                $data = array(
+                    'clasificacion_supervisor' => $propuesta_evaluacion['clasificacion_supervisor']
+                );
+                $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
+                
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $entidad = 'propuestas_evaluacion';
+                $accion = 'modificó';
+                $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
 
             }
 

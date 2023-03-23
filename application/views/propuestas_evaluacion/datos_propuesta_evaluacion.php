@@ -1,6 +1,43 @@
 <div class="card mt-0 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
+        <?php if (in_array('99', $accesos_sistema_rol)) {
+            if ( $cve_rol == 'sup' and $cve_dependencia == 14) { ?>
+                <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-5 mb-3 text-center">
+                            <label for="clasificacion_supervisor">
+                                Clasificación del supervisor
+                                <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
+                                    <i class="bi bi-info-circle texto-menor"></i>
+                                </a>
+                            </label>
+                            <div class="collapse" id="ayuda_clasificacion_supervisor">
+                                <div class="texto-ayuda">
+                                    Seleccione la sección de la Agenda Anual de Evaluación en la deberá integrarse el programa a evaluar.
+                                </div>
+                            </div>                
+                            <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
+                                <option value="0" <?= ($propuesta_evaluacion['clasificacion_supervisor'] == "0") ? 'selected' : '' ?> ></option>
+                                <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
+                                <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>" <?= ($clasificaciones_supervisor_item['cve_clasificacion_supervisor'] == $propuesta_evaluacion['clasificacion_supervisor']) ? 'selected' : '' ?> ><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-1 mb-3">
+                            <label> </label>
+                            <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
+                        </div>
+                        <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
+                        <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
+                        <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                        <hr >
+                    </div>
+                </form>
+            <?php } 
+        } ?>
         <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar/">
             <div class="row mb-3">
                 <div class="col-sm-6">

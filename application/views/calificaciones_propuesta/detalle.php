@@ -226,24 +226,6 @@
                         <label for="puntaje">Puntaje</label>
                         <h1><?= $calificacion_propuesta['puntaje'] ?></h1>
                     </div>
-                    <div class="col-sm-4">
-                        <label for="clasificacion_supervisor">
-                            Clasificación del supervisor
-                            <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
-                                <i class="bi bi-info-circle texto-menor"></i>
-                            </a>
-                        </label>
-                        <div class="collapse" id="ayuda_clasificacion_supervisor">
-                            <div class="texto-ayuda">
-                                Seleccione la sección de la Agenda Anual de Evaluación en la deberá integrarse el programa a evaluar.
-                            </div>
-                        </div>                
-                        <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
-                            <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
-                            <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>" <?= ($clasificaciones_supervisor_item['cve_clasificacion_supervisor'] == $calificacion_propuesta['clasificacion_supervisor']) ? 'selected' : '' ?> ><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
                     <div class="col-sm-6">
                         <label for="comentarios">
                             Comentarios
@@ -263,6 +245,7 @@
                 <input type="hidden" name="id_calificacion_propuesta" value="<?= $calificacion_propuesta['id_calificacion_propuesta'] ?>">
                 <input type="hidden" name="id_propuesta_evaluacion" value="<?= $calificacion_propuesta['id_propuesta_evaluacion'] ?>">
                 <input type="hidden" name="cve_dependencia" value="<?= $calificacion_propuesta['cve_dependencia'] ?>">
+                <input type="hidden" name="clasificacion_supervisor" value="0">
 
                 <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                     <?php if ($cve_dependencia == $calificacion_propuesta['cve_dependencia']) { ?>
