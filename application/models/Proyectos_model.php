@@ -64,19 +64,22 @@ class Proyectos_model extends CI_Model {
     public function get_programas_agenda_evaluacion($cve_dependencia) {
         $sql = ""
             ."select "
-            ."d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto, "
-            ."py.nom_proyecto, te.nom_tipo_evaluacion, pcp.puntaje, pcp.probabilidad "
+            ."d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto,  "
+            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
+            ."te.nom_tipo_evaluacion, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
             ."from "
-            ."propuestas_evaluacion pe "
+            ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
             ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
-            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto "
+            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
+            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
+            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
             ."py.cve_dependencia::text LIKE '%' "
             ."order by "
-            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto "
+            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
 			."";
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
