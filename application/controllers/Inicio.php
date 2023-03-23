@@ -45,6 +45,7 @@ class Inicio extends CI_Controller {
     }
 
     public function login() {
+        $this->session->sess_destroy();
         $data = array();
         $data['error'] = $this->session->flashdata('error');
         $this->load->view('inicio/login', $data);
