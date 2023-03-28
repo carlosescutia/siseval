@@ -13,6 +13,11 @@
                     <?php include "justificaciones_evaluacion/boton.php" ?>
                 </div>
                 <div class="col-md-4">
+                    <?php include "probabilidades_inclusion/boton.php" ?>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
                     <?php include "tipos_evaluacion/boton.php" ?>
                 </div>
             </div>
