@@ -78,6 +78,7 @@ class Proyectos extends CI_Controller {
             }
 
             $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0);
+            $data['max_calificaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('max_calificaciones')['valor_parametro_sistema'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -114,6 +115,7 @@ class Proyectos extends CI_Controller {
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia);
             $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas')['valor_parametro_sistema'];
             $data['metas'] = $this->metas_ods_model->get_metas_proyecto($cve_proyecto);
+            $data['max_calificaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('max_calificaciones')['valor_parametro_sistema'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');

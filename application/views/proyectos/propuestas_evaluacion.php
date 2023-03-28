@@ -24,15 +24,20 @@
                         </p>
                     </div>
                     <div class="col-sm-4">
-                        <?php switch($propuestas_evaluacion_item['num_calificaciones']) {
-                            case 0:
+                        <?php 
+                            $num_calificaciones = $propuestas_evaluacion_item['num_calificaciones'];
+                            switch (true) {
+                            case $num_calificaciones == 0:
                                 $fondo_actual = 'bg-danger'; 
                                 break;
-                            case 6:
+                            case $num_calificaciones > 0 and $num_calificaciones < $max_calificaciones:
+                                $fondo_actual = 'bg-warning'; 
+                                break;
+                            case $num_calificaciones == $max_calificaciones:
                                 $fondo_actual = 'bg-success'; 
                                 break;
                             default:
-                                $fondo_actual = 'bg-warning'; 
+                                $fondo_actual = 'bg-dark'; 
                         } ?>
                         <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $propuestas_evaluacion_item['num_calificaciones'] ?></span> calificaciones</p>
                     </div>
