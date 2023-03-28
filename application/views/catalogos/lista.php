@@ -10,13 +10,16 @@
                     <?php include "dependencias/boton.php" ?>
                 </div>
                 <div class="col-md-4">
-                    <?php include "justificaciones_evaluacion/boton.php" ?>
+                    <?php include "clasificaciones_supervisor/boton.php" ?>
                 </div>
                 <div class="col-md-4">
-                    <?php include "probabilidades_inclusion/boton.php" ?>
+                    <?php include "justificaciones_evaluacion/boton.php" ?>
                 </div>
             </div>
             <div class="row mb-3">
+                <div class="col-md-4">
+                    <?php include "probabilidades_inclusion/boton.php" ?>
+                </div>
                 <div class="col-md-4">
                     <?php include "tipos_evaluacion/boton.php" ?>
                 </div>

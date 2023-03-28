@@ -23,7 +23,7 @@
                             <p class="small"><strong>Clave</strong></p>
                         </div>
                         <div class="col-sm-8 align-self-center">
-                            <p class="small"><strong>Siglas</strong></p>
+                            <p class="small"><strong>Nombre</strong></p>
                         </div>
                     </div>
                 </div>
