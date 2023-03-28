@@ -3,10 +3,10 @@
         <div class="col-sm-12 alternate-color">
             <div class="row">
                 <div class="col-sm-10 text-start">
-                    <h1 class="h2">Justificaciones de evaluación</h1>
+                    <h1 class="h2">Clasificaciones de supervisor</h1>
                 </div>
                 <div class="col-sm-2 text-end">
-                    <form method="post" action="<?= base_url() ?>justificaciones_evaluacion/nuevo">
+                    <form method="post" action="<?= base_url() ?>clasificaciones_supervisor/nuevo">
                         <button type="submit" class="btn btn-primary">Nuevo</button>
                     </form>
                 </div>
@@ -19,29 +19,35 @@
             <div class="row">
                 <div class="col-sm-7">
                     <div class="row">
-                        <div class="col-sm-3 align-self-center">
+                        <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Clave</strong></p>
                         </div>
-                        <div class="col-sm-8 align-self-center">
-                            <p class="small"><strong>Nombre</strong></p>
+                        <div class="col-sm-6 align-self-center">
+                            <p class="small"><strong>Clasificación</strong></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="small"><strong>Orden</strong></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($justificaciones_evaluacion as $justificaciones_evaluacion_item) { ?>
+                <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
                 <div class="col-sm-7 alternate-color">
                     <div class="row">
-                        <div class="col-sm-3 align-self-center">
-                            <p><?= $justificaciones_evaluacion_item['id_justificacion_evaluacion'] ?></p>
+                        <div class="col-sm-2 align-self-center">
+                            <p><?= $clasificaciones_supervisor_item['id_clasificacion_supervisor'] ?></p>
                         </div>
-                        <div class="col-sm-8 align-self-center">
-                            <p><a href="<?=base_url()?>justificaciones_evaluacion/detalle/<?=$justificaciones_evaluacion_item['id_justificacion_evaluacion']?>"><?= $justificaciones_evaluacion_item['nom_justificacion_evaluacion'] ?></a></p>
+                        <div class="col-sm-6 align-self-center">
+                            <p><a href="<?=base_url()?>clasificaciones_supervisor/detalle/<?=$clasificaciones_supervisor_item['id_clasificacion_supervisor']?>"><?= $clasificaciones_supervisor_item['nom_clasificacion_supervisor'] ?></a></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p><?= $clasificaciones_supervisor_item['orden'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 
-                            $item_eliminar = $justificaciones_evaluacion_item['nom_justificacion_evaluacion']; 
-                            $url = base_url() . "justificaciones_evaluacion/eliminar/". $justificaciones_evaluacion_item['id_justificacion_evaluacion']; 
+                            $item_eliminar = $clasificaciones_supervisor_item['nom_clasificacion_supervisor']; 
+                            $url = base_url() . "clasificaciones_supervisor/eliminar/". $clasificaciones_supervisor_item['id_clasificacion_supervisor']; 
                             ?>
                             <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
                             </a></p>

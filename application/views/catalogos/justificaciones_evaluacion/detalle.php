@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nom_justificacion_evaluacion" class="col-sm-2 col-form-label">Siglas</label>
+                <label for="nom_justificacion_evaluacion" class="col-sm-2 col-form-label">Nombre</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="nom_justificacion_evaluacion" id="nom_justificacion_evaluacion" value="<?=$justificacion_evaluacion['nom_justificacion_evaluacion'] ?>">
                 </div>
