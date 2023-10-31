@@ -3,6 +3,7 @@ composer.lock
 
 adjuntos_propuestas/*
 oficios/*
+doc/*
 
 application/cache/*
 !application/cache/index.html
