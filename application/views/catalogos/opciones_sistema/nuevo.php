@@ -38,6 +38,12 @@
                     <input type="text" class="form-control" name="es_menu" id="es_menu">
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="etapa" class="col-sm-2 col-form-label">Etapa Siseval</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="etapa" id="etapa">
+                </div>
+            </div>
         </div>
 
     </form>

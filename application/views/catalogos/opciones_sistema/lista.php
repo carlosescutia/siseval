@@ -28,6 +28,12 @@
                         <div class="col-sm-5 align-self-center">
                             <p class="small"><strong>Nombre</strong></p>
                         </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p class="small"><strong>Es menu</strong></p>
+                        </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p class="small"><strong>Etapa</strong></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,6 +49,12 @@
                         </div>
                         <div class="col-sm-5 align-self-center">
                             <p><a href="<?=base_url()?>opciones_sistema/detalle/<?=$opciones_sistema_item['cve_opcion']?>"><?= $opciones_sistema_item['nom_opcion'] ?></a></p>
+                        </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p><?= $opciones_sistema_item['es_menu'] ?></p>
+                        </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p><?= $opciones_sistema_item['etapa'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 
