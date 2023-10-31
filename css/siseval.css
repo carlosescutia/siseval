@@ -3,6 +3,25 @@
     color: red;
 }
 
+.boton-eliminar-sm {
+    font-size: 0.8rem; 
+    color: red;
+}
+
+.boton-archivo-sm {
+    font-size: 1.2rem; 
+    color: blue;
+}
+
+.boton-subir-sm {
+    font-size: 0.8rem; 
+    color: green;
+}
+
+.documento-g {
+    font-size: 2rem;
+}
+
 .header-dependencia {
     padding: 15px;
     background-color: #C0C6D5 !important;
