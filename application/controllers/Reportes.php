@@ -28,7 +28,7 @@ class Reportes extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
 
-            $data['periodo'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas')['valor_parametro_sistema'];
+            $data['periodo'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
 
             $this->load->view('templates/header', $data);
             $this->load->view('reportes/index', $data);

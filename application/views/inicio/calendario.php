@@ -1,26 +1,5 @@
 <div class="card border-0 border-start mt-0 mb-3 text-center">
     <div class="card-body">
-        <div>
-            <?php foreach ($parametros_sistema as $parametros_sistema_item) {
-                switch($parametros_sistema_item['nom_parametro_sistema']) {
-                    case 'anio_propuestas':
-                        $anio_propuestas = $parametros_sistema_item['valor_parametro_sistema'];
-                        break;
-                    case 'fecha_ini_evaluaciones':
-                        $fecha_ini_evaluaciones = $parametros_sistema_item['valor_parametro_sistema'];
-                        break;
-                    case 'fecha_fin_evaluaciones':
-                        $fecha_fin_evaluaciones = $parametros_sistema_item['valor_parametro_sistema'];
-                        break;
-                    case 'fecha_ini_observaciones':
-                        $fecha_ini_observaciones = $parametros_sistema_item['valor_parametro_sistema'];
-                        break;
-                    case 'fecha_fin_observaciones':
-                        $fecha_fin_observaciones = $parametros_sistema_item['valor_parametro_sistema'];
-                        break;
-                }
-            } ?>
-        </div>
         <div class="col-sm-12">
             <div class="row mb-3">
                 <div class="col-sm-4">

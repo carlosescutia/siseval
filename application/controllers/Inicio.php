@@ -27,7 +27,12 @@ class Inicio extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
+
+            $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
+            $data['fecha_ini_evaluaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_evaluaciones');
+            $data['fecha_fin_evaluaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_evaluaciones');
+            $data['fecha_ini_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_observaciones');
+            $data['fecha_fin_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_observaciones');
 
             $data['dependencia'] = $this->dependencias_model->get_dependencia($cve_dependencia);
 
