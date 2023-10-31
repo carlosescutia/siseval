@@ -8,6 +8,7 @@ class Opciones_sistema extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('accesos_sistema_model');
         $this->load->model('bitacora_model');
+        $this->load->model('parametros_sistema_model');
     }
 
     public function index()
@@ -22,6 +23,7 @@ class Opciones_sistema extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             if ($cve_rol != 'adm') {
                 redirect('inicio');
@@ -50,6 +52,7 @@ class Opciones_sistema extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
             
             if ($cve_rol != 'adm') {
                 redirect('inicio');
@@ -77,6 +80,7 @@ class Opciones_sistema extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             if ($cve_rol != 'adm') {
                 redirect('inicio');
@@ -107,7 +111,8 @@ class Opciones_sistema extends CI_Controller {
                     'cod_opcion' => $opciones_sistema['cod_opcion'],
                     'nom_opcion' => $opciones_sistema['nom_opcion'],
                     'url' => $opciones_sistema['url'],
-                    'es_menu' => $opciones_sistema['es_menu']
+                    'es_menu' => $opciones_sistema['es_menu'],
+                    'etapa' => $opciones_sistema['etapa']
                 );
                 $cve_opcion = $this->opciones_sistema_model->guardar($data, $cve_opcion);
 

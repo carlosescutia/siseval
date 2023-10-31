@@ -27,6 +27,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $data['periodo'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
 
@@ -51,6 +52,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
@@ -78,6 +80,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -129,6 +132,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
@@ -156,6 +160,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -203,6 +208,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -242,6 +248,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -274,6 +281,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -310,6 +318,7 @@ class Reportes extends CI_Controller {
             $data['error'] = $this->session->flashdata('error');
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
             $this->load->dbutil();
             $this->load->helper('file');
