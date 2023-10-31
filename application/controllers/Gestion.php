@@ -58,7 +58,6 @@ class Gestion extends CI_Controller {
             }
 
             $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0);
-            $data['max_calificaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('max_calificaciones')['valor_parametro_sistema'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
