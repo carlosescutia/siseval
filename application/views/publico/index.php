@@ -23,10 +23,10 @@
             </div>
         </div>
         <?php 
-        $prefijo = 'tr';
+        $prefijo = 'gtr';
         $icono = "bi-filetype-pdf";
         $tipo_archivo = 'pdf';
-        $ruta = 'doc/gestion/';
+        $ruta = 'doc/';
         foreach ($proyectos as $proyectos_item) { 
             $nombre_archivo = $prefijo . '_' . strtolower($proyectos_item['cve_proyecto']) . '.' . $tipo_archivo ;
             $nombre_archivo_fs = './' . $ruta . $nombre_archivo ;

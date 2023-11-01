@@ -14,10 +14,10 @@
             ?>
             <td>
                 <?php
-                    $prefijo = 'je';
+                    $prefijo = 'gje';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $ruta = 'doc/gestion/';
+                    $ruta = 'doc/';
                     $nombre_archivo = $prefijo . '_' . strtolower($proyectos_item['cve_proyecto']) . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $ruta . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $ruta . $nombre_archivo;
@@ -53,10 +53,10 @@
             </td>
             <td>
                 <?php
-                    $prefijo = 'dc';
+                    $prefijo = 'gdc';
                     $icono = "bi-file-zip";
                     $tipo_archivo = 'zip';
-                    $ruta = 'doc/gestion/';
+                    $ruta = 'doc/';
                     $nombre_archivo = $prefijo . '_' . strtolower($proyectos_item['cve_proyecto']) . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $ruta . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $ruta . $nombre_archivo;
