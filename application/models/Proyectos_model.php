@@ -105,6 +105,31 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_programas_publicacion() {
+        $sql = ""
+            ."select "
+            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
+            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
+            ."te.nom_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
+            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
+            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
+            ."where "
+            ."cs.cve_clasificacion_supervisor in ('1','2','4','7')"
+            ."order by "
+            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
+			."";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+
     public function get_estadisticas_proyectos_dependencia($cve_dependencia) {
         $sql = 'select sum(num_proyectos) as num_proyectos, sum(num_proyectos_propuesta) as num_proyectos_propuesta, sum(num_propuestas_calificadas) as num_propuestas_calificadas from estadisticas_dependencia where cve_dependencia::text LIKE ?';
         $parametros = array();
