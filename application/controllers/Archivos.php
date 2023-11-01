@@ -170,7 +170,7 @@ class Archivos extends CI_Controller {
             $this->bitacora_model->guardar($data);
 
             // Eliminar archivo
-            $nombre_archivo_fs = './doc/gestion/' . $nombre_archivo ;
+            $nombre_archivo_fs = './doc/' . $nombre_archivo ;
             $status = unlink($nombre_archivo_fs) ? 'Se eliminó el archivo '.$nombre_archivo_fs : 'Error al eliminar el archivo '.$nombre_archivo_fs;
             echo $status;
 
