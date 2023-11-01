@@ -57,7 +57,10 @@
                             <div class="col-sm-3">
                                 <p>Nombre P/Q</p>
                             </div>
-                            <div class="col-sm-5 text-center">
+                            <div class="col-sm-1">
+                                <p>Propuesta por</p>
+                            </div>
+                            <div class="col-sm-4 text-center">
                                 <p>Documentación</p>
                             </div>
                         </div>
@@ -88,7 +91,10 @@
                                         <?php } ?>
                                         <p> <?= $proyectos_item['nom_proyecto'] ?> </p>
                                     </div>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-1">
+                                        <p><?= $proyectos_item['nom_dependencia_propuesta'] ?></p>
+                                    </div>
+                                    <div class="col-sm-4">
                                         <?php 
                                             if ( in_array($proyectos_item['cve_clasificacion_supervisor'], array('1','2','4','7')) ) {
                                                 include 'docs_evaluaciones_externas.php' ;

@@ -1,11 +1,11 @@
 <table class="table table-sm table-bordered border-dark text-center">
     <thead>
         <tr>
-            <th scope="col">TR</th>
-            <th scope="col">BP</th>
-            <th scope="col">CV</th>
-            <th scope="col">CT</th>
-            <th scope="col">EF</th>
+            <th scope="col" title="Términos de referencia">TR</th>
+            <th scope="col" title="Base de participación">BP</th>
+            <th scope="col" title="Convocatoria">CV</th>
+            <th scope="col" title="Contrato">CT</th>
+            <th scope="col" title="Emisión de fallo">EF</th>
             <th style="width: 10%" scope="col">status</th>
         </tr>
     </thead>
