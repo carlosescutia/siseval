@@ -105,7 +105,7 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_programas_publicacion() {
+    public function get_proyectos_evaluaciones_externas($cve_dependencia) {
         $sql = ""
             ."select "
             ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
@@ -121,14 +121,14 @@ class Proyectos_model extends CI_Model {
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
             ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
-            ."cs.cve_clasificacion_supervisor in ('1','2','4','7')"
+			."py.cve_dependencia::text LIKE ? "
+            ."and cs.cve_clasificacion_supervisor in ('1','2','4','7')"
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
 			."";
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }
-
 
     public function get_estadisticas_proyectos_dependencia($cve_dependencia) {
         $sql = 'select sum(num_proyectos) as num_proyectos, sum(num_proyectos_propuesta) as num_proyectos_propuesta, sum(num_propuestas_calificadas) as num_propuestas_calificadas from estadisticas_dependencia where cve_dependencia::text LIKE ?';
