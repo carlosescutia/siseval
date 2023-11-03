@@ -58,7 +58,7 @@ class Gestion extends CI_Controller {
             $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia);
 
             $this->load->view('templates/header', $data);
-            $this->load->view('templates/dlg_borrar');
+            $this->load->view('templates/dlg_borrar_archivos');
             $this->load->view('gestion/index', $data);
             $this->load->view('templates/footer');
         } else {

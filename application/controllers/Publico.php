@@ -16,7 +16,8 @@ class Publico extends CI_Controller {
 
     public function index()
     {
-        $data['proyectos'] = $this->proyectos_model->get_programas_publicacion();
+        $cve_dependencia = '%';
+        $data['proyectos'] = $this->proyectos_model->get_proyectos_evaluaciones_externas($cve_dependencia);
 
         $this->load->view('templates/pubheader', $data);
         $this->load->view('publico/index', $data);
