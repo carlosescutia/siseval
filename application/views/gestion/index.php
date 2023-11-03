@@ -40,22 +40,22 @@
 
     <div class="row">
         <?php foreach ($dependencias as $dependencias_item) { ?>
-        <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?><span class="h6"><?= ($dependencias_item['carga_evaluaciones']) ? '' : ' - No solicita evaluaciones para el ejercicio fiscal' ?></span></h3>
+        <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row fw-bold">
                             <div class="col-sm-1">
-                                <p>Clave PP</p>
-                            </div>
-                            <div class="col-sm-2">
-                                <p>Nombre PP</p>
-                            </div>
-                            <div class="col-sm-1">
                                 <p>Clave P/Q</p>
                             </div>
                             <div class="col-sm-3">
                                 <p>Nombre P/Q</p>
+                            </div>
+                            <div class="col-sm-1 fw-bold">
+                                <p>Año</p>
+                            </div>
+                            <div class="col-sm-1 fw-bold">
+                                <p>Tipo</p>
                             </div>
                             <div class="col-sm-1">
                                 <p>Propuesta por</p>
@@ -72,12 +72,6 @@
                             <div class="col-sm-12 alternate-color">
                                 <div class="row">
                                     <div class="col-sm-1">
-                                        <p><?= $proyectos_item['cve_programa'] ?></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <p><?= $proyectos_item['nom_programa'] ?></p>
-                                    </div>
-                                    <div class="col-sm-1">
                                         <p><?= $proyectos_item['cve_proyecto'] ?></p>
                                     </div>
                                     <div class="col-sm-3">
@@ -90,6 +84,12 @@
                                             <?php } ?>
                                         <?php } ?>
                                         <p> <?= $proyectos_item['nom_proyecto'] ?> </p>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <p><?= $proyectos_item['periodo'] ?></p>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <p><?= $proyectos_item['nom_tipo_evaluacion'] ?></p>
                                     </div>
                                     <div class="col-sm-1">
                                         <p><?= $proyectos_item['nom_dependencia_propuesta'] ?></p>

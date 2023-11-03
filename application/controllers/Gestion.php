@@ -47,18 +47,15 @@ class Gestion extends CI_Controller {
                     }
                 }
 			}
-                    $anexo_social = '0';
-                    $evaluaciones_propuestas = '0';
-
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
 
             $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
-            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
+            $data['dependencias'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia_filtro);
             if ($cve_rol == 'sup' or $cve_rol == 'adm') {
                 $cve_dependencia = '%';
             }
 
-            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0);
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -68,6 +65,5 @@ class Gestion extends CI_Controller {
             redirect('inicio/login');
         }
     }
-
 
 }

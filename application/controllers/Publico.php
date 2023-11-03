@@ -23,20 +23,4 @@ class Publico extends CI_Controller {
         $this->load->view('templates/pubfooter');
     }
 
-    public function gestion()
-    {
-        $cve_dependencia_filtro = '%';
-        $anexo_social = '0';
-        $evaluaciones_propuestas = '0';
-
-        $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
-
-        $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
-        $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
-
-        $this->load->view('templates/pubheader', $data);
-        $this->load->view('publico/index', $data);
-        $this->load->view('templates/pubfooter');
-    }
-
 }

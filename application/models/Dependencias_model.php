@@ -46,6 +46,25 @@ class Dependencias_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_dependencias_evaluaciones($cve_dependencia) {
+        $sql = ""
+            ."select "
+            ."dpe.cve_dependencia, dpe.nom_dependencia "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor "
+            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
+			.'where  '
+			.'dpe.cve_dependencia::text LIKE ?  '
+			."";
+        $parametros = array();
+        array_push($parametros, "$cve_dependencia");
+		$sql .= ' group by dpe.cve_dependencia, dpe.nom_dependencia ';
+        $sql .= ' order by dpe.cve_dependencia;';
+        $query = $this->db->query($sql, $parametros);
+        return $query->result_array();
+    }
+
     public function get_status_dependencias($evaluaciones, $propuestas) {
         $sql = ""
             ."select  "
