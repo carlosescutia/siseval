@@ -60,7 +60,7 @@
 
             <td>
                 <?php
-                    $tipo_doc = 'ip';
+                    $tipo_doc = 'if';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
                     $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $tipo_evaluacion . '.' . $tipo_archivo ;
