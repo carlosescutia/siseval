@@ -42,52 +42,11 @@
         $dir_docs_e2 = 'doc/';
 
         foreach ($proyectos as $proyectos_item) { 
-            switch ($proyectos_item['cve_tipo_evaluacion']) {
-                case 1:
-                    $tipo_evaluacion = 'cp';
-                    break;
-                case 2:
-                    $tipo_evaluacion = 'cr';
-                    break;
-                case 3:
-                    $tipo_evaluacion = 'cs';
-                    break;
-                case 4:
-                    $tipo_evaluacion = 'de';
-                    break;
-                case 5:
-                    $tipo_evaluacion = 'di';
-                    break;
-                case 6:
-                    $tipo_evaluacion = 'es';
-                    break;
-                case 7:
-                    $tipo_evaluacion = 'fd';
-                    break;
-                case 8:
-                    $tipo_evaluacion = 'im';
-                    break;
-                case 9:
-                    $tipo_evaluacion = 'in';
-                    break;
-                case 10:
-                    $tipo_evaluacion = 'pr';
-                    break;
-                case 11:
-                    $tipo_evaluacion = 're';
-                    break;
-                case 12:
-                    $tipo_evaluacion = 'ot';
-                    break;
-                default:
-                    $tipo_evaluacion = '';
-                    break;
-            }
-            $nombre_archivo_e1 = $etapa_e1 . $tipo_doc_e1 . '_' . strtolower($proyectos_item['cve_proyecto']) . $tipo_evaluacion . '.' . $tipo_archivo_e1 ;
+            $nombre_archivo_e1 = $etapa_e1 . $tipo_doc_e1 . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo_e1 ;
             $nombre_archivo_e1_fs = './' . $dir_docs_e1 . $nombre_archivo_e1 ;
             $nombre_archivo_e1_url = base_url() . $dir_docs_e1 . $nombre_archivo_e1;
 
-            $nombre_archivo_e2 = $etapa_e2 . $tipo_doc_e2 . '_' . strtolower($proyectos_item['cve_proyecto']) . $tipo_evaluacion . '.' . $tipo_archivo_e2 ;
+            $nombre_archivo_e2 = $etapa_e2 . $tipo_doc_e2 . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo_e2 ;
             $nombre_archivo_e2_fs = './' . $dir_docs_e2 . $nombre_archivo_e2 ;
             $nombre_archivo_e2_url = base_url() . $dir_docs_e2 . $nombre_archivo_e2;
 
@@ -125,5 +84,6 @@
         <?php } ?>
     </div>
     <hr />
+    <p><?= $links ?></p>
 
 </main>
