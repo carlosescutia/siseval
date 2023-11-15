@@ -66,7 +66,7 @@ class Proyectos_model extends CI_Model {
             ."select "
             ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
             ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
-            ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
+            ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
@@ -81,9 +81,80 @@ class Proyectos_model extends CI_Model {
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
 			."";
-        $query = $this->db->query($sql, array($cve_dependencia));
+
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
+
+    public function get_programas_agenda_evaluacion_archivos($limite=null, $inicio=null) {
+        // lista de proyectos con archivos
+        $dire = './doc/' ;
+        $archivos = directory_map($dire);
+        $lista = array();
+        foreach ($archivos as $archivo) {
+            $tipoarch = substr($archivo, 1, 2);
+            if (in_array($tipoarch, array('if', 'tr'))) {
+                $nom_arch = substr($archivo, 0, -4);
+                $cve_proyecto = substr($nom_arch, 4);
+                array_push($lista, $cve_proyecto);
+            }
+        }
+        $lista_final = array_unique($lista);
+
+        $sql = ""
+            ."select "
+            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
+            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
+            ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
+            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
+            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
+            ."where "
+            ."lower(pe.cve_proyecto) || te.abrev_tipo_evaluacion in ? "
+            ."order by "
+            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
+            ."limit " . $limite . " offset " . $inicio
+			."";
+
+        $query = $this->db->query($sql, array($lista_final));
+        return $query->result_array();
+    }
+
+    public function num_programas_agenda_evaluacion_archivos($limite=null, $inicio=null) {
+        // lista de proyectos con archivos
+        $dire = './doc/' ;
+        $archivos = directory_map($dire);
+        $lista = array();
+        foreach ($archivos as $archivo) {
+            $tipoarch = substr($archivo, 1, 2);
+            if (in_array($tipoarch, array('if', 'tr'))) {
+                $nom_arch = substr($archivo, 0, -4);
+                $cve_proyecto = substr($nom_arch, 4);
+                array_push($lista, $cve_proyecto);
+            }
+        }
+        $lista_final = array_unique($lista);
+
+        $sql = ""
+            ."select "
+            ."count (*) as num_programas "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."where "
+            ."lower(pe.cve_proyecto) || te.abrev_tipo_evaluacion in ? "
+			."";
+
+        $query = $this->db->query($sql, array($lista_final));
+        return $query->row_array()['num_programas'];
+    }
+
 
     public function get_propuestas_evaluacion($cve_dependencia) {
         $sql = ''
@@ -138,6 +209,5 @@ class Proyectos_model extends CI_Model {
         $this->db->where('id_proyecto', $id_proyecto);
         $result = $this->db->delete('proyectos');
     }
-
 
 }
