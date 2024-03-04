@@ -41,7 +41,7 @@ class Proyectos_model extends CI_Model {
         if ($cve_rol == 'adm' || $cve_rol == 'sup') {
             $cve_dependencia = '%';
         }
-        $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on pg.cve_dependencia = d.cve_dependencia where py.cve_proyecto = ? and pg.cve_dependencia::text LIKE ?';
+        $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia left join dependencias d on pg.cve_dependencia = d.cve_dependencia where py.cve_proyecto = ? and pg.cve_dependencia::text LIKE ?';
         $query = $this->db->query($sql, array($cve_proyecto, $cve_dependencia));
         return $query->row_array();
     }
