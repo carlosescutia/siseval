@@ -66,7 +66,7 @@
             <?php if ( $num_calificaciones_propuesta_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-start">
                     <form method="post" action="<?= base_url() ?>calificaciones_propuesta/nuevo/<?=$id_propuesta_evaluacion?>">
-                        <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Calificar</button>
                     </form>
                 </div>
             <?php } ?>

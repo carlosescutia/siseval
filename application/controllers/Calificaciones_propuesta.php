@@ -37,8 +37,11 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['probabilidades_inclusion'] = $this->probabilidades_inclusion_model->get_probabilidades_inclusion();
 
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($data['calificacion_propuesta']['id_propuesta_evaluacion']);
+            $id_propuesta_evaluacion = $data['calificacion_propuesta']['id_propuesta_evaluacion'];
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
+            $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);
 
             $this->load->view('templates/header', $data);
             $this->load->view('calificaciones_propuesta/detalle', $data);
@@ -62,6 +65,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
 
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
@@ -69,6 +73,8 @@ class Calificaciones_propuesta extends CI_Controller {
 
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
+            $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);
 
             $this->load->view('templates/header', $data);
             $this->load->view('calificaciones_propuesta/nuevo', $data);

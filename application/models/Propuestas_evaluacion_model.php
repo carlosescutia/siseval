@@ -35,6 +35,49 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_ods_propuesta_evaluacion($id_propuesta_evaluacion) {
+        $sql = ""
+            ."select "
+            ."distinct od.cve_objetivo_desarrollo, od.nom_objetivo_desarrollo "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join programas_metas pm on pm.cve_programa = py.cve_programa "
+            ."left join metas_ods mo on pm.cve_meta_ods = mo.cve_meta_ods "
+            ."left join objetivos_desarrollo od on od.cve_objetivo_desarrollo = mo.cve_objetivo_desarrollo "
+            ."where "
+            ."pe.id_propuesta_evaluacion = ? "
+			."";
+        $query = $this->db->query($sql, array($id_propuesta_evaluacion));
+        return $query->result_array();
+    }
+
+    public function get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion) {
+        $sql = ""
+            ."select "
+            ."id_propuesta_evaluacion, "
+            ."( "
+            ."coalesce(info_diagnostico, 0) "
+            ."+ coalesce(info_mir, 0) "
+            ."+ coalesce(info_reglasop, 0) "
+            ."+ coalesce(info_regsadm, 0) "
+            ."+ coalesce(info_fuentes_of, 0) "
+            ."+ coalesce(info_progpresup, 0) "
+            ."+ coalesce(info_padronben, 0) "
+            ."+ coalesce(info_lineamientos, 0) "
+            ."+ coalesce(info_guiasop, 0) "
+            ."+ coalesce(info_normativa, 0) "
+            ."+ coalesce(info_otro, 0) "
+            .") as tot_info_disponible "
+            ."from "
+            ."propuestas_evaluacion "
+            ."where "
+            ."id_propuesta_evaluacion = ? ; "
+			."";
+        $query = $this->db->query($sql, array($id_propuesta_evaluacion));
+        return $query->row_array()['tot_info_disponible'] ?? null ;
+    }
+
     public function guardar($data, $id_propuesta_evaluacion)
     {
         if ($id_propuesta_evaluacion) {

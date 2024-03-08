@@ -8,18 +8,12 @@ CREATE VIEW totales_calificacion AS
 SELECT
 	cp.id_calificacion_propuesta,
 	(
-	(case when cp.agenda2030 >= 0 then cp.agenda2030 else 0 end) 
-	+ (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
+	(case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
 	+ (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) 
-	+ (case when cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end) 
-	+ (case when cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end) 
 	) as suma,
 	(
-	(case when cp.agenda2030 >= 0 then 1 else 0 end) 
-	+ (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
+	(case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
 	+ (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end) 
-	+ (case when cp.recomendaciones_previas >= 0 then 1 else 0 end)
-	+ (case when cp.informacion_disponible >= 0 then 1 else 0 end) 
 	) as conteo
 FROM 
 	calificaciones_propuesta cp ;
