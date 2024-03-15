@@ -180,6 +180,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col mb-2">
+                                <?php include "graf_proyectos_ods.php" ?>
+                            </div>
                         </div>
                     </div>
                 </div>
