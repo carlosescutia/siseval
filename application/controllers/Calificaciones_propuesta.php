@@ -37,6 +37,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['probabilidades_inclusion'] = $this->probabilidades_inclusion_model->get_probabilidades_inclusion();
+            $data['num_proyectos_ods'] = $this->proyectos_model->get_num_proyectos_ods();
 
             $id_propuesta_evaluacion = $data['calificacion_propuesta']['id_propuesta_evaluacion'];
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
