@@ -191,6 +191,32 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_num_proyectos_ods()
+    {
+        $sql = ""
+            ."select "
+            ."od.cve_objetivo_desarrollo, od.nom_objetivo_desarrollo, count(t.cve_proyecto) as num_proyectos_ods "
+            ."from "
+            ."( "
+            ."select "
+            ."py.cve_proyecto, py.cve_programa, mo.cve_objetivo_desarrollo "
+            ."from "
+            ."proyectos py "
+            ."left join programas_metas pm on pm.cve_programa = py.cve_programa "
+            ."left join metas_ods mo on mo.cve_meta_ods = pm.cve_meta_ods "
+            ."group by "
+            ."py.cve_proyecto, py.cve_programa, mo.cve_objetivo_desarrollo "
+            .") as t "
+            ."right join objetivos_desarrollo od on od.cve_objetivo_desarrollo = t.cve_objetivo_desarrollo "
+            ."group by "
+            ."od.cve_objetivo_desarrollo, od.nom_objetivo_desarrollo "
+            ."order by "
+            ."od.cve_objetivo_desarrollo "
+            ."";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function guardar($data, $id_proyecto)
     {
         if ($id_proyecto) {

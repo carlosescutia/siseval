@@ -16,6 +16,7 @@ class Calificaciones_propuesta extends CI_Controller {
         $this->load->model('probabilidades_inclusion_model');
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('semaforo_proyectos_model');
+        $this->load->model('proyectos_model');
     }
 
     public function detalle($id_calificacion_propuesta)
@@ -75,6 +76,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
             $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['num_proyectos_ods'] = $this->proyectos_model->get_num_proyectos_ods();
 
             $this->load->view('templates/header', $data);
             $this->load->view('calificaciones_propuesta/nuevo', $data);
