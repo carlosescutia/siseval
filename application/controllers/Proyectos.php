@@ -68,6 +68,9 @@ class Proyectos extends CI_Controller {
                 }
 			}
 
+            $data['dependencia'] = $this->dependencias_model->get_dependencia($cve_dependencia);
+            $data['estadisticas_proyectos'] = $this->proyectos_model->get_estadisticas_proyectos_dependencia($cve_dependencia);
+
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
             $data['anexo_social'] = $anexo_social;
             $data['evaluaciones_propuestas'] = $evaluaciones_propuestas;

@@ -1,52 +1,155 @@
 <main role="main" class="ml-sm-auto px-4">
     <div class="pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12">
-            <form method="post" action="<?= base_url() ?>proyectos">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h2>Procesos y proyectos</h2>
-                    </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h2>Procesos y proyectos</h2>
                 </div>
+            </div>
+
+            <div class="col-sm-12 align-self-center mb-2">
                 <div class="row">
-                    <div class="col-sm-12 align-self-center">
-                        <div class="row">
-                            <div class="col-2">
-                                <select class="form-select form-select-sm" name="cve_dependencia_filtro">
-                                    <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
-                                        <option value="%" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
-                                    <?php } ?>
-                                    <?php foreach ($dependencias_filtro as $dependencias_filtro_item) { ?>
-                                    <option value="<?= $dependencias_filtro_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_filtro_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_filtro_item['nom_dependencia']?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-select form-select-sm" name="anexo_social">
-                                    <option value="0" <?= ($anexo_social == '0') ? 'selected' : '' ?> >Todos los proyectos</option>
-                                    <option value="1" <?= ($anexo_social == '1') ? 'selected' : '' ?>>Solamente proyectos del anexo social</option>
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <select class="form-select form-select-sm" name="evaluaciones_propuestas">
-                                    <option value="0" <?= ($evaluaciones_propuestas == '0') ? 'selected' : '' ?> >Con y sin evaluaciones propuestas</option>
-                                    <option value="1" <?= ($evaluaciones_propuestas == '1') ? 'selected' : '' ?> >Solamente proyectos con evaluaciones propuestas</option>
-                                    <option value="2" <?= ($evaluaciones_propuestas == '2') ? 'selected' : '' ?> >Solamente proyectos sin evaluaciones propuestas</option>
-                                </select>
-                            </div>
-                            <div class="col-1">
-                                <button class="btn btn-success btn-sm">Filtrar</button>
-                            </div>
-            </form>
-                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
-                                <div class="col-sm-3 text-end">
-                                    <form method="post" action="<?= base_url() ?>proyectos/nuevo">
-                                        <button type="submit" class="btn btn-primary">Nuevo</button>
-                                    </form>
+                    <div class="col-sm-11 align-self-center">
+                        <form method="post" action="<?= base_url() ?>proyectos">
+                            <div class="row">
+                                <div class="col-2">
+                                    <select class="form-select form-select-sm" name="cve_dependencia_filtro">
+                                        <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
+                                            <option value="%" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
+                                        <?php } ?>
+                                        <?php foreach ($dependencias_filtro as $dependencias_filtro_item) { ?>
+                                        <option value="<?= $dependencias_filtro_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_filtro_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_filtro_item['nom_dependencia']?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
-                            <?php } ?>
+                                <div class="col-3">
+                                    <select class="form-select form-select-sm" name="anexo_social">
+                                        <option value="0" <?= ($anexo_social == '0') ? 'selected' : '' ?> >Todos los proyectos</option>
+                                        <option value="1" <?= ($anexo_social == '1') ? 'selected' : '' ?>>Solamente proyectos del anexo social</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <select class="form-select form-select-sm" name="evaluaciones_propuestas">
+                                        <option value="0" <?= ($evaluaciones_propuestas == '0') ? 'selected' : '' ?> >Con y sin evaluaciones propuestas</option>
+                                        <option value="1" <?= ($evaluaciones_propuestas == '1') ? 'selected' : '' ?> >Solamente proyectos con evaluaciones propuestas</option>
+                                        <option value="2" <?= ($evaluaciones_propuestas == '2') ? 'selected' : '' ?> >Solamente proyectos sin evaluaciones propuestas</option>
+                                    </select>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-success btn-sm">Filtrar</button>
+                                </div>
+                                <div class="col-3">
+                                    <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#extra-planificacion" role="button" aria-expanded="false" aria-controls="extra-planificacion">
+                                        Tablero de dependencia
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                        <div class="col-sm-1 text-end">
+                            <form method="post" action="<?= base_url() ?>proyectos/nuevo">
+                                <button type="submit" class="btn btn-primary btn-sm">Nuevo</button>
+                            </form>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="col-sm-12 mt-3 collapse text-center" id="extra-planificacion">
+                <div class="row">
+                    <h4><?= $dependencia['nom_completo_dependencia'] ?></h4>
+
+                    <div class="col-sm-12">
+                        <div class="card text-center border-0">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-4 border-end">
+                                        <h1><?= $estadisticas_proyectos['num_proyectos'] ?></h1>
+                                        <p>Proyectos de la dependencia</p>
+                                    </div>
+                                    <div class="col-sm-4 border-end">
+                                        <h1><?= $estadisticas_proyectos['num_proyectos_propuesta'] ?></h1>
+                                        <p>Propuestas de evaluación</p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h1><?= $estadisticas_proyectos['num_propuestas_calificadas'] ?></h1>
+                                        <p>Propuestas calificadas</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-12">
+                        <div class="row mb-2">
+                            <div class="col-sm-6 text-start">
+                                <div class="card mt-0 mb-3 border-0 texto-menor">
+                                    <div class="card-body">
+                                        <?php if ($dependencia['carga_evaluaciones']) { ?>
+                                            <p>Actualmente con solicitud de evaluaciones para el ejercicio fiscal</p>
+                                            <form method="post" action="<?= base_url() ?>dependencias/desactivar_evaluaciones">
+                                                <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                <button class="btn btn-primary" type="submit" >
+                                                    No se solicitarán evaluaciones para el ejercicio fiscal
+                                                </button>
+                                            </form>
+                                        <?php } else { ?>
+                                            <p>Sin solicitud de evaluaciones para el ejercicio fiscal</p>
+                                            <form method="post" action="<?= base_url() ?>dependencias/activar_evaluaciones">
+                                                <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                <button class="btn btn-primary" type="submit" >
+                                                    Solicitar evaluaciones para el ejercicio fiscal
+                                                </button>
+                                            </form>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 text-start">
+                                <div class="card mt-0 mb-3 border-0 texto-menor">
+                                    <div class="card-body">
+                                        <h4>Oficio de solicitud de evaluaciones</h4>
+                                        <p>Una vez cargada la propuesta de evaluaciones a realizar en 2023, favor de adjuntar el oficio mediante el que se hace la solicitud.</p>
+                                        <p>Cargar un sólo documento en formato PDF incluyendo el oficio y el reporte de propuestas de evaluación.</p>
+                                        <p>En caso de no solicitar evaluaciones para el ejercicio fiscal actual, de igual forma le solicitamos cargar el oficio de confirmación.</p>
+                                        <p class="text-end">Máximo 9 MB.</p>
+                                        <div class="mt-3">
+                                            <?php 
+                                            $nombre_archivo = 'oficio_' . $nom_dependencia . '.pdf';
+                                            $nombre_archivo_fs = './oficios/' . $nombre_archivo;
+                                            $nombre_archivo_url = base_url() . 'oficios/' . $nombre_archivo;
+                                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                            <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="30"></span>Oficio cargado</a>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
+                                            <div class="row text-danger">
+                                                <?php if ($error) { 
+                                                echo $error;
+                                                } ?>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <input type="file" class="form-control-file" name="subir_archivo">
+                                                </div>
+                                                <div class="col-md-4 text-end">
+                                                    <button type="submit" class="btn btn-primary btn-sm">Subir oficio</button>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
+
         </div>
     </div>
 

@@ -6,8 +6,6 @@
         <div class="col-md-7 tabla-datos">
             <?php include "bienvenida.php"; ?>
             <?php include "indicadores.php"; ?>
-            <hr class="mx-5">
-            <?php include "oficio.php"; ?>
         </div>
         <div class="col-md-5 ml-5">
             <?php include "calendario.php"; ?>

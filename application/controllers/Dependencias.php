@@ -216,7 +216,7 @@ class Dependencias extends CI_Controller {
                 $this->bitacora_model->guardar($data);
 
             }
-            redirect('inicio');
+            redirect('proyectos');
 
         } else {
             redirect('inicio/login');
@@ -259,7 +259,7 @@ class Dependencias extends CI_Controller {
                 $this->bitacora_model->guardar($data);
 
             }
-            redirect('inicio');
+            redirect('proyectos');
 
         } else {
             redirect('inicio/login');
