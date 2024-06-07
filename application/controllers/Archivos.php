@@ -48,7 +48,7 @@ class Archivos extends CI_Controller {
                 $this->bitacora_model->guardar($data);
 
             }
-            redirect('inicio');
+            redirect('proyectos');
         } else {
             redirect('inicio/login');
         }

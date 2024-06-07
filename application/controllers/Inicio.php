@@ -35,14 +35,6 @@ class Inicio extends CI_Controller {
             $data['fecha_ini_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_observaciones');
             $data['fecha_fin_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_observaciones');
 
-
-            $data['dependencia'] = $this->dependencias_model->get_dependencia($cve_dependencia);
-
-            if ($cve_rol == 'sup') {
-                $cve_dependencia = '%';
-            }
-            $data['estadisticas_proyectos'] = $this->proyectos_model->get_estadisticas_proyectos_dependencia($cve_dependencia);
-
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);
             $this->load->view('templates/footer');
