@@ -33,6 +33,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data['etapa_actual'] = 1 ;
 
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
@@ -67,6 +68,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data['etapa_actual'] = 1 ;
             $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
 
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();

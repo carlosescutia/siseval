@@ -14,7 +14,7 @@
                         <p>
                             <a href="<?=base_url()?>propuestas_evaluacion/detalle/<?= $propuestas_evaluacion_item['id_propuesta_evaluacion'] ?>"><?= $propuestas_evaluacion_item['nom_dependencia'] ?> - <?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></a>
 
-                            <?php if (in_array('99', $accesos_sistema_rol)) {
+                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
                                 if ($cve_dependencia == $propuestas_evaluacion_item['cve_dependencia']) { 
                                     $item_eliminar = 'Propuesta de evaluación '.$propuestas_evaluacion_item['nom_dependencia']. ' ' . $propuestas_evaluacion_item['nom_tipo_evaluacion']; 
                                     $url = base_url() . "propuestas_evaluacion/eliminar/". $propuestas_evaluacion_item['id_propuesta_evaluacion']; ?>
@@ -45,7 +45,7 @@
             </div>
         <?php } ?>
     </div>
-    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
         <?php if ( $cve_rol == 'usr' ) { ?>
             <?php if ( $num_propuestas_evaluacion_proyecto_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-end">

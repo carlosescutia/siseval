@@ -37,7 +37,6 @@
         </div>
     </div>
 
-
     <div class="row">
         <?php foreach ($dependencias as $dependencias_item) { ?>
         <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>

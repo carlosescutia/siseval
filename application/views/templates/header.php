@@ -42,15 +42,12 @@
             <!-- opciones del menu -->
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="col-sm-7">
-                    <h5 class="my-0 mr-md-auto texto-titulo">Sistema de Evaluación de Guanajuato</h5>
+                <h5 class="my-0 mr-md-auto texto-titulo">Sistema de Evaluación de Guanajuato</h5>
                     <hr class="mb-0 mt-2 pt-0 pb-0 " />
                     <ul class="navbar-nav mr-auto">
                         <?php foreach ($opciones_sistema as $opciones_sistema_item) {
-                            if (
-                                in_array($opciones_sistema_item['cod_opcion'], $accesos_sistema_rol) 
-                                && $opciones_sistema_item['es_menu'] 
-                                && ($opciones_sistema_item['etapa'] == 0 || ($opciones_sistema_item['etapa'] == $etapa_siseval) )
-                            ) { ?>
+                            if ( in_array($opciones_sistema_item['cod_opcion'], $accesos_sistema_rol) 
+                                && $opciones_sistema_item['es_menu'] ) { ?>
                                 <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?><?=$opciones_sistema_item['url'] ?>"><?=$opciones_sistema_item['nom_opcion'] ?></a></li>
                             <?php } 
                         } ?>
