@@ -19,7 +19,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <p><a href="<?=base_url()?>calificaciones_propuesta/detalle/<?= $calificaciones_propuesta_item['id_calificacion_propuesta'] ?>"><?= $calificaciones_propuesta_item['nom_dependencia'] ?></a>
-                                    <?php if (in_array('99', $accesos_sistema_rol)) {
+                                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
                                         if ($cve_dependencia == $calificaciones_propuesta_item['cve_dependencia']) { 
                                             $item_eliminar = 'Calificación de la propuesta de '. $calificaciones_propuesta_item['nom_dependencia'] ;
                                             $url = base_url() . "calificaciones_propuesta/eliminar/". $calificaciones_propuesta_item['id_calificacion_propuesta']; ?>
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
         <?php if ( $cve_rol == 'sup' ) { ?>
             <?php if ( $num_calificaciones_propuesta_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-start">

@@ -46,7 +46,7 @@
                             </div>
                         </form>
                     </div>
-                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                         <div class="col-sm-1 text-end">
                             <form method="post" action="<?= base_url() ?>proyectos/nuevo">
                                 <button type="submit" class="btn btn-primary btn-sm">Nuevo</button>
@@ -210,7 +210,7 @@
                                         <?php } ?>
                                         <p>
                                         <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
-                                        <?php if (in_array('99', $accesos_sistema_rol)) {
+                                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
                                             if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { 
                                                 $item_eliminar = 'Proyecto: '.$proyectos_item['cve_proyecto']. ' ' .$proyectos_item['nom_proyecto'];
                                                 $url = base_url() . "proyectos/eliminar/". $proyectos_item['id_proyecto']; ?>

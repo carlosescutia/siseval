@@ -14,7 +14,7 @@
             <?php 
                 // valores comunes a todos los archivos
                 $num_docs = 0; 
-                $etapa_siseval = 'g';
+                $prefijo_etapa = 'g';
                 $dir_docs = 'doc/';
                 $url_actual = base_url() . 'gestion';
             ?>
@@ -24,7 +24,7 @@
                     $tipo_doc = 'tr';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
+                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
@@ -35,7 +35,7 @@
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
                         <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
                             <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
@@ -61,7 +61,7 @@
                     $tipo_doc = 'bp';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
+                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
@@ -72,7 +72,7 @@
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
                         <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
                             <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
@@ -98,7 +98,7 @@
                     $tipo_doc = 'cv';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
+                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
@@ -109,7 +109,7 @@
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
                         <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
                             <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
@@ -135,7 +135,7 @@
                     $tipo_doc = 'ct';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
+                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
@@ -146,7 +146,7 @@
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
                         <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
                             <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
@@ -172,7 +172,7 @@
                     $tipo_doc = 'ef';
                     $icono = "bi-filetype-pdf";
                     $tipo_archivo = 'pdf';
-                    $nombre_archivo = $etapa_siseval . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
+                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
                     $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
@@ -183,7 +183,7 @@
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
                         <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
                             <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">

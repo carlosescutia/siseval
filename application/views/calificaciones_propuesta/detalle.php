@@ -197,7 +197,7 @@
                 <input type="hidden" name="cve_dependencia" value="<?= $calificacion_propuesta['cve_dependencia'] ?>">
                 <input type="hidden" name="clasificacion_supervisor" value="0">
 
-                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
                     <?php if ($cve_dependencia == $calificacion_propuesta['cve_dependencia']) { ?>
                         <div class="card-footer text-end">
                             <button type="submit" class="btn btn-primary btn-sm">Guardar</button>

@@ -1,7 +1,7 @@
 <div class="card mt-0 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
-        <?php if (in_array('99', $accesos_sistema_rol)) {
+        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
             if ( $cve_rol == 'sup' and $cve_dependencia == 14) { ?>
                 <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
                     <div class="row mb-3">
@@ -308,7 +308,7 @@
                 <div class="row">
 
                     <div class="col-sm-6 text-start">
-                        <?php if (in_array('99', $accesos_sistema_rol)) {
+                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
                             if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
                                 <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                             <?php } 
@@ -327,7 +327,7 @@
                                     <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
                                 <?php } ?>
                             </div>
-                            <?php if (in_array('99', $accesos_sistema_rol)) {
+                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
                                 if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
                                 <div class="col-sm-8">
                                     <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/adjunto_propuesta">
