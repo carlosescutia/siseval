@@ -12,6 +12,7 @@ class Inicio extends CI_Controller {
 
         $this->load->model('proyectos_model');
         $this->load->model('dependencias_model');
+        $this->load->model('eventos_model');
     }
 
     public function index()
@@ -34,6 +35,7 @@ class Inicio extends CI_Controller {
             $data['fecha_fin_evaluaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_evaluaciones');
             $data['fecha_ini_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_observaciones');
             $data['fecha_fin_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_observaciones');
+            $data['eventos'] = $this->eventos_model->get_eventos();
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

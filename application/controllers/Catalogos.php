@@ -30,10 +30,6 @@ class Catalogos extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
             
-            if ($cve_rol != 'adm') {
-                redirect('inicio');
-            }
-
             $this->load->view('templates/header', $data);
             $this->load->view('catalogos/lista', $data);
             $this->load->view('templates/footer');
