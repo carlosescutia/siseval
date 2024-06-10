@@ -33,7 +33,7 @@
                         <?php include "tipos_evaluacion/boton.php" ?>
                     </div>
                 <?php } ?>
-                <?php if (in_array('506', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('506', $accesos_sistema_rol) && ($cve_dependencia == '14')) { ?>
                     <div class="col-md-4">
                         <?php include "eventos/boton.php" ?>
                     </div>
