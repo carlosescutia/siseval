@@ -211,3 +211,10 @@ CREATE TABLE parametros_sistema (
     nom_parametro_sistema text,
     valor_parametro_sistema text
 );
+
+DROP TABLE IF EXISTS eventos CASCADE;
+CREATE TABLE eventos (
+    id_evento serial,
+    fecha_evento date,
+    desc_evento text
+);

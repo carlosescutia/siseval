@@ -7,8 +7,9 @@ class Bitacora_model extends CI_Model {
 
     public function guardar($data)
     {
-        $result = $this->db->insert('bitacora', $data);
-        return $result;
+        $this->db->insert('bitacora', $data);
+        $id = $this->db->insert_id();
+        return $id;
     }
 
     public function get_bitacora($nom_dependencia, $cve_rol, $accion, $entidad)

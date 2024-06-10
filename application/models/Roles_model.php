@@ -21,11 +21,13 @@ class Roles_model extends CI_Model {
     {
         if ($cve_rol) {
             $this->db->where('cve_rol', $cve_rol);
-            $result = $this->db->update('roles', $data);
+            $this->db->update('roles', $data);
+            $id = $cve_rol;
         } else {
-            $result = $this->db->insert('roles', $data);
+            $this->db->insert('roles', $data);
+            $id = $this->db->insert_id();
         }
-        return $result;
+        return $id;
     }
 
     public function eliminar($cve_rol)
