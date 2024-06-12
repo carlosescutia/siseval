@@ -38,15 +38,18 @@
                                 <div class="col-1">
                                     <button class="btn btn-success btn-sm">Filtrar</button>
                                 </div>
-                                <div class="col-3">
-                                    <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#extra-planificacion" role="button" aria-expanded="false" aria-controls="extra-planificacion">
-                                        Tablero de dependencia
-                                    </a>
-                                </div>
+                                <?php if (in_array('99', $accesos_sistema_rol) && ($cve_rol == 'usr')) { ?>
+                                <!-- Si tiene permiso de edición, la etapa de planeación es la actual y es rol usuario -->
+                                    <div class="col-3">
+                                        <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#tablero-dependencia" role="button" aria-expanded="false" aria-controls="tablero-dependencia">
+                                            Tablero de dependencia
+                                        </a>
+                                    </div>
+                                <?php } ?>
                             </div>
                         </form>
                     </div>
-                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
+                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
                         <div class="col-sm-1 text-end">
                             <form method="post" action="<?= base_url() ?>proyectos/nuevo">
                                 <button type="submit" class="btn btn-primary btn-sm">Nuevo</button>
@@ -56,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 mt-3 collapse text-center" id="extra-planificacion">
+            <div class="col-sm-12 mt-3 collapse text-center" id="tablero-dependencia">
                 <div class="row">
                     <h4><?= $dependencia['nom_completo_dependencia'] ?></h4>
 
@@ -88,20 +91,24 @@
                                     <div class="card-body">
                                         <?php if ($dependencia['carga_evaluaciones']) { ?>
                                             <p>Actualmente con solicitud de evaluaciones para el ejercicio fiscal</p>
-                                            <form method="post" action="<?= base_url() ?>dependencias/desactivar_evaluaciones">
-                                                <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-                                                <button class="btn btn-primary" type="submit" >
-                                                    No se solicitarán evaluaciones para el ejercicio fiscal
-                                                </button>
-                                            </form>
+                                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                                <form method="post" action="<?= base_url() ?>dependencias/desactivar_evaluaciones">
+                                                    <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                    <button class="btn btn-primary" type="submit" >
+                                                        No se solicitarán evaluaciones para el ejercicio fiscal
+                                                    </button>
+                                                </form>
+                                            <?php } ?>
                                         <?php } else { ?>
                                             <p>Sin solicitud de evaluaciones para el ejercicio fiscal</p>
-                                            <form method="post" action="<?= base_url() ?>dependencias/activar_evaluaciones">
-                                                <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-                                                <button class="btn btn-primary" type="submit" >
-                                                    Solicitar evaluaciones para el ejercicio fiscal
-                                                </button>
-                                            </form>
+                                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                                <form method="post" action="<?= base_url() ?>dependencias/activar_evaluaciones">
+                                                    <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                    <button class="btn btn-primary" type="submit" >
+                                                        Solicitar evaluaciones para el ejercicio fiscal
+                                                    </button>
+                                                </form>
+                                            <?php } ?>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -124,24 +131,26 @@
                                             <?php } ?>
                                         </div>
                                     </div>
-                                    <div class="card-footer text-center">
-                                        <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
-                                            <div class="row text-danger">
-                                                <?php if ($error) { 
-                                                echo $error;
-                                                } ?>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <input type="file" class="form-control-file" name="subir_archivo">
+                                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                        <div class="card-footer text-center">
+                                            <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
+                                                <div class="row text-danger">
+                                                    <?php if ($error) { 
+                                                    echo $error;
+                                                    } ?>
                                                 </div>
-                                                <div class="col-md-4 text-end">
-                                                    <button type="submit" class="btn btn-primary btn-sm">Subir oficio</button>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <input type="file" class="form-control-file" name="subir_archivo">
+                                                    </div>
+                                                    <div class="col-md-4 text-end">
+                                                        <button type="submit" class="btn btn-primary btn-sm">Subir oficio</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
-                                        </form>
-                                    </div>
+                                                <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                                            </form>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +219,7 @@
                                         <?php } ?>
                                         <p>
                                         <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
-                                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
+                                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) {
                                             if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { 
                                                 $item_eliminar = 'Proyecto: '.$proyectos_item['cve_proyecto']. ' ' .$proyectos_item['nom_proyecto'];
                                                 $url = base_url() . "proyectos/eliminar/". $proyectos_item['id_proyecto']; ?>
