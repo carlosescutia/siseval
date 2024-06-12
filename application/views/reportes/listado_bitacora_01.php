@@ -30,7 +30,7 @@
                                     <option value="" <?= ($entidad == '') ? 'selected' : '' ?>>Todas las entidades</option>
                                     <option value="proyectos" <?= ($entidad == 'proyectos') ? 'selected' : '' ?>>proyectos</option>
                                     <option value="propuestas_evaluacion" <?= ($entidad == 'propuestas_evaluacion') ? 'selected' : '' ?>>propuestas_evaluacion</option>
-                                    <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
+                                    <?php if ($cve_rol != 'usr') { ?>
                                         <option value="calificaciones_propuesta" <?= ($entidad == 'calificaciones_propuesta') ? 'selected' : '' ?>>calificaciones_propuesta</option>
                                     <?php } ?>
                                     <option value="dependencias" <?= ($entidad == 'dependencias') ? 'selected' : '' ?>>dependencias</option>

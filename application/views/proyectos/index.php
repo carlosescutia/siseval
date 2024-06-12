@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="col-2">
                                     <select class="form-select form-select-sm" name="cve_dependencia_filtro">
-                                        <?php if ($cve_rol == 'sup' or $cve_rol == 'adm') { ?>
+                                        <?php if ($cve_rol != 'usr') { ?>
                                             <option value="%" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
                                         <?php } ?>
                                         <?php foreach ($dependencias_filtro as $dependencias_filtro_item) { ?>

@@ -2,7 +2,7 @@
     <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
         <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-            if ( $cve_rol == 'sup' and $cve_dependencia == 14) { ?>
+            if ( $cve_rol == 'sec' ) { ?>
                 <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
                     <div class="row mb-3">
                         <div class="col-sm-3">

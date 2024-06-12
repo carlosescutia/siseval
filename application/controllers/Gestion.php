@@ -43,7 +43,7 @@ class Gestion extends CI_Controller {
                     $cve_dependencia_filtro = $this->session->userdata('cve_dependencia_filtro');
                 } else {
                     $cve_dependencia_filtro = $cve_dependencia;
-                    if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                    if ($cve_rol != 'usr') {
                         $cve_dependencia_filtro = '%';
                     }
                 }
@@ -52,7 +52,7 @@ class Gestion extends CI_Controller {
 
             $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
             $data['dependencias'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia_filtro);
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
 

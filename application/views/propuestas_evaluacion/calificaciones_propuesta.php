@@ -62,7 +62,7 @@
         </div>
     </div>
     <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
-        <?php if ( $cve_rol == 'sup' ) { ?>
+        <?php if ( ($cve_rol == 'sup' or $cve_rol == 'sec') ) { ?>
             <?php if ( $num_calificaciones_propuesta_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-start">
                     <form method="post" action="<?= base_url() ?>calificaciones_propuesta/nuevo/<?=$id_propuesta_evaluacion?>">
