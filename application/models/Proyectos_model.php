@@ -38,7 +38,7 @@ class Proyectos_model extends CI_Model {
     }
 
     public function get_proyecto($cve_proyecto, $cve_dependencia, $cve_rol) {
-        if ($cve_rol == 'adm' || $cve_rol == 'sup') {
+        if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
         $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia left join dependencias d on pg.cve_dependencia = d.cve_dependencia where py.cve_proyecto = ? and pg.cve_dependencia::text LIKE ?';
@@ -53,7 +53,7 @@ class Proyectos_model extends CI_Model {
     }
 
     public function get_proyecto_anterior($cve_anterior_proyecto, $cve_dependencia, $cve_rol) {
-        if ($cve_rol == 'adm' || $cve_rol == 'sup') {
+        if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
         $sql = 'select py.* from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where py.cve_anterior_proyecto = ? and pg.cve_dependencia::text LIKE ?';

@@ -12,7 +12,7 @@ class Evaluaciones_model extends CI_Model {
     }
 
     public function get_evaluacion($id_evaluacion, $cve_dependencia, $cve_rol) {
-        if ($cve_rol == 'adm' || $cve_rol == 'sup') {
+        if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
         $sql = 'select e.* from evaluaciones e left join proyectos py on e.cve_proyecto = py.cve_anterior_proyecto left join programas pg on py.cve_programa = pg.cve_programa where e.id_evaluacion = ? and pg.cve_dependencia::text LIKE ?';
