@@ -78,6 +78,7 @@ class Proyectos_model extends CI_Model {
             ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
             ."py.cve_dependencia::text LIKE '%' "
+            ."and coalesce(pe.excluir_agenda,0) <> 1 "
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
 			."";
@@ -117,6 +118,7 @@ class Proyectos_model extends CI_Model {
             ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
             ."lower(pe.cve_proyecto) || te.abrev_tipo_evaluacion in ? "
+            ."and coalesce(pe.excluir_agenda,0) <> 1 "
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
             ."limit " . $limite . " offset " . $inicio
@@ -149,6 +151,7 @@ class Proyectos_model extends CI_Model {
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."where "
             ."lower(pe.cve_proyecto) || te.abrev_tipo_evaluacion in ? "
+            ."and coalesce(pe.excluir_agenda,0) <> 1 "
 			."";
 
         $query = $this->db->query($sql, array($lista_final));

@@ -65,7 +65,9 @@ CREATE TABLE propuestas_evaluacion (
     info_normativa integer,
     info_otro integer,
     otra_info_disponible text,
-    clasificacion_supervisor integer
+    clasificacion_supervisor integer,
+    excluir_agenda integer,
+    comentarios_exclusion text
 );
 
 DROP TABLE IF EXISTS tipos_evaluacion CASCADE;
