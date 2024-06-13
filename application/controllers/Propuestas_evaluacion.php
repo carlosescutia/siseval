@@ -163,7 +163,9 @@ class Propuestas_evaluacion extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'clasificacion_supervisor' => $propuesta_evaluacion['clasificacion_supervisor']
+                    'clasificacion_supervisor' => $propuesta_evaluacion['clasificacion_supervisor'],
+                    'excluir_agenda' => $propuesta_evaluacion['excluir_agenda'],
+                    'comentarios_exclusion' => $propuesta_evaluacion['comentarios_exclusion'],
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
                 

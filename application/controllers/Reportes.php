@@ -105,6 +105,7 @@ class Reportes extends CI_Controller {
                 ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
                 ."where "
                 ."py.cve_dependencia::text LIKE '%' "
+                ."and coalesce(pe.excluir_agenda,0) <> 1 "
                 ."order by "
                 ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
                 ."";

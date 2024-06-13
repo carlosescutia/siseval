@@ -5,9 +5,7 @@
             if ( $cve_rol == 'sec' ) { ?>
                 <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
                     <div class="row mb-3">
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-5 mb-3 text-center">
+                        <div class="col-sm-4 mb-3">
                             <label for="clasificacion_supervisor">
                                 Clasificación del supervisor
                                 <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
@@ -26,7 +24,19 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="col-sm-1 mb-3">
+                        <div class="col-sm-6 gx-5">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="excluir_agenda" id="excluir_agenda" value="1" <?= ($propuesta_evaluacion['excluir_agenda'] == '1') ? 'checked' : '' ?> >
+                                <label class="form-check-label" for="excluir_agenda">Excluír de la Agenda Anual</label>
+                            </div>
+                            <div class="row">
+                                <label for="comentarios_exclusion" class="col-sm-4">Motivo de exclusión:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="comentarios_exclusion" id="comentarios_exclusion" value="<?=$propuesta_evaluacion['comentarios_exclusion']?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 offset-sm-1 mb-3">
                             <label> </label>
                             <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
                         </div>

@@ -53,7 +53,7 @@ class Proyectos extends CI_Controller {
                     $cve_dependencia_filtro = $this->session->userdata('cve_dependencia_filtro');
                 } else {
                     $cve_dependencia_filtro = $cve_dependencia;
-                    if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+                    if ($cve_rol != 'usr') {
                         $cve_dependencia_filtro = '%';
                     }
                 }
@@ -78,7 +78,7 @@ class Proyectos extends CI_Controller {
 
             $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
             $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
 
