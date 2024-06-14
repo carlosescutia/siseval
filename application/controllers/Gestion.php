@@ -108,7 +108,7 @@ class Gestion extends CI_Controller {
                 // guardado
                 $data = array(
                     'objetivo' => $propuesta_evaluacion['objetivo'],
-                    'monto_contratacion' => $propuesta_evaluacion['monto_contratacion'],
+                    'monto_contratacion' => empty($propuesta_evaluacion['monto_contratacion']) ? null : $propuesta_evaluacion['monto_contratacion'],
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
                 
