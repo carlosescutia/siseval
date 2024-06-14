@@ -67,7 +67,8 @@ CREATE TABLE propuestas_evaluacion (
     otra_info_disponible text,
     clasificacion_supervisor integer,
     excluir_agenda integer,
-    comentarios_exclusion text
+    comentarios_exclusion text,
+    monto_contratacion numeric(12,2)
 );
 
 DROP TABLE IF EXISTS tipos_evaluacion CASCADE;

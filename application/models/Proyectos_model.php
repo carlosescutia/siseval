@@ -64,8 +64,8 @@ class Proyectos_model extends CI_Model {
     public function get_programas_agenda_evaluacion($cve_dependencia) {
         $sql = ""
             ."select "
-            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
-            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
+            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto, pe.objetivo, pe.monto_contratacion,  "
+            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, pe.id_propuesta_evaluacion, "
             ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad "
             ."from "
             ."propuestas_evaluacion pe  "
