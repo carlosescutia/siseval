@@ -44,22 +44,19 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row fw-bold">
-                            <div class="col-sm-1">
-                                <p>Clave P/Q</p>
-                            </div>
                             <div class="col-sm-3">
-                                <p>Nombre P/Q</p>
+                                <p>P/Q</p>
+                            </div>
+                            <div class="col-sm-3 fw-bold">
+                                <p>Objetivo</p>
                             </div>
                             <div class="col-sm-1 fw-bold">
-                                <p>Año</p>
+                                <p>Monto de contratación</p>
                             </div>
-                            <div class="col-sm-1 fw-bold">
-                                <p>Tipo</p>
+                            <div class="col-sm-2 fw-bold">
+                                <p>Tipo - Proponente</p>
                             </div>
-                            <div class="col-sm-1">
-                                <p>Propuesta por</p>
-                            </div>
-                            <div class="col-sm-4 text-center">
+                            <div class="col-sm-3 text-center">
                                 <p>Documentación</p>
                             </div>
                         </div>
@@ -70,9 +67,6 @@
                         if ($proyectos_item['cve_dependencia'] == $dependencias_item['cve_dependencia']) { ?>
                             <div class="col-sm-12 alternate-color">
                                 <div class="row">
-                                    <div class="col-sm-1">
-                                        <p><?= $proyectos_item['cve_proyecto'] ?></p>
-                                    </div>
                                     <div class="col-sm-3">
                                         <?php if ($err_proyectos) { ?>
                                             <?php if ($err_proyectos['cve_proyecto'] == $proyectos_item['cve_proyecto']) { ?>
@@ -82,18 +76,24 @@
                                                 </div>
                                             <?php } ?>
                                         <?php } ?>
-                                        <p> <?= $proyectos_item['nom_proyecto'] ?> </p>
+                                        <p><a href="<?=base_url()?>gestion/detalle/<?=$proyectos_item['id_propuesta_evaluacion']?>">
+                                        <?= $proyectos_item['cve_proyecto'] ?> <?= $proyectos_item['nom_proyecto'] ?>
+                                        </a></p>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p><a href="<?=base_url()?>gestion/detalle/<?=$proyectos_item['id_propuesta_evaluacion']?>">
+                                            <?= $proyectos_item['objetivo'] ?>
+                                        </a></p>
                                     </div>
                                     <div class="col-sm-1">
-                                        <p><?= $proyectos_item['periodo'] ?></p>
+                                        <p><a href="<?=base_url()?>gestion/detalle/<?=$proyectos_item['id_propuesta_evaluacion']?>">
+                                            <?= $proyectos_item['monto_contratacion'] ?>
+                                        </a></p>
                                     </div>
-                                    <div class="col-sm-1">
-                                        <p><?= $proyectos_item['nom_tipo_evaluacion'] ?></p>
+                                    <div class="col-sm-2">
+                                        <p><?= $proyectos_item['nom_tipo_evaluacion'] ?> <?= $proyectos_item['nom_dependencia_propuesta'] ?></p>
                                     </div>
-                                    <div class="col-sm-1">
-                                        <p><?= $proyectos_item['nom_dependencia_propuesta'] ?></p>
-                                    </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <?php 
                                             if ( in_array($proyectos_item['cve_clasificacion_supervisor'], array('1','2','4','7')) ) {
                                                 include 'docs_evaluaciones_externas.php' ;
