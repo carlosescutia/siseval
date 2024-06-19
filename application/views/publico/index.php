@@ -17,40 +17,54 @@
                 <div class="col-sm-1 fw-bold">
                     <p>Responsable</p>
                 </div>
-                <div class="col-sm-1 fw-bold">
+                <div class="col-sm-1 fw-bold text-center">
                     <p>TdR</p>
                 </div>
-                <div class="col-sm-1 fw-bold">
+                <div class="col-sm-1 fw-bold text-center">
                     <p>Informe</p>
+                </div>
+                <div class="col-sm-1 fw-bold text-center">
+                    <p>Ficha Conac</p>
                 </div>
             </div>
         </div>
         <?php 
 
-        // archivo etapa 1
-        $etapa_e1 = 'g';
-        $tipo_doc_e1 = 'tr';
-        $icono_e1 = "bi-filetype-pdf";
-        $tipo_archivo_e1 = 'pdf';
-        $dir_docs_e1 = 'doc/';
+        // terminos de referencia
+        $doc1_prefijo = 'g';
+        $doc1_tipo_doc = 'tr';
+        $doc1_icono = "bi-filetype-pdf";
+        $doc1_tipo_archivo = 'pdf';
+        $doc1_dir = 'doc/';
 
-        // archivo etapa 2
-        $etapa_e2 = 'e';
-        $tipo_doc_e2 = 'if';
-        $icono_e2 = "bi-filetype-pdf";
-        $tipo_archivo_e2 = 'pdf';
-        $dir_docs_e2 = 'doc/';
+        // Informe final
+        $doc2_prefijo = 'e';
+        $doc2_tipo_doc = 'if';
+        $doc2_icono = "bi-filetype-pdf";
+        $doc2_tipo_archivo = 'pdf';
+        $doc2_dir = 'doc/';
+
+        // ficha conac
+        $doc3_prefijo = 'e';
+        $doc3_tipo_doc = 'fc';
+        $doc3_icono = "bi-filetype-pdf";
+        $doc3_tipo_archivo = 'pdf';
+        $doc3_dir = 'doc/';
 
         foreach ($proyectos as $proyectos_item) { 
-            $nombre_archivo_e1 = $etapa_e1 . $tipo_doc_e1 . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo_e1 ;
-            $nombre_archivo_e1_fs = './' . $dir_docs_e1 . $nombre_archivo_e1 ;
-            $nombre_archivo_e1_url = base_url() . $dir_docs_e1 . $nombre_archivo_e1;
+            $doc1_nombre_archivo = $doc1_prefijo . $doc1_tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $doc1_tipo_archivo ;
+            $doc1_fs = './' . $doc1_dir . $doc1_nombre_archivo ;
+            $doc1_url = base_url() . $doc1_dir . $doc1_nombre_archivo;
 
-            $nombre_archivo_e2 = $etapa_e2 . $tipo_doc_e2 . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo_e2 ;
-            $nombre_archivo_e2_fs = './' . $dir_docs_e2 . $nombre_archivo_e2 ;
-            $nombre_archivo_e2_url = base_url() . $dir_docs_e2 . $nombre_archivo_e2;
+            $doc2_nombre_archivo = $doc2_prefijo . $doc2_tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $doc2_tipo_archivo ;
+            $doc2_fs = './' . $doc2_dir . $doc2_nombre_archivo ;
+            $doc2_url = base_url() . $doc2_dir . $doc2_nombre_archivo;
 
-            if ( file_exists($nombre_archivo_e1_fs) || file_exists($nombre_archivo_e2_fs) ) { ?>
+            $doc3_nombre_archivo = $doc3_prefijo . $doc3_tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $doc3_tipo_archivo ;
+            $doc3_fs = './' . $doc3_dir . $doc3_nombre_archivo ;
+            $doc3_url = base_url() . $doc3_dir . $doc3_nombre_archivo;
+
+            if ( file_exists($doc1_fs) || file_exists($doc2_fs) || file_exists($doc3_fs) ) { ?>
                 <div class="col-sm-12 alternate-color">
                     <div class="row">
                         <div class="col-sm-1">
@@ -68,14 +82,19 @@
                         <div class="col-sm-1">
                             <p><?= $proyectos_item['nom_dependencia'] ?></p>
                         </div>
-                        <div class="col-sm-1">
-                            <?php if ( file_exists($nombre_archivo_e1_fs) )  { ?>
-                                <p><a href="<?=$nombre_archivo_e1_url?>" target="_blank"><i class="bi <?=$icono_e1?> documento-g"></i></a></p>
+                        <div class="col-sm-1 text-center">
+                            <?php if ( file_exists($doc1_fs) )  { ?>
+                                <p><a href="<?= $doc1_url ?>" target="_blank"><i class="bi <?= $doc1_icono ?> documento-g"></i></a></p>
                             <?php } ?>
                         </div>
-                        <div class="col-sm-1">
-                            <?php if ( file_exists($nombre_archivo_e2_fs) )  { ?>
-                                <p><a href="<?=$nombre_archivo_e2_url?>" target="_blank"><i class="bi <?=$icono_e2?> documento-g"></i></a></p>
+                        <div class="col-sm-1 text-center">
+                            <?php if ( file_exists($doc2_fs) )  { ?>
+                                <p><a href="<?= $doc2_url ?>" target="_blank"><i class="bi <?= $doc2_icono ?> documento-g"></i></a></p>
+                            <?php } ?>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <?php if ( file_exists($doc3_fs) )  { ?>
+                                <p><a href="<?= $doc3_url ?>" target="_blank"><i class="bi <?= $doc3_icono ?> documento-g"></i></a></p>
                             <?php } ?>
                         </div>
                     </div>
