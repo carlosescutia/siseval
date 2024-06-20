@@ -48,14 +48,14 @@ class Dependencias_model extends CI_Model {
 
     public function get_dependencias_evaluaciones($cve_dependencia) {
         $sql = ""
-            ."select "
-            ."dpe.cve_dependencia, dpe.nom_dependencia "
-            ."from "
-            ."propuestas_evaluacion pe "
-            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor "
-            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
-			.'where  '
-			.'dpe.cve_dependencia::text LIKE ?  '
+            ."select  "
+            ."dpe.cve_dependencia, dpe.nom_dependencia  "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on py.cve_proyecto = pe.cve_proyecto "
+            ."left join dependencias dpe on py.cve_dependencia = dpe.cve_dependencia "
+            ."where  "
+            ."dpe.cve_dependencia::text LIKE ? "
 			."";
         $parametros = array();
         array_push($parametros, "$cve_dependencia");
