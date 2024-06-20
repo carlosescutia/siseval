@@ -77,13 +77,13 @@ class Proyectos_model extends CI_Model {
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
             ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
-            ."py.cve_dependencia::text LIKE '%' "
+            ."py.cve_dependencia::text LIKE ? "
             ."and coalesce(pe.excluir_agenda,0) <> 1 "
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
 			."";
 
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
     }
 
