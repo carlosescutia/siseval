@@ -54,7 +54,7 @@ class Reportes extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $data['programas_agenda_evaluacion'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia);
@@ -86,7 +86,7 @@ class Reportes extends CI_Controller {
             $this->load->helper('file');
             $this->load->helper('download');
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $sql = ""
@@ -135,7 +135,7 @@ class Reportes extends CI_Controller {
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $data['propuestas_evaluacion'] = $this->proyectos_model->get_propuestas_evaluacion($cve_dependencia);
@@ -167,7 +167,7 @@ class Reportes extends CI_Controller {
             $this->load->helper('file');
             $this->load->helper('download');
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
 			$sql = ''
@@ -223,7 +223,7 @@ class Reportes extends CI_Controller {
             $data['evaluaciones'] = $evaluaciones;
             $data['propuestas'] = $propuestas;
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $data['status_dependencias'] = $this->dependencias_model->get_status_dependencias($evaluaciones, $propuestas);
@@ -255,7 +255,7 @@ class Reportes extends CI_Controller {
             $this->load->helper('file');
             $this->load->helper('download');
 
-            if ($cve_rol == 'sup' or $cve_rol == 'adm') {
+            if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $sql = 'select nom_dependencia, nom_completo_dependencia from dependencias where carga_evaluaciones = 0 ;';
