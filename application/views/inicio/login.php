@@ -7,10 +7,17 @@
 
         <title>Sistema de Evaluación de Guanajuato</title>
 
+        <!-- bootstrap 5.3 -->
+        <link href="<?=base_url()?>css/bootstrap-4.1.3.min.css" rel="stylesheet"/>
+        <link href="<?=base_url()?>js/bootstrap-4.1.3.min.js" rel="stylesheet"/>
+        <link href="<?=base_url()?>js/tether-1.2.4.min.js" rel="stylesheet"/>
+
+        <!--
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+        -->
+        
         <style>
             html,
             body {

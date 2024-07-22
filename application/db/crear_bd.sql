@@ -221,3 +221,37 @@ CREATE TABLE eventos (
     fecha_evento date,
     desc_evento text
 );
+
+DROP TABLE IF EXISTS documentos_opinion CASCADE;
+CREATE TABLE documentos_opinion (
+    cve_documento_opinion serial,
+    id_propuesta_evaluacion integer,
+    fecha_elaboracion date,
+    instancia_evaluadora text,
+    elaborado_por text,
+    antecedentes text,
+    status integer
+);
+
+DROP TABLE IF EXISTS recomendaciones CASCADE;
+CREATE TABLE recomendaciones (
+    cve_recomendacion serial,
+    cve_documento_opinion integer,
+    desc_recomendacion text,
+    clara text,
+    relevante text,
+    justificable text,
+    factible text,
+    id_tipo_actor integer,
+    prioridad text,
+    responsable text,
+    postura text,
+    justificacion text
+);
+
+DROP TABLE IF EXISTS status_documentos_opinion CASCADE;
+CREATE TABLE status_documentos_opinion (
+    cve_status_documento_opinion serial,
+    desc_status_documento_opinion text,
+    orden integer
+);

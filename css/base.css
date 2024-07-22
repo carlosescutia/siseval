@@ -114,3 +114,15 @@ body a:hover {
 .form-group {
     margin-bottom: .8rem;
 }
+
+@media print {
+    body {
+        padding-top: 0;
+        margin-bottom: 0;
+
+        .page-break {
+            page-break-after: always;
+            break-after: always;
+        }
+    }
+}

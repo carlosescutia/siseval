@@ -3,7 +3,7 @@
         <div class="footer_margin">
         </div>
 
-        <footer class="footer">
+        <footer class="footer d-print-none">
             <ul class="nav justify-content-center">
                 <li class="nav-item"><i class="bi bi-telephone"></i> 472 103 7700 &nbsp;</li>
                 <li class="nav-item"> · &nbsp; </li>

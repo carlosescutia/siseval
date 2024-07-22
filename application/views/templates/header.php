@@ -18,9 +18,10 @@
         <script src="<?=base_url()?>js/bootstrap.bundle.min.js"></script>
 
         <!-- jquery -->
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="<?=base_url()?>js/jquery-3.6.3.min.js"></script>
 
         <!-- bootstrap 5.3 
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -28,7 +29,7 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light fixed-top d-print-block pr-3">
+        <nav class="navbar navbar-expand-sm navbar-light fixed-top d-print-none pr-3">
             <!-- logo -->
             <div class="logo_menu">
                 <img class="logo" src="<?=base_url()?>img/gto_iplaneg.png" class="d-inline-block align-top" alt="iplaneg">
@@ -53,7 +54,7 @@
                         } ?>
                     </ul>
                 </div>
-                <div class="col-sm-5 text-end">
+                <div class="col-sm-5 text-end d-print-none">
                     <p class="m-2 texto-titulo"><?php echo $nom_usuario ?> · <?php echo $nom_dependencia ?> | <a class="m-2 texto-titulo" href="<?= base_url() ?>inicio/cerrar_sesion">Cerrar sesión</a></p>
                 </div>
             </div> <!-- opciones del menu -->

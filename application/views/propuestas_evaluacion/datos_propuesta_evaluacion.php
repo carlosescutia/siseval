@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-1 offset-sm-1 mb-3">
+                        <div class="col-sm-1 offset-sm-1 mb-3 d-print-none">
                             <label> </label>
                             <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
                         </div>

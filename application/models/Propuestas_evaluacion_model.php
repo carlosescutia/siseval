@@ -11,6 +11,23 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_propuesta_evaluacion_doc_op($cve_documento_opinion) {
+        $sql = ""
+            ."select "
+            ."pe.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, py.nom_proyecto, py.periodo "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join dependencias d on d.cve_dependencia = pe.cve_dependencia "
+            ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
+            ."left join proyectos py on py.cve_proyecto = pe.cve_proyecto "
+            ."left join documentos_opinion dop on dop.id_propuesta_evaluacion = pe.id_propuesta_evaluacion "
+            ."where "
+            ."dop.cve_documento_opinion = ? ; "
+            ."";
+        $query = $this->db->query($sql, array($cve_documento_opinion));
+        return $query->row_array();
+    }
+
     public function get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia) {
         $sql = 'select count(*) as num from propuestas_evaluacion where cve_proyecto = ? and cve_dependencia = ? ;';
         $query = $this->db->query($sql, array($cve_proyecto, $cve_dependencia));
