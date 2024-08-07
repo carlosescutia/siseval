@@ -16,6 +16,7 @@ class Valoracion extends CI_Controller {
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('recomendaciones_model');
         $this->load->model('status_documentos_opinion_model');
+        $this->load->model('valoraciones_documento_opinion_model');
     }
 
     public function index()
@@ -32,7 +33,7 @@ class Valoracion extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-            $data['etapa_actual'] = 3 ;
+            $data['etapa_actual'] = 4 ;
             $data['err_proyectos'] = $this->session->flashdata('err_proyectos');
 
             $filtros = $this->input->post();
@@ -86,13 +87,15 @@ class Valoracion extends CI_Controller {
             $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
             $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
             $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-            $data['etapa_actual'] = 1 ;
+            $data['etapa_actual'] = 4 ;
             $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
 
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_doc_op($cve_documento_opinion);
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
+            $data['valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoraciones_documento_opinion($cve_documento_opinion);
+            $data['num_valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion, $cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -362,5 +365,167 @@ class Valoracion extends CI_Controller {
             redirect('inicio/login');
         }
     }
+
+    public function valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $cve_rol = $this->session->userdata('cve_rol');
+            $cve_dependencia = $this->session->userdata('cve_dependencia');
+            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+            $data['cve_dependencia'] = $cve_dependencia;
+            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+            $data['cve_rol'] = $cve_rol;
+            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+            $data['error'] = $this->session->flashdata('error');
+            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
+            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data['etapa_actual'] = 4 ;
+            $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
+
+            $data['valoracion_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/valoracion_documento_opinion_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_documento_opinion_nuevo()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_documento_opinion = $this->input->post();
+            if ($valoracion_documento_opinion) {
+
+                $accion = 'agregó';
+
+                // guardado
+                $data = array(
+                    'cve_documento_opinion' => $valoracion_documento_opinion['cve_documento_opinion'],
+                    'cve_dependencia' => $this->session->userdata('cve_dependencia'),
+                );
+                $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, null);
+
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $entidad = 'valoraciones_documento_opinion';
+                $valor = 'doc_op ' . $cve_valoracion_documento_opinion . ' nuevo';
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
+            }
+
+            $this->valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_documento_opinion_guardar()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_documento_opinion = $this->input->post();
+            if ($valoracion_documento_opinion) {
+
+                if ($valoracion_documento_opinion['cve_valoracion_documento_opinion']) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
+
+                // guardado
+                $data = array(
+                    'pertinencia' => $valoracion_documento_opinion['pertinencia'],
+                    'prioridad' => $valoracion_documento_opinion['prioridad'],
+                    'fundamentada' => $valoracion_documento_opinion['fundamentada'],
+                    'observaciones' => $valoracion_documento_opinion['observaciones'],
+                );
+                $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, $valoracion_documento_opinion['cve_valoracion_documento_opinion']);
+                
+                // registro en bitacora
+				$separador = ' -> ';
+				$usuario = $this->session->userdata('usuario');
+				$nom_usuario = $this->session->userdata('nom_usuario');
+				$nom_dependencia = $this->session->userdata('nom_dependencia');
+				$entidad = 'valoraciones_documento_opinion';
+                $valor = $cve_valoracion_documento_opinion;
+				$data = array(
+					'fecha' => date("Y-m-d"),
+					'hora' => date("H:i"),
+					'origen' => $_SERVER['REMOTE_ADDR'],
+					'usuario' => $usuario,
+					'nom_usuario' => $nom_usuario,
+					'nom_dependencia' => $nom_dependencia,
+					'accion' => $accion,
+					'entidad' => $entidad,
+					'valor' => $valor
+				);
+				$this->bitacora_model->guardar($data);
+
+            }
+
+            redirect('valoracion/documento_opinion_detalle/' . $valoracion_documento_opinion['cve_documento_opinion']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_documento_opinion_eliminar($cve_valoracion_documento_opinion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
+
+            // registro en bitacora
+            $separador = ' -> ';
+            $usuario = $this->session->userdata('usuario');
+            $nom_usuario = $this->session->userdata('nom_usuario');
+            $nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'eliminó';
+            $entidad = 'valoraciones_documento_opinion';
+            $valor = "valoracion_documento_opinion ". $cve_valoracion_documento_opinion;
+            $data = array(
+                'fecha' => date("Y-m-d"),
+                'hora' => date("H:i"),
+                'origen' => $_SERVER['REMOTE_ADDR'],
+                'usuario' => $usuario,
+                'nom_usuario' => $nom_usuario,
+                'nom_dependencia' => $nom_dependencia,
+                'accion' => $accion,
+                'entidad' => $entidad,
+                'valor' => $valor
+            );
+            $this->bitacora_model->guardar($data);
+
+            // eliminado
+            $this->valoraciones_documento_opinion_model->eliminar($cve_valoracion_documento_opinion);
+
+            redirect('valoracion/documento_opinion_detalle/' . $valoracion_documento_opinion['cve_documento_opinion']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+
 
 }

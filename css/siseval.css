@@ -3,6 +3,12 @@
     color: red;
 }
 
+.boton-ok {
+    font-size: 1rem; 
+    color: green;
+}
+
+
 .boton-eliminar-sm {
     font-size: 0.8rem; 
     color: red;

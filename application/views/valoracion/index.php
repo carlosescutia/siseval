@@ -1,7 +1,7 @@
 <main role="main" class="ml-sm-auto px-4">
     <div class="pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12">
-            <form method="post" action="<?= base_url() ?>ejecucion">
+            <form method="post" action="<?= base_url() ?>valoracion">
                 <div class="row">
                     <div class="col-sm-3">
                         <h2>Valoración</h2>
