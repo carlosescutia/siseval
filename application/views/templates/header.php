@@ -46,12 +46,55 @@
                 <h5 class="my-0 mr-md-auto texto-titulo">Sistema de Evaluación de Guanajuato</h5>
                     <hr class="mb-0 mt-2 pt-0 pb-0 " />
                     <ul class="navbar-nav mr-auto">
-                        <?php foreach ($opciones_sistema as $opciones_sistema_item) {
-                            if ( in_array($opciones_sistema_item['cod_opcion'], $permisos_usuario) 
-                                && $opciones_sistema_item['es_menu'] ) { ?>
-                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?><?=$opciones_sistema_item['url'] ?>"><?=$opciones_sistema_item['nom_opcion'] ?></a></li>
-                            <?php } 
-                        } ?>
+                        <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>">Inicio</a></li>
+                        <?php
+                            $permisos_requeridos = array(
+                            'planificacion.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>proyectos">Planificación</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
+                            'gestion.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>gestion">Gestión</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
+                            'ejecucion.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>ejecucion">Ejecución</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
+                            'valoracion.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>valoracion">Valoración</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
+                            'reportes.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>reportes">Reportes</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
+                            'catalogos.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>catalogos">Catálogos</a></li>
+                            <?php }
+                        ?>
                     </ul>
                 </div>
                 <div class="col-sm-5 text-end d-print-none">

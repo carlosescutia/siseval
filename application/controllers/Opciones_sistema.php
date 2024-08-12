@@ -122,9 +122,6 @@ class Opciones_sistema extends CI_Controller {
                 $data = array(
                     'cod_opcion' => $opciones_sistema['cod_opcion'],
                     'nom_opcion' => $opciones_sistema['nom_opcion'],
-                    'url' => $opciones_sistema['url'],
-                    'es_menu' => $opciones_sistema['es_menu'],
-                    'etapa' => $opciones_sistema['etapa']
                 );
                 $cve_opcion = $this->opciones_sistema_model->guardar($data, $cve_opcion);
 
