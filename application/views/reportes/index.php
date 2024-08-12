@@ -6,10 +6,46 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>Listados</h3>
-                <?php if (in_array('04101', $accesos_sistema_rol)) include "btn_listado_programas_agenda_evaluacion_01.php" ?>
-                <?php if (in_array('04103', $accesos_sistema_rol)) include "btn_listado_propuestas_evaluacion_01.php" ?>
-                <?php if (in_array('04102', $accesos_sistema_rol)) include "btn_listado_status_dependencias.php" ?>
-                <?php if (in_array('04104', $accesos_sistema_rol)) include "btn_listado_bitacora_01.php" ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'reportes_supervisor.can_view',
+                        'reportes_secretario.can_view',
+                        'reportes_administrador.can_view',
+                        );
+                        if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
+                            include "btn_listado_programas_agenda_evaluacion_01.php";
+                        } 
+                    ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'reportes_secretario.can_view',
+                        'reportes_administrador.can_view',
+                        );
+                        if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
+                            include "btn_listado_status_dependencias.php";
+                        } 
+                    ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'reportes_usuario.can_view',
+                        'reportes_secretario.can_view',
+                        'reportes_administrador.can_view',
+                        );
+                        if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
+                            include "btn_listado_propuestas_evaluacion_01.php";
+                        } 
+                    ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'reportes_usuario.can_view',
+                        'reportes_supervisor.can_view',
+                        'reportes_secretario.can_view',
+                        'reportes_administrador.can_view',
+                        );
+                        if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
+                            include "btn_listado_bitacora_01.php";
+                        } 
+                    ?>
             </div>
         </div>
     </div>

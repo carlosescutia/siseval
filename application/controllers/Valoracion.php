@@ -1,5 +1,7 @@
 <?php
 class Valoracion extends CI_Controller {
+    // globales
+    var $etapa_actual;
 
     public function __construct()
     {
@@ -17,24 +19,39 @@ class Valoracion extends CI_Controller {
         $this->load->model('recomendaciones_model');
         $this->load->model('status_documentos_opinion_model');
         $this->load->model('valoraciones_documento_opinion_model');
+
+        // globales
+        $this->etapa_actual = 4;
+    }
+
+    public function get_userdata()
+    {
+        $cve_usuario = $this->session->userdata('cve_usuario');
+        $cve_rol = $this->session->userdata('cve_rol');
+        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
+        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+        $data['cve_rol'] = $cve_rol;
+        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+        $data['error'] = $this->session->flashdata('error');
+        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
+
+        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+        if ($data['etapa_siseval'] == $this->etapa_actual) { 
+            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
+        }
+
+        return $data;
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-            $data['etapa_actual'] = 4 ;
-            $data['err_proyectos'] = $this->session->flashdata('err_proyectos');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -76,19 +93,10 @@ class Valoracion extends CI_Controller {
     public function documento_opinion_detalle($cve_documento_opinion)
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-            $data['etapa_actual'] = 4 ;
-            $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
@@ -369,19 +377,10 @@ class Valoracion extends CI_Controller {
     public function valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion)
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-            $data['etapa_actual'] = 4 ;
-            $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $data['valoracion_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
 
@@ -525,7 +524,5 @@ class Valoracion extends CI_Controller {
             redirect('inicio/login');
         }
     }
-
-
 
 }

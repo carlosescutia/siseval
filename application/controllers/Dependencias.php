@@ -1,5 +1,8 @@
 <?php
 class Dependencias extends CI_Controller {
+    // globales
+    var $etapa_actual;
+
 
     public function __construct()
     {
@@ -10,32 +13,51 @@ class Dependencias extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
+        
+        // globales
+        $this->etapa_actual = 0;
+    }
+
+    public function get_userdata()
+    {
+        $cve_usuario = $this->session->userdata('cve_usuario');
+        $cve_rol = $this->session->userdata('cve_rol');
+        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
+        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+        $data['cve_rol'] = $cve_rol;
+        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+        $data['error'] = $this->session->flashdata('error');
+        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
+
+        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+        if ($data['etapa_siseval'] == $this->etapa_actual) { 
+            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
+        }
+
+        return $data;
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
-            if ($cve_rol != 'adm') {
-                redirect('inicio');
+            $permisos_requeridos = array(
+                'dependencia.can_edit',
+            );
+            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+                $data['dependencias'] = $this->dependencias_model->get_dependencias();
+
+                $this->load->view('templates/header', $data);
+                $this->load->view('templates/dlg_borrar');
+                $this->load->view('catalogos/dependencias/lista', $data);
+                $this->load->view('templates/footer');
             }
-
-            $data['dependencias'] = $this->dependencias_model->get_dependencias();
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/dlg_borrar');
-            $this->load->view('catalogos/dependencias/lista', $data);
-            $this->load->view('templates/footer');
         } else {
             redirect('inicio/login');
         }
@@ -44,26 +66,21 @@ class Dependencias extends CI_Controller {
     public function detalle($cve_dependencia)
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
-            if ($cve_rol != 'adm') {
-                redirect('inicio');
+            $permisos_requeridos = array(
+                'dependencia.can_edit',
+            );
+            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+                $data['dependencias'] = $this->dependencias_model->get_dependencia($cve_dependencia);
+
+                $this->load->view('templates/header', $data);
+                $this->load->view('catalogos/dependencias/detalle', $data);
+                $this->load->view('templates/footer');
             }
-
-            $data['dependencias'] = $this->dependencias_model->get_dependencia($cve_dependencia);
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('catalogos/dependencias/detalle', $data);
-            $this->load->view('templates/footer');
         } else {
             redirect('inicio/login');
         }
@@ -72,24 +89,19 @@ class Dependencias extends CI_Controller {
     public function nuevo()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
-            if ($cve_rol != 'adm') {
-                redirect('inicio');
+            $permisos_requeridos = array(
+                'dependencia.can_edit',
+            );
+            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('catalogos/dependencias/nuevo', $data);
+                $this->load->view('templates/footer');
             }
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('catalogos/dependencias/nuevo', $data);
-            $this->load->view('templates/footer');
         } else {
             redirect('inicio/login');
         }

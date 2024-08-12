@@ -94,7 +94,13 @@
                 <input type="hidden" name="cve_documento_opinion" id="cve_documento_opinion" value="<?=$valoracion_documento_opinion['cve_documento_opinion']?>">
             </form>
         </div>
-        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
+        <?php
+            $permisos_requeridos = array(
+            'documento_opinion_valoracion.can_edit',
+            'es_etapa_actual',
+            );
+        ?>
+        <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
             <?php if ($cve_dependencia == $valoracion_documento_opinion['cve_dependencia']) { ?>
                 <div class="card-footer text-end">
                     <button type="submit" class="btn btn-primary btn-sm" form="valoracion">Guardar</button>

@@ -24,11 +24,21 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-10 d-print-none">
-            <a href="<?=base_url()?>valoracion/recomendaciones_nuevo/<?=$documento_opinion['cve_documento_opinion']?>" class="btn btn-primary">Nueva recomendación</a>
-        </div>
-    </div>
+    <?php
+        $permisos_requeridos = array(
+        'documento_opinion.can_edit',
+        'es_etapa_actual',
+        );
+    ?>
+    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+        <?php if ($documento_opinion['status'] == 2) { ?>
+            <div class="row">
+                <div class="col-md-10 d-print-none">
+                    <a href="<?=base_url()?>valoracion/recomendaciones_nuevo/<?=$documento_opinion['cve_documento_opinion']?>" class="btn btn-primary">Nueva recomendación</a>
+                </div>
+            </div>
+        <?php } ?>
+    <?php } ?>
 
     <div class="row mt-3">
         <div class="col-md-10 offset-md-1 text-center d-none d-print-block">

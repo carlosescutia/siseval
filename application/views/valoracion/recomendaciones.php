@@ -197,13 +197,21 @@
                 <input type="hidden" name="cve_documento_opinion" id="cve_documento_opinion" value="<?=$recomendaciones_item['cve_documento_opinion']?>">
             </form>
         </div>
-        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($documento_opinion['status'] == 2)) {
-            $item_eliminar = $recomendaciones_item['desc_recomendacion'] ; 
-            $url = base_url() . "valoracion/recomendaciones_eliminar/". $recomendaciones_item['cve_recomendacion']; ?>
-            <div class="card-footer text-end d-print-none">
-                <a class="btn btn-danger btn-sm" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" >Eliminar</a>
-                <button type="submit" class="btn btn-primary btn-sm" form="recomendacion<?=$num_rec?>">Guardar</button>
-            </div>
+        <?php
+            $permisos_requeridos = array(
+            'documento_opinion.can_edit',
+            'es_etapa_actual',
+            );
+        ?>
+        <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+            <?php if ($documento_opinion['status'] == 2) {
+                $item_eliminar = $recomendaciones_item['desc_recomendacion'] ; 
+                $url = base_url() . "valoracion/recomendaciones_eliminar/". $recomendaciones_item['cve_recomendacion']; ?>
+                <div class="card-footer text-end d-print-none">
+                    <a class="btn btn-danger btn-sm" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" >Eliminar</a>
+                    <button type="submit" class="btn btn-primary btn-sm" form="recomendacion<?=$num_rec?>">Guardar</button>
+                </div>
+            <?php } ?>
         <?php } ?>
     </div>
 <?php } ?>

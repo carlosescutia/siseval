@@ -31,13 +31,20 @@
                         </div>
                         <div class="col-sm-1">
                             <li>
-                                <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                                    if ($cve_dependencia == $valoraciones_documento_opinion_item['cve_dependencia']) { 
+                                <?php
+                                    $permisos_requeridos = array(
+                                    'documento_opinion_valoracion.can_edit',
+                                    'es_etapa_actual',
+                                    );
+                                ?>
+                                <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                    <?php if ($cve_dependencia == $valoraciones_documento_opinion_item['cve_dependencia']) { 
                                         $item_eliminar = 'Valoracion '.$valoraciones_documento_opinion_item['nom_dependencia']; 
                                         $url = base_url() . "valoracion/valoracion_documento_opinion_eliminar/". $valoraciones_documento_opinion_item['cve_valoracion_documento_opinion']; ?>
                                         <a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
-                                    <?php } 
-                                } ?>
+                                    <?php } ?>
+                                <?php } ?>
+
                             </li>
                         </div>
                     <?php } ?>
@@ -45,8 +52,14 @@
             </ul>
         </div>
     </div>
-    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol !='usr')) { ?>
-        <?php if ( $num_valoraciones_documento_opinion['num'] == 0 ) { ?>
+    <?php
+        $permisos_requeridos = array(
+        'documento_opinion_valoracion.can_edit',
+        'es_etapa_actual',
+        );
+    ?>
+    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+        <?php if ( ($documento_opinion['status'] == 3) and ($num_valoraciones_documento_opinion['num'] == 0) ) { ?>
             <div class="card-footer text-end">
                 <form method="post" action="<?= base_url() ?>valoracion/valoracion_documento_opinion_nuevo">
                     <input type="hidden" name="cve_documento_opinion" id="cve_documento_opinion" value="<?=$documento_opinion['cve_documento_opinion']?>">

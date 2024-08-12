@@ -29,11 +29,17 @@
                     <div class="row">
 
                         <div class="col-sm-6 text-start">
-                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                            if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
-                            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                            <?php } 
-                            } ?>
+                            <?php
+                                $permisos_requeridos = array(
+                                'gestion.can_edit',
+                                'es_etapa_actual',
+                                );
+                            ?>
+                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                <?php if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
+                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                <?php } ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

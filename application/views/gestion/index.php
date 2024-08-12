@@ -68,14 +68,6 @@
                             <div class="col-sm-12 alternate-color">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <?php if ($err_proyectos) { ?>
-                                            <?php if ($err_proyectos['cve_proyecto'] == $proyectos_item['cve_proyecto']) { ?>
-                                                <div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
-                                                    <?= $err_proyectos['error'] ?>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </div>
-                                            <?php } ?>
-                                        <?php } ?>
                                         <p><a href="<?=base_url()?>gestion/detalle/<?=$proyectos_item['id_propuesta_evaluacion']?>">
                                         <?= $proyectos_item['cve_proyecto'] ?> <?= $proyectos_item['nom_proyecto'] ?>
                                         </a></p>

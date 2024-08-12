@@ -34,9 +34,17 @@
                     <tr>
                         <td>Status</td>
                         <td><label><?=$documento_opinion['desc_status_documento_opinion'] ?></label>
-                            <!-- si están en status "En revision" y existe al menos una recomendación, activar botón "Enviar a revisión" -->
-                            <?php if ($documento_opinion['status'] == 2 and $documento_opinion['num_recomendaciones'] > 0) { ?>
-                                <a href="<?=base_url()?>valoracion/documento_opinion_revision/<?=$documento_opinion['cve_documento_opinion']?>" class="btn btn-success btn-sm">Enviar a revisión</a>
+                            <?php
+                                $permisos_requeridos = array(
+                                'documento_opinion.can_edit',
+                                'es_etapa_actual',
+                                );
+                            ?>
+                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                <!-- si están en status "En revision" y existe al menos una recomendación, activar botón "Enviar a revisión" -->
+                                <?php if ($documento_opinion['status'] == 2 and $documento_opinion['num_recomendaciones'] > 0) { ?>
+                                    <a href="<?=base_url()?>valoracion/documento_opinion_revision/<?=$documento_opinion['cve_documento_opinion']?>" class="btn btn-success btn-sm">Enviar a revisión</a>
+                                <?php } ?>
                             <?php } ?>
                         </td>
                     </tr>
@@ -52,8 +60,16 @@
     <textarea rows="4" class="form-control" name="antecedentes" id="antecedentes" form="doc_op"><?=$documento_opinion['antecedentes']?></textarea>
 </div>
 
-<?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($documento_opinion['status'] == 2)) { ?>
-    <div class="col-md-12 text-end d-print-none">
-        <button type="submit" class="btn btn-primary" form="doc_op">Guardar</button>
-    </div>
+<?php
+    $permisos_requeridos = array(
+    'documento_opinion.can_edit',
+    'es_etapa_actual',
+    );
+?>
+<?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+    <?php if ($documento_opinion['status'] == 2) { ?>
+        <div class="col-md-12 text-end d-print-none">
+            <button type="submit" class="btn btn-primary" form="doc_op">Guardar</button>
+        </div>
+    <?php } ?>
 <?php } ?>

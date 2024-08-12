@@ -78,14 +78,6 @@
                                         <p><?= $proyectos_item['cve_proyecto'] ?></p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <?php if ($err_proyectos) { ?>
-                                            <?php if ($err_proyectos['cve_proyecto'] == $proyectos_item['cve_proyecto']) { ?>
-                                                <div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
-                                                    <?= $err_proyectos['error'] ?>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </div>
-                                            <?php } ?>
-                                        <?php } ?>
                                         <p> <?= $proyectos_item['nom_proyecto'] ?> </p>
                                     </div>
                                     <div class="col-sm-1">
@@ -101,7 +93,15 @@
                                         <?php if ($proyectos_item['status']) { ?>
                                             <p><a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$proyectos_item['cve_documento_opinion']?>"><?= $proyectos_item['desc_status_documento_opinion'] ?></a></p>
                                         <?php } else { ?>
-                                            <p><a href="<?=base_url()?>valoracion/documento_opinion_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a></p>
+                                            <?php
+                                                $permisos_requeridos = array(
+                                                'documento_opinion.can_edit',
+                                                'es_etapa_actual',
+                                                );
+                                            ?>
+                                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                                <p><a href="<?=base_url()?>valoracion/documento_opinion_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a></p>
+                                            <?php } ?>
                                         <?php } ?>
                                     </div>
                                 </div>

@@ -19,13 +19,19 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <p><a href="<?=base_url()?>calificaciones_propuesta/detalle/<?= $calificaciones_propuesta_item['id_calificacion_propuesta'] ?>"><?= $calificaciones_propuesta_item['nom_dependencia'] ?></a>
-                                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                                        if ($cve_dependencia == $calificaciones_propuesta_item['cve_dependencia']) { 
+                                    <?php
+                                        $permisos_requeridos = array(
+                                        'calificacion_propuesta.can_edit',
+                                        'es_etapa_actual',
+                                        );
+                                    ?>
+                                    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                        <?php if ($cve_dependencia == $calificaciones_propuesta_item['cve_dependencia']) { 
                                             $item_eliminar = 'Calificación de la propuesta de '. $calificaciones_propuesta_item['nom_dependencia'] ;
                                             $url = base_url() . "calificaciones_propuesta/eliminar/". $calificaciones_propuesta_item['id_calificacion_propuesta']; ?>
                                             <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
-                                        <?php } 
-                                    } ?>
+                                        <?php } ?>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-sm-6 text-center">
                                     <p><?= $calificaciones_propuesta_item['puntaje'] ?></p>
@@ -61,15 +67,19 @@
             </div>
         </div>
     </div>
-    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
-        <?php if ( ($cve_rol == 'sup' or $cve_rol == 'sec') ) { ?>
-            <?php if ( $num_calificaciones_propuesta_dependencia['num'] == 0 ) { ?>
-                <div class="card-footer text-start">
-                    <form method="post" action="<?= base_url() ?>calificaciones_propuesta/nuevo/<?=$id_propuesta_evaluacion?>">
-                        <button type="submit" class="btn btn-primary btn-sm">Calificar</button>
-                    </form>
-                </div>
-            <?php } ?>
+    <?php
+        $permisos_requeridos = array(
+        'calificacion_propuesta.can_edit',
+        'es_etapa_actual',
+        );
+    ?>
+    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+        <?php if ( $num_calificaciones_propuesta_dependencia['num'] == 0 ) { ?>
+            <div class="card-footer text-start">
+                <form method="post" action="<?= base_url() ?>calificaciones_propuesta/nuevo/<?=$id_propuesta_evaluacion?>">
+                    <button type="submit" class="btn btn-primary btn-sm">Calificar</button>
+                </form>
+            </div>
         <?php } ?>
     <?php } ?>
 </div>

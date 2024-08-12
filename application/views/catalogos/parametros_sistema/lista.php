@@ -6,9 +6,16 @@
                     <h1 class="h2">Parámetros del sistema</h1>
                 </div>
                 <div class="col-sm-2 text-end">
-                    <form method="post" action="<?= base_url() ?>parametros_sistema/nuevo">
-                        <button type="submit" class="btn btn-primary">Nuevo</button>
-                    </form>
+                    <?php
+                        $permisos_requeridos = array(
+                        'parametro_sistema.can_create',
+                        );
+                    ?>
+                    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                        <form method="post" action="<?= base_url() ?>parametros_sistema/nuevo">
+                            <button type="submit" class="btn btn-primary">Nuevo</button>
+                        </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -22,10 +29,10 @@
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Clave</strong></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-3 align-self-center">
                             <p class="small"><strong>Parámetro</strong></p>
                         </div>
-                        <div class="col-sm-5 align-self-center">
+                        <div class="col-sm-3 align-self-center">
                             <p class="small"><strong>Valor</strong></p>
                         </div>
                     </div>
@@ -38,10 +45,10 @@
                         <div class="col-sm-2 align-self-center">
                             <p><?= $parametros_sistema_item['cve_parametro_sistema'] ?></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-3 align-self-center">
                             <p><a href="<?=base_url()?>parametros_sistema/detalle/<?=$parametros_sistema_item['cve_parametro_sistema']?>"><?= $parametros_sistema_item['nom_parametro_sistema'] ?></a></p>
                         </div>
-                        <div class="col-sm-5 align-self-center">
+                        <div class="col-sm-3 align-self-center">
                             <p><?= $parametros_sistema_item['valor_parametro_sistema'] ?></a></p>
                         </div>
                         <div class="col-sm-1">

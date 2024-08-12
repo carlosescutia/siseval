@@ -1,5 +1,8 @@
 <?php
 class Reportes extends CI_Controller {
+    // globales
+    var $etapa_actual;
+
 
     public function __construct()
     {
@@ -13,21 +16,39 @@ class Reportes extends CI_Controller {
         $this->load->model('parametros_sistema_model');
         $this->load->model('dependencias_model');
         $this->load->model('probabilidades_inclusion_model');
+        
+        // globales
+        $this->etapa_actual = 0;
+    }
+
+    public function get_userdata()
+    {
+        $cve_usuario = $this->session->userdata('cve_usuario');
+        $cve_rol = $this->session->userdata('cve_rol');
+        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
+        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
+        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
+        $data['cve_rol'] = $cve_rol;
+        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
+        $data['error'] = $this->session->flashdata('error');
+        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
+
+        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
+        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+        if ($data['etapa_siseval'] == $this->etapa_actual) { 
+            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
+        }
+
+        return $data;
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $data['periodo'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
 
@@ -42,17 +63,10 @@ class Reportes extends CI_Controller {
     public function listado_programas_agenda_evaluacion_01()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
@@ -70,17 +84,10 @@ class Reportes extends CI_Controller {
     public function listado_programas_agenda_evaluacion_01_csv()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -123,17 +130,10 @@ class Reportes extends CI_Controller {
     public function listado_propuestas_evaluacion_01()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
@@ -151,17 +151,10 @@ class Reportes extends CI_Controller {
     public function listado_propuestas_evaluacion_01_csv()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -199,17 +192,10 @@ class Reportes extends CI_Controller {
     public function listado_status_dependencias()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -239,17 +225,10 @@ class Reportes extends CI_Controller {
     public function listado_status_dependencias_csv()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $cve_dependencia = $this->session->userdata('cve_dependencia');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $cve_dependencia;
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $this->load->dbutil();
             $this->load->helper('file');
@@ -273,16 +252,10 @@ class Reportes extends CI_Controller {
     public function listado_bitacora_01()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -310,16 +283,10 @@ class Reportes extends CI_Controller {
     public function listado_bitacora_01_csv()
     {
         if ($this->session->userdata('logueado')) {
-            $cve_rol = $this->session->userdata('cve_rol');
-            $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-            $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-            $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-            $data['cve_rol'] = $cve_rol;
-            $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-            $data['error'] = $this->session->flashdata('error');
-            $data['accesos_sistema_rol'] = explode(',', $this->accesos_sistema_model->get_accesos_sistema_rol($cve_rol)['accesos']);
-            $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-            $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
 
             $this->load->dbutil();
             $this->load->helper('file');

@@ -14,13 +14,19 @@
                         <p>
                             <a href="<?=base_url()?>propuestas_evaluacion/detalle/<?= $propuestas_evaluacion_item['id_propuesta_evaluacion'] ?>"><?= $propuestas_evaluacion_item['nom_dependencia'] ?> - <?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></a>
 
-                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                                if ($cve_dependencia == $propuestas_evaluacion_item['cve_dependencia']) { 
+                            <?php
+                                $permisos_requeridos = array(
+                                'propuesta_evaluacion.can_edit',
+                                'es_etapa_actual',
+                                );
+                            ?>
+                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                <?php if ($cve_dependencia == $propuestas_evaluacion_item['cve_dependencia']) { 
                                     $item_eliminar = 'Propuesta de evaluación '.$propuestas_evaluacion_item['nom_dependencia']. ' ' . $propuestas_evaluacion_item['nom_tipo_evaluacion']; 
                                     $url = base_url() . "propuestas_evaluacion/eliminar/". $propuestas_evaluacion_item['id_propuesta_evaluacion']; ?>
                                     <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
-                                <?php } 
-                            } ?>
+                                <?php } ?>
+                            <?php } ?>
                         </p>
                     </div>
                     <div class="col-sm-4">
@@ -45,7 +51,13 @@
             </div>
         <?php } ?>
     </div>
-    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) { ?>
+    <?php
+        $permisos_requeridos = array(
+        'propuesta_evaluacion.can_edit',
+        'es_etapa_actual',
+        );
+    ?>
+    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
         <?php if ( $cve_rol == 'usr' ) { ?>
             <?php if ( $num_propuestas_evaluacion_proyecto_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-end">

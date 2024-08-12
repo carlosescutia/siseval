@@ -23,6 +23,13 @@ class Accesos_sistema_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_permisos_usuario($cve_usuario) {
+        $sql = "select string_agg(cod_opcion::text, ',') as permisos from accesos_sistema acs left join usuarios usu on acs.cve_rol = usu.cve_rol where usu.cve_usuario = ?";
+        $query = $this->db->query($sql, array($cve_usuario));
+        return $query->row_array()['permisos'] ?? null ;
+    }
+
+
     public function get_acceso_opcion_rol($cod_opcion, $cve_rol) {
         $sql = 'select * from accesos_sistema where cod_opcion = ? and $cve_rol = ?;';
         $query = $this->db->query($sql, array($cod_opcion, $cve_rol));

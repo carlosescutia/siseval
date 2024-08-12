@@ -1,54 +1,59 @@
 <div class="card mt-0 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
-        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-            if ( $cve_rol == 'sec' ) { ?>
-                <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
-                    <div class="row mb-3">
-                        <div class="col-sm-4 mb-3">
-                            <label for="clasificacion_supervisor">
-                                Clasificación del supervisor
-                                <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
-                                    <i class="bi bi-info-circle texto-menor"></i>
-                                </a>
-                            </label>
-                            <div class="collapse" id="ayuda_clasificacion_supervisor">
-                                <div class="texto-ayuda">
-                                    Seleccione la sección de la Agenda Anual de Evaluación en la deberá integrarse el programa a evaluar.
-                                </div>
-                            </div>                
-                            <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
-                                <option value="0" <?= ($propuesta_evaluacion['clasificacion_supervisor'] == "0") ? 'selected' : '' ?> ></option>
-                                <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
-                                <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>" <?= ($clasificaciones_supervisor_item['cve_clasificacion_supervisor'] == $propuesta_evaluacion['clasificacion_supervisor']) ? 'selected' : '' ?> ><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-6 gx-5">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="excluir_agenda" id="excluir_agenda" value="1" <?= ($propuesta_evaluacion['excluir_agenda'] == '1') ? 'checked' : '' ?> >
-                                <label class="form-check-label" for="excluir_agenda">Excluír de la Agenda Anual</label>
+        <?php
+            $permisos_requeridos = array(
+            'propuesta_evaluacion.can_edit',
+            'propuesta_evaluacion.can_exclude',
+            'es_etapa_actual',
+            );
+        ?>
+        <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+            <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar_clasificacion/">
+                <div class="row mb-3">
+                    <div class="col-sm-4 mb-3">
+                        <label for="clasificacion_supervisor">
+                            Clasificación del supervisor
+                            <a data-bs-toggle="collapse" href="#ayuda_clasificacion_supervisor" role="button" aria-expanded="false" aria-controls="ayuda_clasificacion_supervisor">
+                                <i class="bi bi-info-circle texto-menor"></i>
+                            </a>
+                        </label>
+                        <div class="collapse" id="ayuda_clasificacion_supervisor">
+                            <div class="texto-ayuda">
+                                Seleccione la sección de la Agenda Anual de Evaluación en la deberá integrarse el programa a evaluar.
                             </div>
-                            <div class="row">
-                                <label for="comentarios_exclusion" class="col-sm-4">Motivo de exclusión:</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="comentarios_exclusion" id="comentarios_exclusion" value="<?=$propuesta_evaluacion['comentarios_exclusion']?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-1 offset-sm-1 mb-3 d-print-none">
-                            <label> </label>
-                            <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
-                        </div>
-                        <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
-                        <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
-                        <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-                        <hr >
+                        </div>                
+                        <select class="form-select" name="clasificacion_supervisor" id="clasificacion_supervisor">
+                            <option value="0" <?= ($propuesta_evaluacion['clasificacion_supervisor'] == "0") ? 'selected' : '' ?> ></option>
+                            <?php foreach ($clasificaciones_supervisor as $clasificaciones_supervisor_item) { ?>
+                            <option value="<?=$clasificaciones_supervisor_item['cve_clasificacion_supervisor']?>" <?= ($clasificaciones_supervisor_item['cve_clasificacion_supervisor'] == $propuesta_evaluacion['clasificacion_supervisor']) ? 'selected' : '' ?> ><?=$clasificaciones_supervisor_item['nom_clasificacion_supervisor']?></option>
+                            <?php } ?>
+                        </select>
                     </div>
-                </form>
-            <?php } 
-        } ?>
-        <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar/">
+                    <div class="col-sm-6 gx-5">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="excluir_agenda" id="excluir_agenda" value="1" <?= ($propuesta_evaluacion['excluir_agenda'] == '1') ? 'checked' : '' ?> >
+                            <label class="form-check-label" for="excluir_agenda">Excluír de la Agenda Anual</label>
+                        </div>
+                        <div class="row">
+                            <label for="comentarios_exclusion" class="col-sm-4">Motivo de exclusión:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="comentarios_exclusion" id="comentarios_exclusion" value="<?=$propuesta_evaluacion['comentarios_exclusion']?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 offset-sm-1 mb-3 d-print-none">
+                        <label> </label>
+                        <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
+                    </div>
+                    <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
+                    <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
+                    <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                    <hr >
+                </div>
+            </form>
+        <?php } ?>
+        <form method="post" action="<?= base_url() ?>propuestas_evaluacion/guardar/" id='frm_propuesta_evaluacion'>
             <div class="row mb-3">
                 <div class="col-sm-6">
                     <label for="id_tipo_evaluacion">
@@ -314,31 +319,42 @@
             <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
             <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
             <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-            <div class="card-footer text-end">
-                <div class="row">
-
-                    <div class="col-sm-6 text-start">
-                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                            if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
-                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                            <?php } 
-                        } ?>
-                    </div>
         </form>
+        <div class="card-footer text-end">
+            <div class="row">
+                <div class="col-sm-6 text-start">
+                    <?php
+                        $permisos_requeridos = array(
+                        'propuesta_evaluacion.can_edit',
+                        'es_etapa_actual',
+                        );
+                    ?>
+                    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                        <?php if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
+                            <button type="submit" class="btn btn-primary btn-sm" form='frm_propuesta_evaluacion'>Guardar</button>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
 
-                    <div class="col-sm-6 texto-menor text-end">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <?php 
-                                $nombre_archivo = 'adjunto_' . $id_propuesta_evaluacion . '.zip';
-                                $nombre_archivo_fs = './adjuntos_propuestas/' . $nombre_archivo;
-                                $nombre_archivo_url = base_url() . 'adjuntos_propuestas/' . $nombre_archivo;
-                                if ( file_exists($nombre_archivo_fs) ) { ?>
-                                    <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
-                                <?php } ?>
-                            </div>
-                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual)) {
-                                if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
+                <div class="col-sm-6 texto-menor text-end">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <?php 
+                            $nombre_archivo = 'adjunto_' . $id_propuesta_evaluacion . '.zip';
+                            $nombre_archivo_fs = './adjuntos_propuestas/' . $nombre_archivo;
+                            $nombre_archivo_url = base_url() . 'adjuntos_propuestas/' . $nombre_archivo;
+                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
+                            <?php } ?>
+                        </div>
+                        <?php
+                            $permisos_requeridos = array(
+                            'propuesta_evaluacion.can_edit',
+                            'es_etapa_actual',
+                            );
+                        ?>
+                        <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                            <?php if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
                                 <div class="col-sm-8">
                                     <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/adjunto_propuesta">
                                         <div class="row text-danger">
@@ -367,11 +383,11 @@
                                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                                     </form>
                                 </div>
-                                <?php } 
-                            } ?>
-                        </div>
+                            <?php } ?>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>

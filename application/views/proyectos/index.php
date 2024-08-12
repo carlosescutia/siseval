@@ -38,8 +38,12 @@
                                 <div class="col-1">
                                     <button class="btn btn-success btn-sm">Filtrar</button>
                                 </div>
-                                <?php if (in_array('99', $accesos_sistema_rol) && ($cve_rol == 'usr')) { ?>
-                                <!-- Si tiene permiso de edición, la etapa de planeación es la actual y es rol usuario -->
+                                <?php
+                                    $permisos_requeridos = array(
+                                    'proyecto.can_edit',
+                                    );
+                                ?>
+                                <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                     <div class="col-3">
                                         <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#tablero-dependencia" role="button" aria-expanded="false" aria-controls="tablero-dependencia">
                                             Tablero de dependencia
@@ -49,7 +53,13 @@
                             </div>
                         </form>
                     </div>
-                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'proyecto.can_edit',
+                        'es_etapa_actual',
+                        );
+                    ?>
+                    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                         <div class="col-sm-1 text-end">
                             <form method="post" action="<?= base_url() ?>proyectos/nuevo">
                                 <button type="submit" class="btn btn-primary btn-sm">Nuevo</button>
@@ -91,7 +101,7 @@
                                     <div class="card-body">
                                         <?php if ($dependencia['carga_evaluaciones']) { ?>
                                             <p>Actualmente con solicitud de evaluaciones para el ejercicio fiscal</p>
-                                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                                 <form method="post" action="<?= base_url() ?>dependencias/desactivar_evaluaciones">
                                                     <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
                                                     <button class="btn btn-primary" type="submit" >
@@ -101,7 +111,7 @@
                                             <?php } ?>
                                         <?php } else { ?>
                                             <p>Sin solicitud de evaluaciones para el ejercicio fiscal</p>
-                                            <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                                 <form method="post" action="<?= base_url() ?>dependencias/activar_evaluaciones">
                                                     <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
                                                     <button class="btn btn-primary" type="submit" >
@@ -131,7 +141,7 @@
                                             <?php } ?>
                                         </div>
                                     </div>
-                                    <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) { ?>
+                                    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                         <div class="card-footer text-center">
                                             <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
                                                 <div class="row text-danger">
@@ -219,13 +229,13 @@
                                         <?php } ?>
                                         <p>
                                         <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
-                                        <?php if (in_array('99', $accesos_sistema_rol) && ($etapa_siseval == $etapa_actual) && ($cve_rol == 'usr')) {
-                                            if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { 
+                                        <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                            <?php if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { ?>
                                                 $item_eliminar = 'Proyecto: '.$proyectos_item['cve_proyecto']. ' ' .$proyectos_item['nom_proyecto'];
                                                 $url = base_url() . "proyectos/eliminar/". $proyectos_item['id_proyecto']; ?>
                                                 <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
-                                            <?php } 
-                                        } ?>
+                                            <?php } ?>
+                                        <?php } ?>
                                         </p>
                                     </div>
                                     <div class="col-sm-1 text-center">
