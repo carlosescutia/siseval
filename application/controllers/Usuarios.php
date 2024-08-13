@@ -13,6 +13,7 @@ class Usuarios extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
+        $this->load->model('accesos_sistema_usuario_model');
         
         // globales
         $this->etapa_actual = 0;
@@ -78,8 +79,12 @@ class Usuarios extends CI_Controller {
                 $data['usuarios'] = $this->usuarios_model->get_usuario($cve_usuario);
                 $data['roles'] = $this->roles_model->get_roles();
                 $data['dependencias'] = $this->dependencias_model->get_dependencias();
+                $data['accesos_sistema_rol'] = $this->accesos_sistema_model->get_accesos_sistema_rol_usuario($cve_usuario);
+                $data['accesos_sistema_usuario'] = $this->accesos_sistema_usuario_model->get_accesos_sistema_usuario($cve_usuario);
+                $data['opciones_sistema_otorgables'] = $this->opciones_sistema_model->get_opciones_sistema_otorgables();
 
                 $this->load->view('templates/header', $data);
+                $this->load->view('templates/dlg_borrar');
                 $this->load->view('catalogos/usuarios/detalle', $data);
                 $this->load->view('templates/footer');
             }

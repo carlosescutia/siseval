@@ -11,6 +11,12 @@ class Opciones_sistema_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_opciones_sistema_otorgables() {
+        $sql = 'select * from opciones_sistema where otorgable = 1 order by cod_opcion;';
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function get_opcion($cve_opcion) {
         $sql = 'select * from opciones_sistema where cve_opcion = ?;';
         $query = $this->db->query($sql, array($cve_opcion));

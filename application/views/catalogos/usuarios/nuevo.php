@@ -16,19 +16,19 @@
         <div class="col-md-12">
             <div class="form-group row">
                 <label for="nom_usuario" class="col-sm-2 col-form-label">Nombre</label>
-                <div class="col-sm-10">
+                <div class="col-sm-4">
                     <input type="text" class="form-control" name="nom_usuario" id="nom_usuario">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
-                <div class="col-sm-10">
+                <div class="col-sm-4">
                     <input type="text" class="form-control" name="usuario" id="usuario">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="password" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
+                <div class="col-sm-2">
                     <input type="text" class="form-control" name="password" id="password">
                 </div>
             </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="form-group row">
                 <label for="activo" class="col-sm-2 col-form-label">Activo</label>
-                <div class="col-sm-10">
+                <div class="col-sm-1">
                     <input type="text" class="form-control" name="activo" id="activo">
                 </div>
             </div>

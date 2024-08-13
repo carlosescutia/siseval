@@ -28,6 +28,9 @@
                         <div class="col-sm-3 align-self-center">
                             <p class="small"><strong>Nombre</strong></p>
                         </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p class="small"><strong>Otorgable</strong></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,10 +42,13 @@
                             <p><?= $opciones_sistema_item['cve_opcion'] ?></p>
                         </div>
                         <div class="col-sm-4 align-self-center">
-                            <p><?= $opciones_sistema_item['cod_opcion'] ?></p>
+                            <p><a href="<?=base_url()?>opciones_sistema/detalle/<?=$opciones_sistema_item['cve_opcion']?>"><?= $opciones_sistema_item['cod_opcion'] ?></a></p>
                         </div>
                         <div class="col-sm-3 align-self-center">
-                            <p><a href="<?=base_url()?>opciones_sistema/detalle/<?=$opciones_sistema_item['cve_opcion']?>"><?= $opciones_sistema_item['nom_opcion'] ?></a></p>
+                            <p><?= $opciones_sistema_item['nom_opcion'] ?></p>
+                        </div>
+                        <div class="col-sm-1 align-self-center">
+                            <p><?= $opciones_sistema_item['otorgable'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 

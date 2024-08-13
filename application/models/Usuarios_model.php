@@ -19,7 +19,18 @@ class Usuarios_model extends CI_Model {
     }
 
     public function get_usuarios() {
-        $sql = 'select u.*, r.nom_rol, d.nom_dependencia from usuarios u left join roles r on u.cve_rol = r.cve_rol left join dependencias d on u.cve_dependencia = d.cve_dependencia order by u.cve_usuario;';
+        //$sql = 'select u.*, r.nom_rol, d.nom_dependencia, (select count(*) from accesos_sistema_usuario asu where asu.cve_usuario = u.cve_usuario) as num_permisos from usuarios u left join roles r on u.cve_rol = r.cve_rol left join dependencias d on u.cve_dependencia = d.cve_dependencia order by u.cve_usuario;';
+        $sql = ""
+            ."select "
+            ."u.*, r.nom_rol, d.nom_dependencia, "
+            ."(select count(*) from accesos_sistema_usuario asu where asu.cve_usuario = u.cve_usuario) as num_permisos "
+            ."from "
+            ."usuarios u "
+            ."left join roles r on u.cve_rol = r.cve_rol "
+            ."left join dependencias d on u.cve_dependencia = d.cve_dependencia "
+            ."order by "
+            ."u.cve_usuario "
+            ."";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

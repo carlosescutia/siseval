@@ -10,6 +10,7 @@ class Opciones_sistema extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('opciones_sistema_model');
         $this->load->model('accesos_sistema_model');
+        $this->load->model('accesos_sistema_usuario_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
         
@@ -75,6 +76,8 @@ class Opciones_sistema extends CI_Controller {
             );
             if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
                 $data['opcion_sistema'] = $this->opciones_sistema_model->get_opcion($cve_opcion);
+                $data['roles_acceso'] = $this->accesos_sistema_model->get_roles_acceso($cve_opcion);
+                $data['usuarios_acceso'] = $this->accesos_sistema_usuario_model->get_usuarios_acceso($cve_opcion);
 
                 $this->load->view('templates/header', $data);
                 $this->load->view('catalogos/opciones_sistema/detalle', $data);
@@ -122,6 +125,7 @@ class Opciones_sistema extends CI_Controller {
                 $data = array(
                     'cod_opcion' => $opciones_sistema['cod_opcion'],
                     'nom_opcion' => $opciones_sistema['nom_opcion'],
+                    'otorgable' => empty($opciones_sistema['otorgable']) ? null : $opciones_sistema['otorgable'] ,
                 );
                 $cve_opcion = $this->opciones_sistema_model->guardar($data, $cve_opcion);
 

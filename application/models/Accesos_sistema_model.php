@@ -17,24 +17,53 @@ class Accesos_sistema_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_accesos_sistema_rol($cve_rol) {
-        $sql = "select string_agg(cod_opcion::text, ',') as accesos from accesos_sistema where cve_rol = ?";
-        $query = $this->db->query($sql, array($cve_rol));
-        return $query->row_array();
+    public function get_accesos_sistema_rol_usuario($cve_usuario) {
+        // solo accesos del rol al que pertenece el usuario
+        $sql = "select acs.cod_opcion, ops.nom_opcion from accesos_sistema acs left join opciones_sistema ops on acs.cod_opcion = ops.cod_opcion left join usuarios usu on acs.cve_rol = usu.cve_rol where usu.cve_usuario = ?";
+        $query = $this->db->query($sql, array($cve_usuario));
+        return $query->result_array();
     }
 
     public function get_permisos_usuario($cve_usuario) {
-        $sql = "select string_agg(cod_opcion::text, ',') as permisos from accesos_sistema acs left join usuarios usu on acs.cve_rol = usu.cve_rol where usu.cve_usuario = ?";
-        $query = $this->db->query($sql, array($cve_usuario));
+        // accesos del usuario y su rol
+        $sql = ""
+        ."select "
+        ."  string_agg(cod_opcion::text, ',') as permisos "
+        ."from ( "
+        ."  select "
+        ."    acs.cod_opcion "
+        ."  from "
+        ."    accesos_sistema acs "
+        ."    left join usuarios usu on acs.cve_rol = usu.cve_rol "
+        ."  where "
+        ."    usu.cve_usuario = ? "
+        ."  union "
+        ."  select "
+        ."    asu.cod_opcion "
+        ."  from "
+        ."    accesos_sistema_usuario asu "
+        ."  where "
+        ."    asu.cve_usuario = ? "
+        .") subconsulta "
+        ."";
+
+        $query = $this->db->query($sql, array($cve_usuario, $cve_usuario));
         return $query->row_array()['permisos'] ?? null ;
     }
-
 
     public function get_acceso_opcion_rol($cod_opcion, $cve_rol) {
         $sql = 'select * from accesos_sistema where cod_opcion = ? and $cve_rol = ?;';
         $query = $this->db->query($sql, array($cod_opcion, $cve_rol));
         return $query->row_array();
     }
+
+    public function get_roles_acceso($cve_opcion) {
+        // Devuelve roles con acceso a una opción
+        $sql = 'select acs.cve_rol, r.nom_rol from accesos_sistema acs left join opciones_sistema ops on ops.cod_opcion = acs.cod_opcion left join roles r on r.cve_rol = acs.cve_rol where ops.cve_opcion = ?';
+        $query = $this->db->query($sql, array($cve_opcion));
+        return $query->result_array();
+    }
+
 
     public function guardar($data, $cve_acceso)
     {

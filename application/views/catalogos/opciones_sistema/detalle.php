@@ -15,27 +15,37 @@
 
         <div class="col-md-12">
             <div class="form-group row">
-                <label for="cve_opcion" class="col-sm-2 col-form-label">Clave</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="cve_opcion" id="cve_opcion" value="<?=$opcion_sistema['cve_opcion'] ?>" readonly>
-                </div>
-            </div>
-            <div class="form-group row">
                 <label for="cod_opcion" class="col-sm-2 col-form-label">Código</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="cod_opcion" id="cod_opcion" value="<?=$opcion_sistema['cod_opcion'] ?>">
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="cod_opcion" id="cod_opcion" value="<?=$opcion_sistema['cod_opcion'] ?>" required>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="nom_opcion" class="col-sm-2 col-form-label">Nombre</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nom_opcion" id="nom_opcion" value="<?=$opcion_sistema['nom_opcion'] ?>">
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="nom_opcion" id="nom_opcion" value="<?=$opcion_sistema['nom_opcion'] ?>" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="otorgable" class="col-sm-2 col-form-label">Otorgable</label>
+                <div class="col-sm-1">
+                    <input type="text" class="form-control" name="otorgable" id="otorgable" value="<?=$opcion_sistema['otorgable'] ?>">
                 </div>
             </div>
         </div>
 
     </form>
 
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4 offset-md-1">
+                <?php include 'roles_acceso.php' ?>
+            </div>
+            <div class="col-md-4 offset-md-1">
+                <?php include 'usuarios_acceso.php' ?>
+            </div>
+        </div>
+    </div>
 
     <hr />
 

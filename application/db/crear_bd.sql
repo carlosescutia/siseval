@@ -175,8 +175,7 @@ CREATE TABLE opciones_sistema (
     cve_opcion serial,
     cod_opcion text,
     nom_opcion text,
-    url text,
-    es_menu integer
+    otorgable integer
 );
 
 DROP TABLE IF EXISTS accesos_sistema CASCADE;
@@ -265,4 +264,11 @@ CREATE TABLE valoraciones_documento_opinion (
     prioridad integer,
     fundamentada integer,
     observaciones text
+);
+
+DROP TABLE IF EXISTS accesos_sistema_usuario CASCADE;
+CREATE TABLE accesos_sistema_usuario (
+    cve_acceso serial,
+    cve_usuario integer,
+    cod_opcion text
 );
