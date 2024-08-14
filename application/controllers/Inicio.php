@@ -1,8 +1,5 @@
 <?php
 class Inicio extends CI_Controller {
-    // globales
-    var $etapa_actual;
-
 
     public function __construct()
     {
@@ -16,9 +13,6 @@ class Inicio extends CI_Controller {
         $this->load->model('proyectos_model');
         $this->load->model('dependencias_model');
         $this->load->model('eventos_model');
-        
-        // globales
-        $this->etapa_actual = 0;
     }
 
     public function get_userdata()
@@ -34,10 +28,6 @@ class Inicio extends CI_Controller {
         $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
 
         $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-        if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
-        }
 
         return $data;
     }

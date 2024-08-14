@@ -96,7 +96,7 @@
                                             <?php
                                                 $permisos_requeridos = array(
                                                 'documento_opinion.can_edit',
-                                                'es_etapa_actual',
+                                                'valoracion.etapa_actual',
                                                 );
                                             ?>
                                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

@@ -22,7 +22,7 @@
                                     <?php
                                         $permisos_requeridos = array(
                                         'calificacion_propuesta.can_edit',
-                                        'es_etapa_actual',
+                                        'planificacion.etapa_actual',
                                         );
                                     ?>
                                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -70,7 +70,7 @@
     <?php
         $permisos_requeridos = array(
         'calificacion_propuesta.can_edit',
-        'es_etapa_actual',
+        'planificacion.etapa_actual',
         );
     ?>
     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

@@ -5,7 +5,7 @@
             $permisos_requeridos = array(
             'propuesta_evaluacion.can_edit',
             'propuesta_evaluacion.can_exclude',
-            'es_etapa_actual',
+            'planificacion.etapa_actual',
             );
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -326,7 +326,7 @@
                     <?php
                         $permisos_requeridos = array(
                         'propuesta_evaluacion.can_edit',
-                        'es_etapa_actual',
+                        'planificacion.etapa_actual',
                         );
                     ?>
                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -350,7 +350,7 @@
                         <?php
                             $permisos_requeridos = array(
                             'propuesta_evaluacion.can_edit',
-                            'es_etapa_actual',
+                            'planificacion.etapa_actual',
                             );
                         ?>
                         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

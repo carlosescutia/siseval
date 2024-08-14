@@ -37,7 +37,7 @@
                 <?php
                     $permisos_requeridos = array(
                     'ejecucion.can_add_files',
-                    'es_etapa_actual',
+                    'ejecucion.etapa_actual',
                     );
                 ?>
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

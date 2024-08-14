@@ -1,7 +1,5 @@
 <?php
 class Usuarios extends CI_Controller {
-    // globales
-    var $etapa_actual;
 
     public function __construct() {
         parent::__construct();
@@ -14,9 +12,6 @@ class Usuarios extends CI_Controller {
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
         $this->load->model('accesos_sistema_usuario_model');
-        
-        // globales
-        $this->etapa_actual = 0;
     }
 
     public function get_userdata()
@@ -32,10 +27,6 @@ class Usuarios extends CI_Controller {
         $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
 
         $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-        if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
-        }
 
         return $data;
     }

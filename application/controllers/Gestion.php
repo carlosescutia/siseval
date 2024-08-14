@@ -36,7 +36,7 @@ class Gestion extends CI_Controller {
         $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
         $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
         if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'es_etapa_actual'); 
+            array_push($data['permisos_usuario'], 'gestion.etapa_actual'); 
         }
 
         return $data;

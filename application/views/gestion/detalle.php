@@ -32,7 +32,7 @@
                             <?php
                                 $permisos_requeridos = array(
                                 'gestion.can_edit',
-                                'es_etapa_actual',
+                                'gestion.etapa_actual',
                                 );
                             ?>
                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
