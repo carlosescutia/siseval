@@ -255,11 +255,11 @@
 
                                         $fondo_calificadas = 'bg-dark';
                                         if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
-                                        ($proyectos_item['num_calif_dependencias'] == $proyectos_item['propuestas_calificadas'] * $max_calificaciones)) {
+                                        ($proyectos_item['num_calif_dependencias'] == $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
                                             $fondo_calificadas = 'bg-success';
                                         }
                                         if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
-                                        ($proyectos_item['num_calif_dependencias'] < $proyectos_item['propuestas_calificadas'] * $max_calificaciones)) {
+                                        ($proyectos_item['num_calif_dependencias'] < $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
                                             $fondo_calificadas = 'bg-warning';
                                         }
                                         if ($proyectos_item['status_actual'] > $proyectos_item['propuestas_calificadas']) {

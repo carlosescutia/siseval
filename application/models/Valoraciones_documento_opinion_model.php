@@ -26,10 +26,34 @@ class Valoraciones_documento_opinion_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_num_valoraciones_documento_opinion($cve_documento_opinion, $cve_dependencia) {
-        $sql = 'select count(*) as num from valoraciones_documento_opinion where cve_documento_opinion = ? and cve_dependencia = ?';
+    public function get_num_valoraciones_documento_opinion_dependencia($cve_documento_opinion, $cve_dependencia) {
+        $sql = 'select count(*) as num_valoraciones_documento_opinion_dependencia from valoraciones_documento_opinion where cve_documento_opinion = ? and cve_dependencia = ?';
         $query = $this->db->query($sql, array($cve_documento_opinion, $cve_dependencia));
-        return $query->row_array();
+        return $query->row_array()['num_valoraciones_documento_opinion_dependencia'];
+    }
+
+    public function get_num_valoraciones_documento_opinion($cve_documento_opinion) {
+        $sql = 'select count(*) as num_valoraciones_documento_opinion from valoraciones_documento_opinion where cve_documento_opinion = ?';
+        $query = $this->db->query($sql, array($cve_documento_opinion));
+        return $query->row_array()['num_valoraciones_documento_opinion'];
+    }
+
+    public function get_status_valoraciones_documento_opinion($cve_documento_opinion) {
+        $sql = "select string_agg(distinct status, '') as status_valoraciones_documento_opinion from valoraciones_documento_opinion where cve_documento_opinion = ?";
+        $query = $this->db->query($sql, array($cve_documento_opinion));
+        return $query->row_array()['status_valoraciones_documento_opinion'];
+    }
+
+    public function get_observaciones_valoraciones_documento_opinion($cve_documento_opinion) {
+        $sql = "select string_agg(observaciones, '') as observaciones_valoraciones_documento_opinion from valoraciones_documento_opinion where cve_documento_opinion = ?";
+        $query = $this->db->query($sql, array($cve_documento_opinion));
+        return $query->row_array()['observaciones_valoraciones_documento_opinion'];
+    }
+
+    public function guardar_documento_opinion($data, $cve_documento_opinion)
+    {
+        $this->db->where('cve_documento_opinion', $cve_documento_opinion);
+        $result = $this->db->update('valoraciones_documento_opinion', $data);
     }
 
     public function guardar($data, $cve_valoracion_documento_opinion)

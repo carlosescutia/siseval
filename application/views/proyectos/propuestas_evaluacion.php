@@ -36,10 +36,10 @@
                             case $num_calificaciones == 0:
                                 $fondo_actual = 'bg-danger'; 
                                 break;
-                            case $num_calificaciones > 0 and $num_calificaciones < $max_calificaciones:
+                            case $num_calificaciones > 0 and $num_calificaciones < $num_supervisores:
                                 $fondo_actual = 'bg-warning'; 
                                 break;
-                            case $num_calificaciones == $max_calificaciones:
+                            case $num_calificaciones == $num_supervisores:
                                 $fondo_actual = 'bg-success'; 
                                 break;
                             default:

@@ -204,7 +204,7 @@
             );
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-            <?php if ($documento_opinion['status'] == 2) {
+            <?php if ($documento_opinion['status'] == 'en_proceso') {
                 $item_eliminar = $recomendaciones_item['desc_recomendacion'] ; 
                 $url = base_url() . "valoracion/recomendaciones_eliminar/". $recomendaciones_item['cve_recomendacion']; ?>
                 <div class="card-footer text-end d-print-none">

@@ -229,7 +229,7 @@ CREATE TABLE documentos_opinion (
     instancia_evaluadora text,
     elaborado_por text,
     antecedentes text,
-    status integer
+    status text
 );
 
 DROP TABLE IF EXISTS recomendaciones CASCADE;
@@ -250,9 +250,8 @@ CREATE TABLE recomendaciones (
 
 DROP TABLE IF EXISTS status_documentos_opinion CASCADE;
 CREATE TABLE status_documentos_opinion (
-    cve_status_documento_opinion serial,
-    desc_status_documento_opinion text,
-    orden integer
+    cve_status_documento_opinion text,
+    desc_status_documento_opinion text
 );
 
 DROP TABLE IF EXISTS valoraciones_documento_opinion CASCADE;
@@ -263,7 +262,8 @@ CREATE TABLE valoraciones_documento_opinion (
     pertinencia integer,
     prioridad integer,
     fundamentada integer,
-    observaciones text
+    observaciones text,
+    status text
 );
 
 DROP TABLE IF EXISTS accesos_sistema_usuario CASCADE;

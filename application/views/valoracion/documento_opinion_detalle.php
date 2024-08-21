@@ -11,7 +11,7 @@
         <div class="col-md-6 offset-md-1">
             <?php include 'datos_documento_opinion.php' ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <?php include 'valoracion_documento_opinion.php' ?>
         </div>
     </div>
@@ -31,7 +31,7 @@
         );
     ?>
     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-        <?php if ($documento_opinion['status'] == 2) { ?>
+        <?php if ($documento_opinion['status'] == 'en_proceso') { ?>
             <div class="row">
                 <div class="col-md-10 d-print-none">
                     <a href="<?=base_url()?>valoracion/recomendaciones_nuevo/<?=$documento_opinion['cve_documento_opinion']?>" class="btn btn-primary">Nueva recomendación</a>

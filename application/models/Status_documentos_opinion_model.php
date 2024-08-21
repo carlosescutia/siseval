@@ -6,7 +6,7 @@ class Status_documentos_opinion_model extends CI_Model {
     }
 
     public function get_status_documentos_opinion() {
-        $sql = 'select * from status_documentos_opinion order by orden;';
+        $sql = 'select * from status_documentos_opinion;';
         $query = $this->db->query($sql);
         return $query->result_array();
     }

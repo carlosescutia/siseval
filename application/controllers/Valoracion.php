@@ -45,6 +45,27 @@ class Valoracion extends CI_Controller {
         return $data;
     }
 
+    public function registro_bitacora($accion, $entidad, $valor)
+    {
+        // registro en bitacora
+        $separador = ' -> ';
+        $usuario = $this->session->userdata('usuario');
+        $nom_usuario = $this->session->userdata('nom_usuario');
+        $nom_dependencia = $this->session->userdata('nom_dependencia');
+        $data = array(
+            'fecha' => date("Y-m-d"),
+            'hora' => date("H:i"),
+            'origen' => $_SERVER['REMOTE_ADDR'],
+            'usuario' => $usuario,
+            'nom_usuario' => $nom_usuario,
+            'nom_dependencia' => $nom_dependencia,
+            'accion' => $accion,
+            'entidad' => $entidad,
+            'valor' => $valor
+        );
+        $this->bitacora_model->guardar($data);
+    }
+
     public function index()
     {
         if ($this->session->userdata('logueado')) {
@@ -103,7 +124,7 @@ class Valoracion extends CI_Controller {
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_doc_op($cve_documento_opinion);
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
             $data['valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoraciones_documento_opinion($cve_documento_opinion);
-            $data['num_valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion, $cve_dependencia);
+            $data['num_valoraciones_documento_opinion_dependencia'] = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion_dependencia($cve_documento_opinion, $cve_dependencia);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -118,35 +139,20 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            $accion = 'agregó';
 
             // guardado
             $data = array(
                 'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
                 'fecha_elaboracion' => date('Y-m-d'),
-                'status' => 2,
+                'status' => 'en_proceso',
             );
             $cve_documento_opinion = $this->documentos_opinion_model->guardar($data, null);
 
             // registro en bitacora
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'agregó';
             $entidad = 'documentos_opinion';
             $valor = 'doc_op ' . $cve_documento_opinion . ' nuevo';
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $this->registro_bitacora($accion, $entidad, $valor);
 
             $this->documento_opinion_detalle($cve_documento_opinion);
 
@@ -159,34 +165,24 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            $accion = 'modificó';
-
             // guardado
             $data = array(
                 'fecha_elaboracion' => date('Y-m-d'),
-                'status' => 3,
+                'status' => 'por_evaluar',
             );
             $cve_documento_opinion = $this->documentos_opinion_model->guardar($data, $cve_documento_opinion);
 
+            // cambiar status a valoraciones con observaciones del documento de opinion a por_valorar
+            $data = array(
+                'status' => 'por_valorar',
+            );
+            $this->valoraciones_documento_opinion_model->guardar_documento_opinion($data, $cve_documento_opinion);
+
             // registro en bitacora
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'modificó';
             $entidad = 'documentos_opinion';
             $valor = 'doc_op ' . $cve_documento_opinion . ' revision';
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $this->registro_bitacora($accion, $entidad, $valor);
 
             redirect('valoracion');
 
@@ -201,13 +197,7 @@ class Valoracion extends CI_Controller {
 
             $documento_opinion = $this->input->post();
             if ($documento_opinion) {
-
-                if ($cve_documento_opinion) {
-                    $accion = 'modificó';
-                } else {
-                    $accion = 'agregó';
-                }
-
+                
                 // guardado
                 $data = array(
                     'fecha_elaboracion' => $documento_opinion['fecha_elaboracion'],
@@ -216,27 +206,16 @@ class Valoracion extends CI_Controller {
                     'antecedentes' => $documento_opinion['antecedentes'],
                 );
                 $cve_documento_opinion = $this->documentos_opinion_model->guardar($data, $cve_documento_opinion);
-                
+
                 // registro en bitacora
-				$separador = ' -> ';
-				$usuario = $this->session->userdata('usuario');
-				$nom_usuario = $this->session->userdata('nom_usuario');
-				$nom_dependencia = $this->session->userdata('nom_dependencia');
+                if ($cve_documento_opinion) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
 				$entidad = 'documentos_opinion';
                 $valor = $cve_documento_opinion;
-				$data = array(
-					'fecha' => date("Y-m-d"),
-					'hora' => date("H:i"),
-					'origen' => $_SERVER['REMOTE_ADDR'],
-					'usuario' => $usuario,
-					'nom_usuario' => $nom_usuario,
-					'nom_dependencia' => $nom_dependencia,
-					'accion' => $accion,
-					'entidad' => $entidad,
-					'valor' => $valor
-				);
-				$this->bitacora_model->guardar($data);
-
+                $this->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $cve_documento_opinion);
@@ -250,8 +229,6 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            $accion = 'agregó';
-
             // guardado
             $data = array(
                 'cve_documento_opinion' => $cve_documento_opinion,
@@ -259,24 +236,10 @@ class Valoracion extends CI_Controller {
             $cve_recomendacion = $this->recomendaciones_model->guardar($data, null);
 
             // registro en bitacora
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
+            $accion = 'agregó';
             $entidad = 'recomendaciones';
             $valor = $cve_recomendacion;
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $this->registro_bitacora($accion, $entidad, $valor);
 
             redirect('valoracion/documento_opinion_detalle/' . $cve_documento_opinion);
 
@@ -291,7 +254,6 @@ class Valoracion extends CI_Controller {
 
             $recomendacion = $this->input->post();
             if ($recomendacion) {
-                $accion = 'modificó';
 
                 // guardado
                 $data = array(
@@ -310,24 +272,10 @@ class Valoracion extends CI_Controller {
                 $cve_recomendacion = $this->recomendaciones_model->guardar($data, $recomendacion['cve_recomendacion']);
 
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $accion = 'modificó';
                 $entidad = 'recomendaciones';
                 $valor = $cve_recomendacion;
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $recomendacion['cve_documento_opinion']);
@@ -341,28 +289,15 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
+            // checar: al parecer no se usa
             $recomendacion = $this->recomendaciones_model->get_recomendacion($cve_recomendacion);
 
+            // checar: mover despues de la eliminacion
             // registro en bitacora
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
             $accion = 'eliminó';
             $entidad = 'recomendaciones';
             $valor = "Recomendacion ". $cve_recomendacion;
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $this->registro_bitacora($accion, $entidad, $valor);
 
             // eliminado
             $this->recomendaciones_model->eliminar($cve_recomendacion);
@@ -383,6 +318,7 @@ class Valoracion extends CI_Controller {
             $cve_rol = $data['cve_rol'];
 
             $data['valoracion_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
+            $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($data['valoracion_documento_opinion']['cve_documento_opinion']);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -400,34 +336,19 @@ class Valoracion extends CI_Controller {
             $valoracion_documento_opinion = $this->input->post();
             if ($valoracion_documento_opinion) {
 
-                $accion = 'agregó';
-
                 // guardado
                 $data = array(
                     'cve_documento_opinion' => $valoracion_documento_opinion['cve_documento_opinion'],
                     'cve_dependencia' => $this->session->userdata('cve_dependencia'),
+                    'status' => 'por_valorar',
                 );
                 $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, null);
 
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $accion = 'agregó';
                 $entidad = 'valoraciones_documento_opinion';
                 $valor = 'doc_op ' . $cve_valoracion_documento_opinion . ' nuevo';
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->registro_bitacora($accion, $entidad, $valor);
             }
 
             $this->valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion);
@@ -444,41 +365,48 @@ class Valoracion extends CI_Controller {
             $valoracion_documento_opinion = $this->input->post();
             if ($valoracion_documento_opinion) {
 
-                if ($valoracion_documento_opinion['cve_valoracion_documento_opinion']) {
-                    $accion = 'modificó';
-                } else {
-                    $accion = 'agregó';
-                }
-
                 // guardado
                 $data = array(
                     'pertinencia' => $valoracion_documento_opinion['pertinencia'],
                     'prioridad' => $valoracion_documento_opinion['prioridad'],
                     'fundamentada' => $valoracion_documento_opinion['fundamentada'],
                     'observaciones' => $valoracion_documento_opinion['observaciones'],
+                    'status' => 'valorada',
                 );
                 $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, $valoracion_documento_opinion['cve_valoracion_documento_opinion']);
                 
+                $cve_documento_opinion = $valoracion_documento_opinion['cve_documento_opinion'];
+                $num_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion);
+                $status_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_status_valoraciones_documento_opinion($cve_documento_opinion);
+                // probar si se completaron las valoraciones solamente si todas las valoraciones tienen status valorada
+                $num_supervisores = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+                if ($num_valoraciones_documento_opinion == $num_supervisores and $status_valoraciones_documento_opinion == 'valorada') {
+
+                    // probar si no hay observaciones
+                    $observaciones_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_observaciones_valoraciones_documento_opinion($cve_documento_opinion);
+                    if ($observaciones_valoraciones_documento_opinion) {
+                        // cambiar status del documento de opinion a en_proceso
+                        $status = 'en_proceso';
+                    } else {
+                        // cambiar status del documento de opinion a aprobado
+                        $status = 'aprobado';
+                    }
+                    $data = array(
+                        'status' => $status,
+                    );
+                    $this->documentos_opinion_model->guardar($data, $cve_documento_opinion);
+
+                }
+                
                 // registro en bitacora
-				$separador = ' -> ';
-				$usuario = $this->session->userdata('usuario');
-				$nom_usuario = $this->session->userdata('nom_usuario');
-				$nom_dependencia = $this->session->userdata('nom_dependencia');
+                if ($valoracion_documento_opinion['cve_valoracion_documento_opinion']) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
 				$entidad = 'valoraciones_documento_opinion';
                 $valor = $cve_valoracion_documento_opinion;
-				$data = array(
-					'fecha' => date("Y-m-d"),
-					'hora' => date("H:i"),
-					'origen' => $_SERVER['REMOTE_ADDR'],
-					'usuario' => $usuario,
-					'nom_usuario' => $nom_usuario,
-					'nom_dependencia' => $nom_dependencia,
-					'accion' => $accion,
-					'entidad' => $entidad,
-					'valor' => $valor
-				);
-				$this->bitacora_model->guardar($data);
-
+                $this->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $valoracion_documento_opinion['cve_documento_opinion']);
@@ -492,28 +420,15 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
+            // checar: al parecer no se usa
             $valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
 
+            // checar: ver si se puede mover después de la eliminación
             // registro en bitacora
-            $separador = ' -> ';
-            $usuario = $this->session->userdata('usuario');
-            $nom_usuario = $this->session->userdata('nom_usuario');
-            $nom_dependencia = $this->session->userdata('nom_dependencia');
             $accion = 'eliminó';
             $entidad = 'valoraciones_documento_opinion';
             $valor = "valoracion_documento_opinion ". $cve_valoracion_documento_opinion;
-            $data = array(
-                'fecha' => date("Y-m-d"),
-                'hora' => date("H:i"),
-                'origen' => $_SERVER['REMOTE_ADDR'],
-                'usuario' => $usuario,
-                'nom_usuario' => $nom_usuario,
-                'nom_dependencia' => $nom_dependencia,
-                'accion' => $accion,
-                'entidad' => $entidad,
-                'valor' => $valor
-            );
-            $this->bitacora_model->guardar($data);
+            $this->registro_bitacora($accion, $entidad, $valor);
 
             // eliminado
             $this->valoraciones_documento_opinion_model->eliminar($cve_valoracion_documento_opinion);

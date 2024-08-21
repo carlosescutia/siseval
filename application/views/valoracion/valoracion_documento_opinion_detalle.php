@@ -101,10 +101,12 @@
             );
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-            <?php if ($cve_dependencia == $valoracion_documento_opinion['cve_dependencia']) { ?>
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-primary btn-sm" form="valoracion">Guardar</button>
-                </div>
+            <?php if ($documento_opinion['status'] == 'por_evaluar') { ?>
+                <?php if ($cve_dependencia == $valoracion_documento_opinion['cve_dependencia']) { ?>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-primary btn-sm" form="valoracion">Guardar</button>
+                    </div>
+                <?php } ?>
             <?php } ?>
         <?php } ?>
     </div>
