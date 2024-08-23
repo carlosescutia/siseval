@@ -1,4 +1,4 @@
-<div class="card mt-0 mb-3 tabla-datos">
+<div class="card mt-0 mb-3 tabla-datos d-print-none">
     <div class="card-header text-white bg-primary">Valoraciones</div>
     <div class="card-body">
         <div class="col-sm-12">

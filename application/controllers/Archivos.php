@@ -10,6 +10,27 @@ class Archivos extends CI_Controller {
 
     }
 
+    public function registro_bitacora($accion, $entidad, $valor)
+    {
+        // registro en bitacora
+        $usuario = $this->session->userdata('usuario');
+        $nom_usuario = $this->session->userdata('nom_usuario');
+        $nom_dependencia = $this->session->userdata('nom_dependencia');
+        $data = array(
+            'fecha' => date("Y-m-d"),
+            'hora' => date("H:i"),
+            'origen' => $_SERVER['REMOTE_ADDR'],
+            'usuario' => $usuario,
+            'nom_usuario' => $nom_usuario,
+            'nom_dependencia' => $nom_dependencia,
+            'accion' => $accion,
+            'entidad' => $entidad,
+            'valor' => $valor
+        );
+        $this->bitacora_model->guardar($data);
+    }
+
+
     public function oficio_dependencia()
     {
         if ($this->session->userdata('logueado')) {
@@ -27,25 +48,10 @@ class Archivos extends CI_Controller {
                 $this->session->set_flashdata('error', $error['error']);
             } else {
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
-                $entidad = 'archivos';
-                $valor = $nom_dependencia . $separador . $nombre_archivo;
                 $accion = 'adjuntó';
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $entidad = 'archivos';
+                $valor = $nom_dependencia . '->' . $nombre_archivo;
+                $this->registro_bitacora($accion, $entidad, $valor);
 
             }
             redirect('proyectos');
@@ -53,6 +59,7 @@ class Archivos extends CI_Controller {
             redirect('inicio/login');
         }
     }
+
     public function adjunto_propuesta()
     {
         if ($this->session->userdata('logueado')) {
@@ -70,28 +77,42 @@ class Archivos extends CI_Controller {
                 $this->session->set_flashdata('error', $error['error']);
             } else {
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
-                $entidad = 'archivos';
-                $valor = 'propuestas_eval.' . $separador . $nombre_archivo;
                 $accion = 'adjuntó';
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $entidad = 'archivos';
+                $valor = 'propuestas_eval.' . ' -> ' . $nombre_archivo;
+                $this->registro_bitacora($accion, $entidad, $valor);
 
             }
             redirect('propuestas_evaluacion/detalle/'.$id_propuesta_evaluacion);
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function documento_opinion()
+    {
+        if ($this->session->userdata('logueado')) {
+            $nombre_archivo = $this->input->post('nombre_archivo');
+            $cve_documento_opinion = $this->input->post('cve_documento_opinion');
+            $config = array();
+            $config['upload_path'] = 'doc';
+            $config['allowed_types'] = 'pdf';
+            $config['max_size'] = '10240';
+            $config['overwrite'] = TRUE;
+            $config['file_name'] = $nombre_archivo;
+            $this->load->library('upload', $config);
+            if ( ! $this->upload->do_upload('subir_archivo') ) {
+                $error = array('error' => $this->upload->display_errors());
+                $this->session->set_flashdata('error', $error['error']);
+            } else {
+                // registro en bitacora
+                $accion = 'subió';
+                $entidad = 'archivos';
+                $valor = 'documento_opinion' . ' -> ' . $nombre_archivo;
+                $this->registro_bitacora($accion, $entidad, $valor);
+
+            }
+            redirect(base_url().'valoracion/documento_opinion_detalle/'.$cve_documento_opinion);
         } else {
             redirect('inicio/login');
         }
@@ -121,25 +142,10 @@ class Archivos extends CI_Controller {
                 print_r($this->input->post());
             } else {
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
-                $entidad = 'archivos';
-                $valor = $nom_dependencia . $separador . $nombre_archivo;
                 $accion = 'subió';
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $entidad = 'archivos';
+                $valor = $nom_dependencia . ' -> ' . $nombre_archivo;
+                $this->registro_bitacora($accion, $entidad, $valor);
 
             }
             redirect($url_actual);
@@ -160,25 +166,10 @@ class Archivos extends CI_Controller {
                 $url_actual = $datos['url_actual'];
 
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $accion = 'eliminó';
                 $entidad = 'archivos';
                 $valor = $nombre_archivo;
-                $accion = 'eliminó';
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->registro_bitacora($accion, $entidad, $valor);
 
                 // Eliminar archivo
                 $status = unlink($nombre_archivo_fs) ? 'Se eliminó el archivo '.$nombre_archivo_fs : 'Error al eliminar el archivo '.$nombre_archivo_fs;

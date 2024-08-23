@@ -12,7 +12,14 @@
             <?php include 'datos_documento_opinion.php' ?>
         </div>
         <div class="col-md-5">
-            <?php include 'valoracion_documento_opinion.php' ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php include 'valoracion_documento_opinion.php' ?>
+                </div>
+                <div class="col-md-12">
+                    <?php include 'pdf_documento_opinion.php' ?>
+                </div>
+            </div>
         </div>
     </div>
 
