@@ -34,8 +34,6 @@ class Dependencias extends CI_Controller {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
 
             $permisos_requeridos = array(
                 'dependencia.can_edit',
@@ -58,8 +56,6 @@ class Dependencias extends CI_Controller {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
 
             $permisos_requeridos = array(
                 'dependencia.can_edit',
@@ -81,8 +77,6 @@ class Dependencias extends CI_Controller {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
 
             $permisos_requeridos = array(
                 'dependencia.can_edit',

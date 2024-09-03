@@ -42,7 +42,7 @@
                             <p><a href="<?=base_url()?>dependencias/detalle/<?=$dependencias_item['cve_dependencia']?>"><?= $dependencias_item['nom_completo_dependencia'] ?></a></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
-                            <p><a href="<?=base_url()?>dependencias/detalle/<?=$dependencias_item['cve_dependencia']?>"><?= $dependencias_item['nom_dependencia'] ?></a></p>
+                            <p><?= $dependencias_item['nom_dependencia'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 
