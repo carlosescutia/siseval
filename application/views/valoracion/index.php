@@ -16,7 +16,7 @@
                                         <option value="%" <?= ($cve_dependencia_filtro == '') ? 'selected' : '' ?> >Todas las dependencias</option>
                                     <?php } ?>
                                     <?php foreach ($dependencias_filtro as $dependencias_filtro_item) { ?>
-                                    <option value="<?= $dependencias_filtro_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_filtro_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_filtro_item['nom_dependencia']?></option>
+                                        <option value="<?= $dependencias_filtro_item['cve_dependencia']?>" <?= ($cve_dependencia_filtro == $dependencias_filtro_item['cve_dependencia']) ? 'selected' : '' ?> ><?=$dependencias_filtro_item['nom_dependencia']?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -25,8 +25,8 @@
                             </div>
                             <div class="col-9 text-end">
                                 <div class="row text-danger">
-                                    <?php if ($error) { 
-                                    echo $error;
+                                    <?php if ($error) {
+                                        echo $error;
                                     } ?>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
 
     <div class="row">
         <?php foreach ($dependencias as $dependencias_item) { ?>
-        <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>
+            <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-12">
@@ -90,8 +90,9 @@
                                         <p><?= $proyectos_item['nom_dependencia_propuesta'] ?></p>
                                     </div>
                                     <div class="col-sm-1">
-                                        <?php if ($proyectos_item['status']) { ?>
-                                            <p><a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$proyectos_item['cve_documento_opinion']?>"><?= $proyectos_item['desc_status_documento_opinion'] ?></a></p>
+                                        <p>
+                                        <?php if ($proyectos_item['status_documento_opinion']) { ?>
+                                            <a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$proyectos_item['cve_documento_opinion']?>"><?= $proyectos_item['desc_status_documento_opinion'] ?></a>
                                         <?php } else { ?>
                                             <?php
                                                 $permisos_requeridos = array(
@@ -100,14 +101,22 @@
                                                 );
                                             ?>
                                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-                                                <p><a href="<?=base_url()?>valoracion/documento_opinion_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a></p>
+                                                <a href="<?=base_url()?>valoracion/documento_opinion_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a>
                                             <?php } ?>
                                         <?php } ?>
+                                        <?php 
+                                            $nombre_archivo = 'doc_op_' . $proyectos_item['cve_documento_opinion'] . '.pdf';
+                                            $nombre_archivo_fs = './doc/' . $nombre_archivo;
+                                            $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+                                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                        <?php } ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         <?php } 
-                     } ?>
+                    } ?>
                 </div>
             </div>
         <?php } ?>
