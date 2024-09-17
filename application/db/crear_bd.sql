@@ -245,7 +245,8 @@ CREATE TABLE recomendaciones (
     prioridad text,
     responsable text,
     postura text,
-    justificacion text
+    justificacion text,
+    ponderacion integer
 );
 
 DROP TABLE IF EXISTS status_documentos_opinion CASCADE;
@@ -272,3 +273,48 @@ CREATE TABLE accesos_sistema_usuario (
     cve_usuario integer,
     cod_opcion text
 );
+
+DROP TABLE IF EXISTS planes_accion CASCADE;
+CREATE TABLE planes_accion (
+    id_plan_accion serial,
+    cve_documento_opinion integer,
+    fecha_elaboracion date,
+    status text
+);
+
+DROP TABLE IF EXISTS actividades CASCADE;
+CREATE TABLE actividades (
+    id_actividad serial,
+    cve_recomendacion integer,
+    desc_actividad text,
+    fech_ini date,
+    fech_fin date,
+    area_responsable text,
+    resultados_esperados text,
+    ponderacion integer
+);
+
+DROP TABLE IF EXISTS status_plan_accion CASCADE;
+CREATE TABLE status_plan_accion (
+    cve_status_plan_accion text,
+    desc_status_plan_accion text
+);
+
+DROP TABLE IF EXISTS valoraciones_plan_accion CASCADE;
+CREATE TABLE valoraciones_plan_accion (
+    id_valoracion_plan_accion serial,
+    id_plan_accion integer,
+    cve_dependencia integer,
+    actividades_cumplimiento int,
+    plazo_adecuado int,
+    resultados_pertinentes int,
+    observaciones text,
+    status text
+);
+
+DROP TABLE IF EXISTS tipos_actor CASCADE;
+CREATE TABLE tipos_actor (
+    id serial,
+    descripcion text
+);
+

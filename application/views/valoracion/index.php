@@ -37,7 +37,6 @@
         </div>
     </div>
 
-
     <div class="row">
         <?php foreach ($dependencias as $dependencias_item) { ?>
             <h3 class="header-dependencia"><?= $dependencias_item['nom_dependencia'] ?></h3>
@@ -106,6 +105,32 @@
                                         <?php } ?>
                                         <?php 
                                             $nombre_archivo = 'doc_op_' . $proyectos_item['cve_documento_opinion'] . '.pdf';
+                                            $nombre_archivo_fs = './doc/' . $nombre_archivo;
+                                            $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+                                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                        <?php } ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <p>
+                                        <?php if ($proyectos_item['status_plan_accion']) { ?>
+                                            <a href="<?=base_url()?>valoracion/plan_accion_detalle/<?=$proyectos_item['id_plan_accion']?>"><?= $proyectos_item['desc_status_plan_accion'] ?></a>
+                                        <?php } else { ?>
+                                            <?php if ($proyectos_item['status_documento_opinion'] == 'aprobado') { ?>
+                                                <?php
+                                                    $permisos_requeridos = array(
+                                                    'plan_accion.can_edit',
+                                                    'valoracion.etapa_actual',
+                                                    );
+                                                ?>
+                                                <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                                    <a href="<?=base_url()?>valoracion/plan_accion_nuevo/<?=$proyectos_item['cve_documento_opinion']?>">Generar</a>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?php 
+                                            $nombre_archivo = 'plan_ac_' . $proyectos_item['id_plan_accion'] . '.pdf';
                                             $nombre_archivo_fs = './doc/' . $nombre_archivo;
                                             $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
                                             if ( file_exists($nombre_archivo_fs) ) { ?>

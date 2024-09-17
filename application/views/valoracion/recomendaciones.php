@@ -125,10 +125,14 @@
                         </div>                
                         <select class="form-select" name="id_tipo_actor" id="id_tipo_actor" required>
                             <option value=""></option>
-                            <option value="1" <?= $recomendaciones_item['id_tipo_actor'] == '1' ? 'selected' : '' ?> >Específico</option>
-                            <option value="2" <?= $recomendaciones_item['id_tipo_actor'] == '2' ? 'selected' : '' ?> >Institucional</option>
-                            <option value="3" <?= $recomendaciones_item['id_tipo_actor'] == '3' ? 'selected' : '' ?> >Interinstitucional</option>
-                            <option value="4" <?= $recomendaciones_item['id_tipo_actor'] == '4' ? 'selected' : '' ?> >Intergubernamental</option>
+                            <?php foreach ($tipos_actor as $tipos_actor_item) { ?>
+                                <option 
+                                    value="<?= $tipos_actor_item['id'] ?>" 
+                                    <?= $recomendaciones_item['id_tipo_actor'] == $tipos_actor_item['id'] ? 'selected' : '' ?> 
+                                >
+                                    <?= $tipos_actor_item['descripcion'] ?>
+                                </option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="col-sm-4">

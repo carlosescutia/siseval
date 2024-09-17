@@ -17,8 +17,13 @@ class Valoracion extends CI_Controller {
         $this->load->model('documentos_opinion_model');
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('recomendaciones_model');
+        $this->load->model('tipos_actor_model');
         $this->load->model('status_documentos_opinion_model');
         $this->load->model('valoraciones_documento_opinion_model');
+        $this->load->model('planes_accion_model');
+        $this->load->model('status_plan_accion_model');
+        $this->load->model('valoraciones_plan_accion_model');
+        $this->load->model('actividades_model');
 
         // globales
         $this->etapa_actual = 4;
@@ -111,6 +116,9 @@ class Valoracion extends CI_Controller {
         }
     }
 
+    /*
+    * Documento de opinion
+    */
     public function documento_opinion_detalle($cve_documento_opinion)
     {
         if ($this->session->userdata('logueado')) {
@@ -122,6 +130,7 @@ class Valoracion extends CI_Controller {
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_doc_op($cve_documento_opinion);
+            $data['tipos_actor'] = $this->tipos_actor_model->get_tipos_actor();
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
             $data['valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoraciones_documento_opinion($cve_documento_opinion);
             $data['num_valoraciones_documento_opinion_dependencia'] = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion_dependencia($cve_documento_opinion, $cve_dependencia);
@@ -285,6 +294,34 @@ class Valoracion extends CI_Controller {
         }
     }
 
+    public function recomendaciones_ponderacion()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $recomendacion = $this->input->post();
+            if ($recomendacion) {
+
+                // guardado
+                $data = array(
+                    'ponderacion' => $recomendacion['ponderacion'],
+                );
+                $cve_recomendacion = $this->recomendaciones_model->guardar($data, $recomendacion['cve_recomendacion']);
+
+                // registro en bitacora
+                $accion = 'modificó';
+                $entidad = 'recomendaciones';
+                $valor = $cve_recomendacion;
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            redirect('valoracion/plan_accion_detalle/' . $recomendacion['id_plan_accion']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+
     public function recomendaciones_eliminar($cve_recomendacion)
     {
         if ($this->session->userdata('logueado')) {
@@ -440,4 +477,331 @@ class Valoracion extends CI_Controller {
         }
     }
 
+    /*
+    * /Documento de opinion
+    */
+
+
+
+    /*
+    * Plan de acción
+    */
+
+    public function plan_accion_detalle($id_plan_accion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['plan_accion'] = $this->planes_accion_model->get_plan_accion($id_plan_accion);
+            $cve_documento_opinion = $data['plan_accion']['cve_documento_opinion'];
+            $data['status_plan_accion_all'] = $this->status_plan_accion_model->get_status_plan_accion_all();
+            $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
+            $data['valoraciones_plan_accion'] = $this->valoraciones_plan_accion_model->get_valoraciones_plan_accion($id_plan_accion);
+            $data['actividades'] = $this->actividades_model->get_actividades_plan_accion($id_plan_accion);
+            $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_plan_accion($id_plan_accion);
+            $data['recomendaciones_tienen_actividad'] = $this->actividades_model->get_recomendaciones_tienen_actividad($id_plan_accion);
+            $data['num_valoraciones_plan_accion_dependencia'] = $this->valoraciones_plan_accion_model->get_num_valoraciones_plan_accion_dependencia($id_plan_accion, $cve_dependencia);
+            $data['error_ponderaciones'] = $this->session->flashdata('error_ponderaciones');
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/plan_accion_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function plan_accion_nuevo($cve_documento_opinion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+            // guardado
+            $data = array(
+                'cve_documento_opinion' => $cve_documento_opinion,
+                'fecha_elaboracion' => date('Y-m-d'),
+                'status' => 'en_proceso',
+            );
+            $id_plan_accion = $this->planes_accion_model->guardar($data, null);
+
+            // registro en bitacora
+            $accion = 'agregó';
+            $entidad = 'planes_accion';
+            $valor = 'plan_acc ' . $id_plan_accion;
+            $this->registro_bitacora($accion, $entidad, $valor);
+
+            $this->plan_accion_detalle($id_plan_accion);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function plan_accion_revision($id_plan_accion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $ponderacion_recomendaciones = $this->recomendaciones_model->get_ponderacion_recomendaciones_plan_accion($id_plan_accion);
+            $ponderacion_actividades = $this->actividades_model->get_ponderacion_actividades_plan_accion($id_plan_accion);
+            
+            if ($ponderacion_recomendaciones == 100 and $ponderacion_actividades == 100) {
+
+                // guardado
+                $data = array(
+                    'fecha_elaboracion' => date('Y-m-d'),
+                    'status' => 'por_evaluar',
+                );
+                $id_plan_accion = $this->planes_accion_model->guardar($data, $id_plan_accion);
+
+                // cambiar status a valoraciones con observaciones del plan de accion a por_valorar
+                $data = array(
+                    'status' => 'por_valorar',
+                );
+                $this->valoraciones_plan_accion_model->guardar_plan_accion($data, $id_plan_accion);
+
+                // registro en bitacora
+                $accion = 'modificó';
+                $entidad = 'planes_accion';
+                $valor = 'plan_accion ' . $id_plan_accion . ' revision';
+                $this->registro_bitacora($accion, $entidad, $valor);
+
+                redirect(base_url() . 'valoracion');
+            } else {
+                $this->session->set_flashdata('error_ponderaciones', 'La ponderación de las recomendaciones o de las actividades es diferente a 100');
+                redirect(base_url() . 'valoracion/plan_accion_detalle/' . $id_plan_accion);
+            }
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function actividades_detalle($id_actividad)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['actividad'] = $this->actividades_model->get_actividad($id_actividad);
+            $data['plan_accion'] = $this->planes_accion_model->get_plan_accion_actividad($id_actividad);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/actividades_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function actividades_nuevo()
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $datos = $this->input->post();
+            if ($datos) {
+                $data['id_plan_accion'] = $datos['id_plan_accion'];
+                $data['cve_recomendacion'] = $datos['cve_recomendacion'];
+
+                $this->load->view('templates/header', $data);
+                $this->load->view('valoracion/actividades_nuevo', $data);
+                $this->load->view('templates/footer');
+            }
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function actividades_guardar()
+    {
+        if ($this->session->userdata('logueado')) {
+            // guardado
+
+            $actividad = $this->input->post();
+            $id_plan_accion = $actividad['id_plan_accion'] ;
+            if ($actividad) {
+
+                $id_actividad = $actividad['id_actividad'] ;
+                if ($id_actividad) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
+
+                $data = array(
+                    'cve_recomendacion' => $actividad['cve_recomendacion'],
+                    'desc_actividad' =>  $actividad['desc_actividad'],
+                    'fech_ini' =>  $actividad['fech_ini'],
+                    'fech_fin' =>  $actividad['fech_fin'],
+                    'area_responsable' => $actividad['area_responsable'],
+                    'resultados_esperados' => $actividad['resultados_esperados'],
+                    'ponderacion' => $actividad['ponderacion'],
+                );
+                $id_actividad = $this->actividades_model->guardar($data, $id_actividad);
+
+                // registro en bitacora
+                $accion = 'agregó';
+                $entidad = 'actividades';
+                $valor = 'actividad ' . $id_actividad;
+                $this->registro_bitacora($accion, $entidad, $valor);
+
+                redirect(base_url() . 'valoracion/plan_accion_detalle/' . $id_plan_accion);
+            }
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function actividades_eliminar($id_actividad)
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $actividad = $this->actividades_model->get_actividad($id_actividad);
+            if ($actividad) {
+
+                // checar: mover despues de la eliminacion
+                // registro en bitacora
+                $accion = 'eliminó';
+                $entidad = 'actividades';
+                $valor = "Actividad ". $id_actividad;
+                $this->registro_bitacora($accion, $entidad, $valor);
+
+                // eliminado
+                $this->actividades_model->eliminar($id_actividad);
+
+                redirect(base_url() . 'valoracion/plan_accion_detalle/' . $actividad['id_plan_accion']);
+            }
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_plan_accion_detalle($id_valoracion_plan_accion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['valoracion_plan_accion'] = $this->valoraciones_plan_accion_model->get_valoracion_plan_accion($id_valoracion_plan_accion);
+            $data['plan_accion'] = $this->planes_accion_model->get_plan_accion($data['valoracion_plan_accion']['id_plan_accion']);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/valoracion_plan_accion_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_plan_accion_nuevo()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_plan_accion = $this->input->post();
+            if ($valoracion_plan_accion) {
+
+                // guardado
+                $data = array(
+                    'id_plan_accion' => $valoracion_plan_accion['id_plan_accion'],
+                    'cve_dependencia' => $this->session->userdata('cve_dependencia'),
+                    'actividades_cumplimiento' => $this->session->userdata('actividades_cumplimiento'),
+                    'plazo_adecuado' => $this->session->userdata('plazo_adecuado'),
+                    'resultados_pertinentes' => $this->session->userdata('resultados_pertinentes'),
+                    'observaciones' => $this->session->userdata('observaciones'),
+                    'status' => 'por_valorar',
+                );
+                $id_valoracion_plan_accion = $this->valoraciones_plan_accion_model->guardar($data, null);
+
+                // registro en bitacora
+                $accion = 'agregó';
+                $entidad = 'valoraciones_plan_accion';
+                $valor = 'valoracion_plan_acc ' . $id_valoracion_plan_accion . ' nuevo';
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            $this->valoracion_plan_accion_detalle($id_valoracion_plan_accion);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_plan_accion_guardar()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_plan_accion = $this->input->post();
+            if ($valoracion_plan_accion) {
+
+                // guardado
+                $data = array(
+                    'actividades_cumplimiento' => $valoracion_plan_accion['actividades_cumplimiento'],
+                    'plazo_adecuado' => $valoracion_plan_accion['plazo_adecuado'],
+                    'resultados_pertinentes' => $valoracion_plan_accion['resultados_pertinentes'],
+                    'observaciones' => $valoracion_plan_accion['observaciones'],
+                    'status' => 'valorada',
+                );
+                $id_valoracion_plan_accion = $this->valoraciones_plan_accion_model->guardar($data, $valoracion_plan_accion['id_valoracion_plan_accion']);
+                
+                $id_plan_accion = $valoracion_plan_accion['id_plan_accion'];
+                $num_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_num_valoraciones_plan_accion($id_plan_accion);
+                $status_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_status_valoraciones_plan_accion($id_plan_accion);
+                // probar si se completaron las valoraciones solamente si todas las valoraciones tienen status valorada
+                $num_supervisores = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+                if ($num_valoraciones_plan_accion == $num_supervisores and $status_valoraciones_plan_accion == 'valorada') {
+
+                    // probar si no hay observaciones
+                    $observaciones_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_observaciones_valoraciones_plan_accion($id_plan_accion);
+                    if ($observaciones_valoraciones_plan_accion) {
+                        // cambiar status del plan_accion a en_proceso
+                        $status = 'en_proceso';
+                    } else {
+                        // cambiar status del plan_accion a aprobado
+                        $status = 'aprobado';
+                    }
+                    $data = array(
+                        'status' => $status,
+                    );
+                    $this->planes_accion_model->guardar($data, $id_plan_accion);
+
+                }
+                
+                // registro en bitacora
+                if ($valoracion_plan_accion['id_valoracion_plan_accion']) {
+                    $accion = 'modificó';
+                } else {
+                    $accion = 'agregó';
+                }
+				$entidad = 'valoraciones_plan_accion';
+                $valor = $id_valoracion_plan_accion;
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            redirect('valoracion/plan_accion_detalle/' . $valoracion_plan_accion['id_plan_accion']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+
+
+    /*
+    * /Plan de acción
+    */
 }

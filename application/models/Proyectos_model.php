@@ -7,17 +7,17 @@ class Proyectos_model extends CI_Model {
 
     public function get_proyectos_dependencia($cve_dependencia, $anexo_social, $evaluaciones_propuestas) {
         $sql = ''
-			.'select '
+            .'select '
             .'py.*, pg.*,  '
-			.'(select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual, '
-			.'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp. id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as propuestas_calificadas, '
-			.'(select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo, '
-			.'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as num_calif_dependencias '
-			.'from '
-			.'proyectos py '
-			.'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
-			.'where '
-			.'pg.cve_dependencia::text LIKE ? '
+            .'(select count(*) from propuestas_evaluacion where cve_proyecto = py.cve_proyecto) as status_actual, '
+            .'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp. id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as propuestas_calificadas, '
+            .'(select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.cve_proyecto = py.cve_proyecto) as status_previo, '
+            .'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.cve_proyecto = py.cve_proyecto) as num_calif_dependencias '
+            .'from '
+            .'proyectos py '
+            .'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
+            .'where '
+            .'pg.cve_dependencia::text LIKE ? '
             .'';
 
         $parametros = array();
@@ -67,7 +67,8 @@ class Proyectos_model extends CI_Model {
             ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto, pe.objetivo, pe.monto_contratacion,  "
             ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, pe.id_propuesta_evaluacion, "
             ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, "
-            ."pcp.puntaje, pcp.probabilidad, dop.cve_documento_opinion, dop.status, sdop.desc_status_documento_opinion "
+            ."pcp.puntaje, pcp.probabilidad, dop.cve_documento_opinion, dop.status as status_documento_opinion, sdop.desc_status_documento_opinion, "
+            ."pa.id_plan_accion, pa.status as status_plan_accion, spa.desc_status_plan_accion "
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
@@ -79,12 +80,14 @@ class Proyectos_model extends CI_Model {
             ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."left join documentos_opinion dop on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
             ."left join status_documentos_opinion sdop on sdop.cve_status_documento_opinion = dop.status "
+            ."left join planes_accion pa on pa.cve_documento_opinion = dop.cve_documento_opinion "
+            ."left join status_plan_accion spa on spa.cve_status_plan_accion = pa.status "
             ."where "
             ."py.cve_dependencia::text LIKE ? "
             ."and coalesce(pe.excluir_agenda,0) <> 1 "
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
-			."";
+            ."";
 
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();
@@ -125,7 +128,7 @@ class Proyectos_model extends CI_Model {
             ."order by "
             ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
             ."limit " . $limite . " offset " . $inicio
-			."";
+            ."";
 
         $query = $this->db->query($sql, array($lista_final));
         return $query->result_array();
@@ -155,7 +158,7 @@ class Proyectos_model extends CI_Model {
             ."where "
             ."lower(pe.cve_proyecto) || te.abrev_tipo_evaluacion in ? "
             ."and coalesce(pe.excluir_agenda,0) <> 1 "
-			."";
+            ."";
 
         $query = $this->db->query($sql, array($lista_final));
         return $query->row_array()['num_programas'];
@@ -164,19 +167,19 @@ class Proyectos_model extends CI_Model {
 
     public function get_propuestas_evaluacion($cve_dependencia) {
         $sql = ''
-			.'select  '
-			.'d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto,  '
-			.'py.nom_proyecto, te.nom_tipo_evaluacion '
-			.'from  '
-			.'propuestas_evaluacion pe  '
-			.'left join proyectos py on pe.cve_proyecto = py.cve_proyecto  '
-			.'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
-			.'left join dependencias d on py.cve_dependencia = d.cve_dependencia '
-			.'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
-			.'where  '
-			.'py.cve_dependencia::text LIKE ? '
-			.'order by '
-			.'d.nom_dependencia, pg.cve_programa, pe.cve_proyecto  '
+            .'select  '
+            .'d.nom_dependencia, pg.cve_programa, pg.nom_programa, pe.cve_proyecto,  '
+            .'py.nom_proyecto, te.nom_tipo_evaluacion '
+            .'from  '
+            .'propuestas_evaluacion pe  '
+            .'left join proyectos py on pe.cve_proyecto = py.cve_proyecto  '
+            .'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
+            .'left join dependencias d on py.cve_dependencia = d.cve_dependencia '
+            .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
+            .'where  '
+            .'py.cve_dependencia::text LIKE ? '
+            .'order by '
+            .'d.nom_dependencia, pg.cve_programa, pe.cve_proyecto  '
             .'';
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->result_array();

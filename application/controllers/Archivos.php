@@ -118,6 +118,35 @@ class Archivos extends CI_Controller {
         }
     }
 
+    public function plan_accion()
+    {
+        if ($this->session->userdata('logueado')) {
+            $nombre_archivo = $this->input->post('nombre_archivo');
+            $id_plan_accion = $this->input->post('id_plan_accion');
+            $config = array();
+            $config['upload_path'] = 'doc';
+            $config['allowed_types'] = 'pdf';
+            $config['max_size'] = '10240';
+            $config['overwrite'] = TRUE;
+            $config['file_name'] = $nombre_archivo;
+            $this->load->library('upload', $config);
+            if ( ! $this->upload->do_upload('subir_archivo') ) {
+                $error = array('error' => $this->upload->display_errors());
+                $this->session->set_flashdata('error', $error['error']);
+            } else {
+                // registro en bitacora
+                $accion = 'subió';
+                $entidad = 'archivos';
+                $valor = 'plan_accion' . ' -> ' . $nombre_archivo;
+                $this->registro_bitacora($accion, $entidad, $valor);
+
+            }
+            redirect(base_url().'valoracion/plan_accion_detalle/'.$id_plan_accion);
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
     public function subir()
     {
         if ($this->session->userdata('logueado')) {
