@@ -60,6 +60,12 @@ class Recomendaciones_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_num_recomendaciones_documento_opinion($cve_documento_opinion) {
+        $sql = 'select count(*) as num_recomendaciones_documento_opinion from recomendaciones where cve_documento_opinion = ?';
+        $query = $this->db->query($sql, array($cve_documento_opinion));
+        return $query->row_array()['num_recomendaciones_documento_opinion'];
+    }
+
     public function guardar($data, $cve_recomendacion)
     {
         if ($cve_recomendacion) {

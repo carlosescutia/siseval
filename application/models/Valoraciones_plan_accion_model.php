@@ -50,10 +50,10 @@ class Valoraciones_plan_accion_model extends CI_Model {
         return $query->row_array()['observaciones_valoraciones_plan_accion'];
     }
 
-    public function guardar_plan_accion($data, $id_plan_accion)
+    public function set_status_plan_accion($id_plan_accion, $status)
     {
-        $this->db->where('id_plan_accion', $id_plan_accion);
-        $result = $this->db->update('valoraciones_plan_accion', $data);
+        $sql = "update valoraciones_plan_accion set status = ? where observaciones <> '' and id_plan_accion = ? ;" ;
+        $this->db->query($sql, array($status, $id_plan_accion));
     }
 
     public function guardar($data, $id_valoracion_plan_accion)
@@ -77,4 +77,3 @@ class Valoraciones_plan_accion_model extends CI_Model {
     }
 
 }
-

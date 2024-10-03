@@ -8,14 +8,11 @@
         </div>
     </div>
     <div class="row mb-5">
-        <div class="col-md-6 offset-md-1">
+        <div class="col-md-5 offset-md-1">
             <?php include 'datos_documento_opinion.php' ?>
         </div>
         <div class="col-md-5">
             <div class="row">
-                <div class="col-md-12">
-                    <?php include 'valoracion_documento_opinion.php' ?>
-                </div>
                 <div class="col-md-12">
                     <?php include 'pdf_documento_opinion.php' ?>
                 </div>
@@ -24,6 +21,14 @@
     </div>
 
     <hr />
+
+    <?php if ($error_recomendaciones) { ?>
+        <div class="row mb-3">
+            <div class="col-md-10 offset-md-1 text-danger">
+                <?= $error_recomendaciones ?>
+            </div>
+        </div>
+    <?php } ?>
 
     <div class="row mb-3">
         <div class="col-md-10 offset-md-1">

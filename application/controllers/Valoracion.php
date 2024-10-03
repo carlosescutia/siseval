@@ -19,7 +19,7 @@ class Valoracion extends CI_Controller {
         $this->load->model('recomendaciones_model');
         $this->load->model('tipos_actor_model');
         $this->load->model('status_documentos_opinion_model');
-        $this->load->model('valoraciones_documento_opinion_model');
+        $this->load->model('valoraciones_recomendacion_model');
         $this->load->model('planes_accion_model');
         $this->load->model('status_plan_accion_model');
         $this->load->model('valoraciones_plan_accion_model');
@@ -132,8 +132,8 @@ class Valoracion extends CI_Controller {
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_doc_op($cve_documento_opinion);
             $data['tipos_actor'] = $this->tipos_actor_model->get_tipos_actor();
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
-            $data['valoraciones_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoraciones_documento_opinion($cve_documento_opinion);
-            $data['num_valoraciones_documento_opinion_dependencia'] = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion_dependencia($cve_documento_opinion, $cve_dependencia);
+            $data['valoraciones_recomendacion'] = $this->valoraciones_recomendacion_model->get_valoraciones_recomendacion_documento_opinion($cve_documento_opinion);
+            $data['error_recomendaciones'] = $this->session->flashdata('error_recomendaciones');
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -181,11 +181,9 @@ class Valoracion extends CI_Controller {
             );
             $cve_documento_opinion = $this->documentos_opinion_model->guardar($data, $cve_documento_opinion);
 
-            // cambiar status a valoraciones con observaciones del documento de opinion a por_valorar
-            $data = array(
-                'status' => 'por_valorar',
-            );
-            $this->valoraciones_documento_opinion_model->guardar_documento_opinion($data, $cve_documento_opinion);
+            // cambiar status a "por_evaluar" en valoraciones con observaciones del documento de opinion
+            $status = 'por_evaluar';
+            $this->valoraciones_recomendacion_model->set_status_documento_opinion($cve_documento_opinion, $status);
 
             // registro en bitacora
             $accion = 'modificó';
@@ -326,19 +324,22 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
-            // checar: al parecer no se usa
             $recomendacion = $this->recomendaciones_model->get_recomendacion($cve_recomendacion);
+            $num_valoraciones = $this->valoraciones_recomendacion_model->get_num_valoraciones_recomendacion($cve_recomendacion);
 
-            // checar: mover despues de la eliminacion
-            // registro en bitacora
-            $accion = 'eliminó';
-            $entidad = 'recomendaciones';
-            $valor = "Recomendacion ". $cve_recomendacion;
-            $this->registro_bitacora($accion, $entidad, $valor);
+            if ($num_valoraciones == 0) {
+                // eliminado
+                $this->recomendaciones_model->eliminar($cve_recomendacion);
 
-            // eliminado
-            $this->recomendaciones_model->eliminar($cve_recomendacion);
+                // registro en bitacora
+                $accion = 'eliminó';
+                $entidad = 'recomendaciones';
+                $valor = "Recomendacion ". $cve_recomendacion;
+                $this->registro_bitacora($accion, $entidad, $valor);
 
+            } else {
+                $this->session->set_flashdata('error_recomendaciones', 'No se puede eliminar la recomendación porque ya tiene Valoraciones.');
+            }
             redirect('valoracion/documento_opinion_detalle/' . $recomendacion['cve_documento_opinion']);
 
         } else {
@@ -346,7 +347,7 @@ class Valoracion extends CI_Controller {
         }
     }
 
-    public function valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion)
+    public function valoracion_recomendacion_detalle($cve_valoracion_recomendacion)
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
@@ -354,73 +355,74 @@ class Valoracion extends CI_Controller {
             $cve_dependencia = $data['cve_dependencia'];
             $cve_rol = $data['cve_rol'];
 
-            $data['valoracion_documento_opinion'] = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
-            $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($data['valoracion_documento_opinion']['cve_documento_opinion']);
+            $data['valoracion_recomendacion'] = $this->valoraciones_recomendacion_model->get_valoracion_recomendacion($cve_valoracion_recomendacion);
+            $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($data['valoracion_recomendacion']['cve_documento_opinion']);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
-            $this->load->view('valoracion/valoracion_documento_opinion_detalle', $data);
+            $this->load->view('valoracion/valoracion_recomendacion_detalle', $data);
             $this->load->view('templates/footer');
         } else {
             redirect('inicio/login');
         }
     }
 
-    public function valoracion_documento_opinion_nuevo()
+    public function valoracion_recomendacion_nuevo()
     {
         if ($this->session->userdata('logueado')) {
 
-            $valoracion_documento_opinion = $this->input->post();
-            if ($valoracion_documento_opinion) {
+            $valoracion_recomendacion = $this->input->post();
+            if ($valoracion_recomendacion) {
 
                 // guardado
                 $data = array(
-                    'cve_documento_opinion' => $valoracion_documento_opinion['cve_documento_opinion'],
+                    'cve_recomendacion' => $valoracion_recomendacion['cve_recomendacion'],
                     'cve_dependencia' => $this->session->userdata('cve_dependencia'),
-                    'status' => 'por_valorar',
+                    'status' => 'por_evaluar',
                 );
-                $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, null);
+                $cve_valoracion_recomendacion = $this->valoraciones_recomendacion_model->guardar($data, null);
 
                 // registro en bitacora
                 $accion = 'agregó';
-                $entidad = 'valoraciones_documento_opinion';
-                $valor = 'doc_op ' . $cve_valoracion_documento_opinion . ' nuevo';
+                $entidad = 'valoraciones_recomendacion';
+                $valor = 'doc_op ' . $cve_valoracion_recomendacion . ' nuevo';
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
 
-            $this->valoracion_documento_opinion_detalle($cve_valoracion_documento_opinion);
+            $this->valoracion_recomendacion_detalle($cve_valoracion_recomendacion);
 
         } else {
             redirect('inicio/login');
         }
     }
 
-    public function valoracion_documento_opinion_guardar()
+    public function valoracion_recomendacion_guardar()
     {
         if ($this->session->userdata('logueado')) {
 
-            $valoracion_documento_opinion = $this->input->post();
-            if ($valoracion_documento_opinion) {
+            $valoracion_recomendacion = $this->input->post();
+            if ($valoracion_recomendacion) {
 
                 // guardado
                 $data = array(
-                    'pertinencia' => $valoracion_documento_opinion['pertinencia'],
-                    'prioridad' => $valoracion_documento_opinion['prioridad'],
-                    'fundamentada' => $valoracion_documento_opinion['fundamentada'],
-                    'observaciones' => $valoracion_documento_opinion['observaciones'],
+                    'pertinencia' => $valoracion_recomendacion['pertinencia'],
+                    'prioridad' => $valoracion_recomendacion['prioridad'],
+                    'fundamentada' => $valoracion_recomendacion['fundamentada'],
+                    'observaciones' => $valoracion_recomendacion['observaciones'],
                     'status' => 'valorada',
                 );
-                $cve_valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->guardar($data, $valoracion_documento_opinion['cve_valoracion_documento_opinion']);
+                $cve_valoracion_recomendacion = $this->valoraciones_recomendacion_model->guardar($data, $valoracion_recomendacion['cve_valoracion_recomendacion']);
                 
-                $cve_documento_opinion = $valoracion_documento_opinion['cve_documento_opinion'];
-                $num_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion);
-                $status_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_status_valoraciones_documento_opinion($cve_documento_opinion);
+                $cve_documento_opinion = $valoracion_recomendacion['cve_documento_opinion'];
+                $num_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion);
+                $status_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_status_valoraciones_documento_opinion($cve_documento_opinion);
                 // probar si se completaron las valoraciones solamente si todas las valoraciones tienen status valorada
                 $num_supervisores = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
-                if ($num_valoraciones_documento_opinion == $num_supervisores and $status_valoraciones_documento_opinion == 'valorada') {
+                $num_recomendaciones = $this->recomendaciones_model->get_num_recomendaciones_documento_opinion($cve_documento_opinion);
+                if ($num_valoraciones_documento_opinion == ($num_supervisores * $num_recomendaciones) and $status_valoraciones_documento_opinion == 'valorada') {
 
                     // probar si no hay observaciones
-                    $observaciones_valoraciones_documento_opinion = $this->valoraciones_documento_opinion_model->get_observaciones_valoraciones_documento_opinion($cve_documento_opinion);
+                    $observaciones_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_observaciones_valoraciones_documento_opinion($cve_documento_opinion);
                     if ($observaciones_valoraciones_documento_opinion) {
                         // cambiar status del documento de opinion a en_proceso
                         $status = 'en_proceso';
@@ -436,41 +438,39 @@ class Valoracion extends CI_Controller {
                 }
                 
                 // registro en bitacora
-                if ($valoracion_documento_opinion['cve_valoracion_documento_opinion']) {
+                if ($valoracion_recomendacion['cve_valoracion_recomendacion']) {
                     $accion = 'modificó';
                 } else {
                     $accion = 'agregó';
                 }
-				$entidad = 'valoraciones_documento_opinion';
-                $valor = $cve_valoracion_documento_opinion;
+				$entidad = 'valoraciones_recomendacion';
+                $valor = $cve_valoracion_recomendacion;
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
 
-            redirect('valoracion/documento_opinion_detalle/' . $valoracion_documento_opinion['cve_documento_opinion']);
+            redirect('valoracion/documento_opinion_detalle/' . $valoracion_recomendacion['cve_documento_opinion']);
 
         } else {
             redirect('inicio/login');
         }
     }
 
-    public function valoracion_documento_opinion_eliminar($cve_valoracion_documento_opinion)
+    public function valoracion_recomendacion_eliminar($cve_valoracion_recomendacion)
     {
         if ($this->session->userdata('logueado')) {
 
-            // checar: al parecer no se usa
-            $valoracion_documento_opinion = $this->valoraciones_documento_opinion_model->get_valoracion_documento_opinion($cve_valoracion_documento_opinion);
-
-            // checar: ver si se puede mover después de la eliminación
-            // registro en bitacora
-            $accion = 'eliminó';
-            $entidad = 'valoraciones_documento_opinion';
-            $valor = "valoracion_documento_opinion ". $cve_valoracion_documento_opinion;
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $valoracion_recomendacion = $this->valoraciones_recomendacion_model->get_valoracion_recomendacion($cve_valoracion_recomendacion);
 
             // eliminado
-            $this->valoraciones_documento_opinion_model->eliminar($cve_valoracion_documento_opinion);
+            $this->valoraciones_recomendacion_model->eliminar($cve_valoracion_recomendacion);
+            //
+            // registro en bitacora
+            $accion = 'eliminó';
+            $entidad = 'valoraciones_recomendacion';
+            $valor = "valoracion_recomendacion ". $cve_valoracion_recomendacion;
+            $this->registro_bitacora($accion, $entidad, $valor);
 
-            redirect('valoracion/documento_opinion_detalle/' . $valoracion_documento_opinion['cve_documento_opinion']);
+            redirect('valoracion/documento_opinion_detalle/' . $valoracion_recomendacion['cve_documento_opinion']);
 
         } else {
             redirect('inicio/login');
@@ -557,11 +557,9 @@ class Valoracion extends CI_Controller {
                 );
                 $id_plan_accion = $this->planes_accion_model->guardar($data, $id_plan_accion);
 
-                // cambiar status a valoraciones con observaciones del plan de accion a por_valorar
-                $data = array(
-                    'status' => 'por_valorar',
-                );
-                $this->valoraciones_plan_accion_model->guardar_plan_accion($data, $id_plan_accion);
+                // cambiar status a "por_evaluar" en valoraciones con observaciones del documento de opinion
+                $status = 'por_evaluar';
+                $this->valoraciones_plan_accion_model->set_status_plan_accion($id_plan_accion, $status);
 
                 // registro en bitacora
                 $accion = 'modificó';
@@ -723,7 +721,7 @@ class Valoracion extends CI_Controller {
                     'plazo_adecuado' => $this->session->userdata('plazo_adecuado'),
                     'resultados_pertinentes' => $this->session->userdata('resultados_pertinentes'),
                     'observaciones' => $this->session->userdata('observaciones'),
-                    'status' => 'por_valorar',
+                    'status' => 'por_evaluar',
                 );
                 $id_valoracion_plan_accion = $this->valoraciones_plan_accion_model->guardar($data, null);
 

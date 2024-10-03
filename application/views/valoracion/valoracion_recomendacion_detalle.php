@@ -4,7 +4,7 @@
             Valoración
         </div>
         <div class="card-body">
-            <form method="post" action="<?= base_url() ?>valoracion/valoracion_documento_opinion_guardar" id="valoracion">
+            <form method="post" action="<?= base_url() ?>valoracion/valoracion_recomendacion_guardar" id="valoracion">
                 <div class="row mb-3">
                     <div class="col-sm-4">
                         <label for="pertinencia">
@@ -25,8 +25,8 @@
                         </div>                
                         <select class="form-select" name="pertinencia" id="pertinencia" required>
                             <option value=""></option>
-                            <option value="1" <?= $valoracion_documento_opinion['pertinencia'] == '1' ? 'selected' : '' ?> >Si</option>
-                            <option value="0" <?= $valoracion_documento_opinion['pertinencia'] == '0' ? 'selected' : '' ?> >No</option>
+                            <option value="1" <?= $valoracion_recomendacion['pertinencia'] == '1' ? 'selected' : '' ?> >Si</option>
+                            <option value="0" <?= $valoracion_recomendacion['pertinencia'] == '0' ? 'selected' : '' ?> >No</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -48,8 +48,8 @@
                         </div>                
                         <select class="form-select" name="prioridad" id="prioridad" required>
                             <option value=""></option>
-                            <option value="1" <?= $valoracion_documento_opinion['prioridad'] == '1' ? 'selected' : '' ?> >Si</option>
-                            <option value="0" <?= $valoracion_documento_opinion['prioridad'] == '0' ? 'selected' : '' ?> >No</option>
+                            <option value="1" <?= $valoracion_recomendacion['prioridad'] == '1' ? 'selected' : '' ?> >Si</option>
+                            <option value="0" <?= $valoracion_recomendacion['prioridad'] == '0' ? 'selected' : '' ?> >No</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -69,8 +69,8 @@
                         </div>                
                         <select class="form-select" name="fundamentada" id="fundamentada" required>
                             <option value=""></option>
-                            <option value="1" <?= $valoracion_documento_opinion['fundamentada'] == '1' ? 'selected' : '' ?> >Si</option>
-                            <option value="0" <?= $valoracion_documento_opinion['fundamentada'] == '0' ? 'selected' : '' ?> >No</option>
+                            <option value="1" <?= $valoracion_recomendacion['fundamentada'] == '1' ? 'selected' : '' ?> >Si</option>
+                            <option value="0" <?= $valoracion_recomendacion['fundamentada'] == '0' ? 'selected' : '' ?> >No</option>
                         </select>
                     </div>
                 </div>
@@ -87,11 +87,12 @@
                                 Especifique sus observaciones en caso de haberlas.
                             </div>
                         </div>                
-                        <textarea rows="4" class="form-control" name="observaciones" id="observaciones"><?=$valoracion_documento_opinion['observaciones']?></textarea>
+                        <textarea rows="4" class="form-control" name="observaciones" id="observaciones"><?=$valoracion_recomendacion['observaciones']?></textarea>
                     </div>
                 </div>
-                <input type="hidden" name="cve_valoracion_documento_opinion" id="cve_valoracion_documento_opinion" value="<?=$valoracion_documento_opinion['cve_valoracion_documento_opinion']?>">
-                <input type="hidden" name="cve_documento_opinion" id="cve_documento_opinion" value="<?=$valoracion_documento_opinion['cve_documento_opinion']?>">
+                <input type="hidden" name="cve_valoracion_recomendacion" id="cve_valoracion_recomendacion" value="<?=$valoracion_recomendacion['cve_valoracion_recomendacion']?>">
+                <input type="hidden" name="cve_recomendacion" id="cve_recomendacion" value="<?=$valoracion_recomendacion['cve_recomendacion']?>">
+                <input type="hidden" name="cve_documento_opinion" id="cve_documento_opinion" value="<?=$valoracion_recomendacion['cve_documento_opinion']?>">
             </form>
         </div>
         <?php
@@ -102,7 +103,7 @@
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
             <?php if ($documento_opinion['status'] == 'por_evaluar') { ?>
-                <?php if ($cve_dependencia == $valoracion_documento_opinion['cve_dependencia']) { ?>
+                <?php if ($cve_dependencia == $valoracion_recomendacion['cve_dependencia']) { ?>
                     <div class="card-footer text-end">
                         <button type="submit" class="btn btn-primary btn-sm" form="valoracion">Guardar</button>
                     </div>
@@ -115,6 +116,6 @@
 <hr />
 <div class="form-group row">
     <div class="col-sm-10 d-print-none">
-        <a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$valoracion_documento_opinion['cve_documento_opinion']?>" class="btn btn-secondary boton">Volver</a>
+        <a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$valoracion_recomendacion['cve_documento_opinion']?>" class="btn btn-secondary boton">Volver</a>
     </div>
 </div>
