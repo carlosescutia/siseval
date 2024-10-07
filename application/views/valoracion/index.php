@@ -65,6 +65,12 @@
                             <div class="col-sm-1">
                                 <p>Plan de acción</p>
                             </div>
+                            <div class="col-sm-1">
+                                <p>Valoración Evaluador</p>
+                            </div>
+                            <div class="col-sm-1">
+                                <p>Valoración Evaluación</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,6 +137,54 @@
                                         <?php } ?>
                                         <?php 
                                             $nombre_archivo = 'plan_ac_' . $proyectos_item['id_plan_accion'] . '.pdf';
+                                            $nombre_archivo_fs = './doc/' . $nombre_archivo;
+                                            $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+                                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                        <?php } ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <p>
+                                        <?php if ($proyectos_item['id_valoracion_evaluador']) { ?>
+                                            <?php
+                                                $puntaje_valoracion_evaluador = $proyectos_item['puntaje_valoracion_evaluador'];
+                                                switch(true) {
+                                                    case $puntaje_valoracion_evaluador >= 0 and $puntaje_valoracion_evaluador <= 19:
+                                                        $fondo_valoracion_evaluador = 'text-bg-danger';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluador >= 20 and $puntaje_valoracion_evaluador <= 29:
+                                                        $fondo_valoracion_evaluador = 'text-bg-secondary';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluador >= 30 and $puntaje_valoracion_evaluador <= 39:
+                                                        $fondo_valoracion_evaluador = 'text-bg-warning';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluador >= 40 and $puntaje_valoracion_evaluador <= 49:
+                                                        $fondo_valoracion_evaluador = 'text-bg-success';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluador = 50:
+                                                        $fondo_valoracion_evaluador = 'text-bg-primary';
+                                                        break;
+                                                    default:
+                                                        $fondo_valoracion_evaluador = 'text-bg-light';
+                                                        break;
+                                                }
+                                            ?>
+                                            <a href="<?=base_url()?>valoracion/valoracion_evaluador_detalle/<?=$proyectos_item['id_valoracion_evaluador']?>">Ver&nbsp;
+                                            <span class="badge rounded-pill <?=$fondo_valoracion_evaluador?>"><?=$proyectos_item['puntaje_valoracion_evaluador']?></span></a>
+                                        <?php } else { ?>
+                                            <?php
+                                                $permisos_requeridos = array(
+                                                'evaluador_valoracion.can_edit',
+                                                'valoracion.etapa_actual',
+                                                );
+                                            ?>
+                                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                                <a href="<?=base_url()?>valoracion/valoracion_evaluador_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a>
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?php
+                                            $nombre_archivo = 'val_evdor_' . $proyectos_item['id_valoracion_evaluador'] . '.pdf';
                                             $nombre_archivo_fs = './doc/' . $nombre_archivo;
                                             $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
                                             if ( file_exists($nombre_archivo_fs) ) { ?>

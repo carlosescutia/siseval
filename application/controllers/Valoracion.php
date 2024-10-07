@@ -24,6 +24,7 @@ class Valoracion extends CI_Controller {
         $this->load->model('status_plan_accion_model');
         $this->load->model('valoraciones_plan_accion_model');
         $this->load->model('actividades_model');
+        $this->load->model('valoraciones_evaluador_model');
 
         // globales
         $this->etapa_actual = 4;
@@ -95,7 +96,7 @@ class Valoracion extends CI_Controller {
                         $cve_dependencia_filtro = '%';
                     }
                 }
-			}
+            }
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
 
             $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
@@ -204,7 +205,7 @@ class Valoracion extends CI_Controller {
 
             $documento_opinion = $this->input->post();
             if ($documento_opinion) {
-                
+
                 // guardado
                 $data = array(
                     'fecha_elaboracion' => $documento_opinion['fecha_elaboracion'],
@@ -220,7 +221,7 @@ class Valoracion extends CI_Controller {
                 } else {
                     $accion = 'agregó';
                 }
-				$entidad = 'documentos_opinion';
+                $entidad = 'documentos_opinion';
                 $valor = $cve_documento_opinion;
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
@@ -412,7 +413,7 @@ class Valoracion extends CI_Controller {
                     'status' => 'valorada',
                 );
                 $cve_valoracion_recomendacion = $this->valoraciones_recomendacion_model->guardar($data, $valoracion_recomendacion['cve_valoracion_recomendacion']);
-                
+
                 $cve_documento_opinion = $valoracion_recomendacion['cve_documento_opinion'];
                 $num_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion);
                 $status_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_status_valoraciones_documento_opinion($cve_documento_opinion);
@@ -436,14 +437,14 @@ class Valoracion extends CI_Controller {
                     $this->documentos_opinion_model->guardar($data, $cve_documento_opinion);
 
                 }
-                
+
                 // registro en bitacora
                 if ($valoracion_recomendacion['cve_valoracion_recomendacion']) {
                     $accion = 'modificó';
                 } else {
                     $accion = 'agregó';
                 }
-				$entidad = 'valoraciones_recomendacion';
+                $entidad = 'valoraciones_recomendacion';
                 $valor = $cve_valoracion_recomendacion;
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
@@ -547,7 +548,7 @@ class Valoracion extends CI_Controller {
 
             $ponderacion_recomendaciones = $this->recomendaciones_model->get_ponderacion_recomendaciones_plan_accion($id_plan_accion);
             $ponderacion_actividades = $this->actividades_model->get_ponderacion_actividades_plan_accion($id_plan_accion);
-            
+
             if ($ponderacion_recomendaciones == 100 and $ponderacion_actividades == 100) {
 
                 // guardado
@@ -755,7 +756,7 @@ class Valoracion extends CI_Controller {
                     'status' => 'valorada',
                 );
                 $id_valoracion_plan_accion = $this->valoraciones_plan_accion_model->guardar($data, $valoracion_plan_accion['id_valoracion_plan_accion']);
-                
+
                 $id_plan_accion = $valoracion_plan_accion['id_plan_accion'];
                 $num_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_num_valoraciones_plan_accion($id_plan_accion);
                 $status_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_status_valoraciones_plan_accion($id_plan_accion);
@@ -778,14 +779,14 @@ class Valoracion extends CI_Controller {
                     $this->planes_accion_model->guardar($data, $id_plan_accion);
 
                 }
-                
+
                 // registro en bitacora
                 if ($valoracion_plan_accion['id_valoracion_plan_accion']) {
                     $accion = 'modificó';
                 } else {
                     $accion = 'agregó';
                 }
-				$entidad = 'valoraciones_plan_accion';
+                $entidad = 'valoraciones_plan_accion';
                 $valor = $id_valoracion_plan_accion;
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
@@ -798,8 +799,96 @@ class Valoracion extends CI_Controller {
     }
 
 
-
     /*
     * /Plan de acción
     */
+
+
+
+    /*
+    * Valoración del evaluador
+    */
+
+    public function valoracion_evaluador_detalle($id_valoracion_evaluador)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['valoracion_evaluador'] = $this->valoraciones_evaluador_model->get_valoracion_evaluador($id_valoracion_evaluador);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/valoracion_evaluador_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluador_nuevo($id_propuesta_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+
+            // guardado
+            $data = array(
+                'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
+            );
+            $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, null);
+
+            // registro en bitacora
+            $accion = 'agregó';
+            $entidad = 'valoraciones_evaluador';
+            $valor = 'valoracion evaluador ' . $id_valoracion_evaluador . ' nuevo';
+            $this->registro_bitacora($accion, $entidad, $valor);
+
+            $this->valoracion_evaluador_detalle($id_valoracion_evaluador);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluador_guardar()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_evaluador = $this->input->post();
+            if ($valoracion_evaluador) {
+
+                // guardado
+                $data = array(
+                    'evaluador' => $valoracion_evaluador['evaluador'],
+                    'puntualidad' => $valoracion_evaluador['puntualidad'],
+                    'solidez' => $valoracion_evaluador['solidez'],
+                    'objetividad' => $valoracion_evaluador['objetividad'],
+                    'claridad' => $valoracion_evaluador['claridad'],
+                    'disponibilidad' => $valoracion_evaluador['disponibilidad'],
+                    'observaciones' => $valoracion_evaluador['observaciones'],
+                    'elaborado' => $valoracion_evaluador['elaborado'],
+                );
+                $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, $valoracion_evaluador['id_valoracion_evaluador']);
+
+                // registro en bitacora
+                $accion = 'modificó';
+                $entidad = 'valoraciones_evaluador';
+                $valor = $id_valoracion_evaluador;
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            redirect(base_url() . 'valoracion');
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    /*
+    * /Valoración del evaluador
+    */
+
+
 }
