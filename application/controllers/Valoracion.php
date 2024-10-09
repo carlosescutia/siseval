@@ -25,6 +25,7 @@ class Valoracion extends CI_Controller {
         $this->load->model('valoraciones_plan_accion_model');
         $this->load->model('actividades_model');
         $this->load->model('valoraciones_evaluador_model');
+        $this->load->model('valoraciones_evaluacion_model');
 
         // globales
         $this->etapa_actual = 4;
@@ -890,5 +891,97 @@ class Valoracion extends CI_Controller {
     * /Valoración del evaluador
     */
 
+
+
+
+    /*
+    * Valoración de la evaluación
+    */
+
+    public function valoracion_evaluacion_detalle($id_valoracion_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['valoracion_evaluacion'] = $this->valoraciones_evaluacion_model->get_valoracion_evaluacion($id_valoracion_evaluacion);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/valoracion_evaluacion_detalle', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluacion_nuevo($id_propuesta_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+
+            // guardado
+            $data = array(
+                'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
+            );
+            $id_valoracion_evaluacion = $this->valoraciones_evaluacion_model->guardar($data, null);
+
+            // registro en bitacora
+            $accion = 'agregó';
+            $entidad = 'valoraciones_evaluacion';
+            $valor = 'valoracion evaluador ' . $id_valoracion_evaluacion . ' nuevo';
+            $this->registro_bitacora($accion, $entidad, $valor);
+
+            $this->valoracion_evaluacion_detalle($id_valoracion_evaluacion);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluacion_guardar()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_evaluacion = $this->input->post();
+            if ($valoracion_evaluacion) {
+
+                // guardado
+                $data = array(
+                    'informe' => $valoracion_evaluacion['informe'],
+                    'antecedentes' => $valoracion_evaluacion['antecedentes'],
+                    'metodologia' => $valoracion_evaluacion['metodologia'],
+                    'informacion' => $valoracion_evaluacion['informacion'],
+                    'analisis' => $valoracion_evaluacion['analisis'],
+                    'conclusiones' => $valoracion_evaluacion['conclusiones'],
+                    'acuerdos_institucionales' => $valoracion_evaluacion['acuerdos_institucionales'],
+                    'acuerdos_confidencialidad' => $valoracion_evaluacion['acuerdos_confidencialidad'],
+                    'derechos' => $valoracion_evaluacion['derechos'],
+                    'orientacion' => $valoracion_evaluacion['orientacion'],
+                    'autonomia' => $valoracion_evaluacion['autonomia'],
+                    'genero' => $valoracion_evaluacion['genero'],
+                    'observaciones' => $valoracion_evaluacion['observaciones'],
+                );
+                $id_valoracion_evaluacion = $this->valoraciones_evaluacion_model->guardar($data, $valoracion_evaluacion['id_valoracion_evaluacion']);
+
+                // registro en bitacora
+                $accion = 'modificó';
+                $entidad = 'valoraciones_evaluacion';
+                $valor = $id_valoracion_evaluacion;
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            redirect(base_url() . 'valoracion');
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    /*
+    * /Valoración de la evaluación
+    */
 
 }

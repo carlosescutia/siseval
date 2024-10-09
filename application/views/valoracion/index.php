@@ -192,6 +192,51 @@
                                         <?php } ?>
                                         </p>
                                     </div>
+                                    <div class="col-sm-1">
+                                        <p>
+                                        <?php if ($proyectos_item['id_valoracion_evaluacion']) { ?>
+                                            <?php
+                                                $puntaje_valoracion_evaluacion = $proyectos_item['puntaje_valoracion_evaluacion'];
+                                                switch(true) {
+                                                    case $puntaje_valoracion_evaluacion <= 24:
+                                                        $fondo_valoracion_evaluacion = 'text-bg-danger';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluacion >= 25 and $puntaje_valoracion_evaluacion <= 34:
+                                                        $fondo_valoracion_evaluacion = 'text-bg-warning';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluacion >= 35 and $puntaje_valoracion_evaluacion <= 44:
+                                                        $fondo_valoracion_evaluacion = 'text-bg-success';
+                                                        break;
+                                                    case $puntaje_valoracion_evaluacion >= 45:
+                                                        $fondo_valoracion_evaluacion = 'text-bg-primary';
+                                                        break;
+                                                    default:
+                                                        $fondo_valoracion_evaluacion = 'text-bg-light';
+                                                        break;
+                                                }
+                                            ?>
+                                            <a href="<?=base_url()?>valoracion/valoracion_evaluacion_detalle/<?=$proyectos_item['id_valoracion_evaluacion']?>">Ver&nbsp;
+                                            <span class="badge rounded-pill <?=$fondo_valoracion_evaluacion?>"><?=$proyectos_item['puntaje_valoracion_evaluacion']?></span></a>
+                                        <?php } else { ?>
+                                            <?php
+                                                $permisos_requeridos = array(
+                                                'evaluacion_valoracion.can_edit',
+                                                'valoracion.etapa_actual',
+                                                );
+                                            ?>
+                                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                                <a href="<?=base_url()?>valoracion/valoracion_evaluacion_nuevo/<?=$proyectos_item['id_propuesta_evaluacion']?>">Generar</a>
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?php
+                                            $nombre_archivo = 'val_evcn_' . $proyectos_item['id_valoracion_evaluacion'] . '.pdf';
+                                            $nombre_archivo_fs = './doc/' . $nombre_archivo;
+                                            $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+                                            if ( file_exists($nombre_archivo_fs) ) { ?>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                        <?php } ?>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         <?php } 

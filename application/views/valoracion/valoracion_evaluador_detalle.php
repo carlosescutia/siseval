@@ -27,7 +27,7 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-sm-4">
-                        <label for="">
+                        <label for="puntualidad">
                             Puntualidad en la entrega de los productos señalados en los Términos de Referencia
                             <a data-bs-toggle="collapse" href="#ayuda_puntualidad" role="button" aria-expanded="false" aria-controls="ayuda_puntualidad">
                                 <i class="bi bi-info-circle texto-menor"></i>
