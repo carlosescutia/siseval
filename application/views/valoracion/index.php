@@ -175,7 +175,7 @@
                                         <?php } else { ?>
                                             <?php
                                                 $permisos_requeridos = array(
-                                                'evaluador_valoracion.can_edit',
+                                                'valoracion_evaluador.can_edit',
                                                 'valoracion.etapa_actual',
                                                 );
                                             ?>
@@ -220,7 +220,7 @@
                                         <?php } else { ?>
                                             <?php
                                                 $permisos_requeridos = array(
-                                                'evaluacion_valoracion.can_edit',
+                                                'valoracion_evaluacion.can_edit',
                                                 'valoracion.etapa_actual',
                                                 );
                                             ?>
