@@ -14,7 +14,7 @@
                 } ?>
             </div>
             <div class="col-sm-8 offset-sm-2 mt-3 mb-4 text-center">
-                <a href="javascript:window.print()" class="btn btn-primary boton">Imprimir Valoración del evaluador</a>
+                <a href="<?=base_url()?>valoracion/frm_valoracion_evaluador/<?=$valoracion_evaluador['id_valoracion_evaluador']?>" class="btn btn-primary boton">Generar Documento de Valoración del evaluador</a>
                 <hr />
             </div>
             <?php 

@@ -11,6 +11,26 @@
                         <textarea rows="4" class="form-control" name="nom_proyecto" id="nom_proyecto" readonly><?=$valoracion_evaluacion['cve_proyecto']?> - <?=$valoracion_evaluacion['nom_proyecto']?></textarea>
                     </div>
                 </div>
+                <div class="row mb-5">
+                    <div class="col-sm-4">
+                        <label for="evaluador">
+                            Evaluador
+                        </label>
+                        <input type="text" class="form-control" name="id_evaluador" id="id_evaluador" value="<?= $valoracion_evaluacion['id_evaluador'] ?> - <?= $valoracion_evaluacion['nom_evaluador'] ?>" readonly>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="elaborado">
+                            Elaborado por
+                        </label>
+                        <input type="text" class="form-control" name="elaborado" id="elaborado" value="<?=$valoracion_evaluacion['elaborado']?>" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="cargo">
+                            Cargo
+                        </label>
+                        <input type="text" class="form-control" name="cargo" id="cargo" value="<?=$valoracion_evaluacion['cargo']?>" required>
+                    </div>
+                </div>
 
                 <div class="row mb-5 d-print-none">
                     <div class="col-sm-12">
@@ -28,8 +48,8 @@
                                 <li>3 puntos: <strong>Bueno</strong>, Cuando los aspectos y/o antecedentes presentados cumplen satisfactoriamente el estándar evaluado.</li>
                                 <li>4 puntos: <strong>Sobresaliente</strong>, Cuando los aspectos y/o antecedentes presentados cumplen cabalmente con el estándar evaluado, generando un logro excepcional, superando lo esperado.</li>
                             </div>
-                        </div>                
-                    </div>                
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row mb-5">
@@ -44,7 +64,7 @@
                             <div class="texto-ayuda">
                                 <p>El informe de evaluación producido está sustentado en información documentada (entrevistas, informes, otras fuentes).</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="informe" id="informe" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['informe'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -62,7 +82,7 @@
                             <div class="texto-ayuda">
                                 <p>El informe recoge la información previa que existe (documentos, informes, etc.), analizando el problema, sus características, partes interesadas, principales desafíos y riesgos de la intervención pública evaluada.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="antecedentes" id="antecedentes" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['antecedentes'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -80,7 +100,7 @@
                             <div class="texto-ayuda">
                                 <p>Los métodos de recolección de datos y las técnicas de análisis son rigurosas y consistentes con el objeto de evaluación (los instrumentos son apropiados y relevantes para medir).</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="metodologia" id="metodologia" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['metodologia'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -98,7 +118,7 @@
                             <div class="texto-ayuda">
                                 <p>Los datos recopilados se han verificado sistemáticamente, y están disponibles en elementos gráficos.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="informacion" id="informacion" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['informacion'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -120,7 +140,7 @@
                             <div class="texto-ayuda">
                                 <p>El informe expone los hallazgos y los relaciona con los objetivos de la intervención pública y con datos cuantitativos y cualitativos sólidos que corroboran las explicaciones desarrolladas.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="analisis" id="analisis" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['analisis'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -138,7 +158,7 @@
                             <div class="texto-ayuda">
                                 <p>Las conclusiones y recomendaciones de la evaluación, están completamente respaldadas y bien argumentadas, además están sustentadas en una sólida relación con las conclusiones y los hallazgos descritos.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="conclusiones" id="conclusiones" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['conclusiones'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -159,7 +179,7 @@
                             <div class="texto-ayuda">
                                 <p>La evaluación realizada cumple a cabalidad con los términos de referencia.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="acuerdos_institucionales" id="acuerdos_institucionales" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['acuerdos_institucionales'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -179,7 +199,7 @@
                             <div class="texto-ayuda">
                                 <p>La evaluación realizada incluye los protocolos de confidencialidad de las personas que proporcionaron información.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="acuerdos_confidencialidad" id="acuerdos_confidencialidad" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['acuerdos_confidencialidad'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -201,7 +221,7 @@
                             <div class="texto-ayuda">
                                 <p>La evaluación fue conducida de acuerdo con principios éticos y jurídicos definidos: independencia, imparcialidad, objetividad y profesionalismo.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="derechos" id="derechos" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['derechos'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -219,7 +239,7 @@
                             <div class="texto-ayuda">
                                 <p>Los análisis realizados por la evaluación son sensibles a las creencias y costumbres, cuidando la dignidad de quienes participan en la evaluación, sean ejecutores o beneficiarios.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="orientacion" id="orientacion" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['orientacion'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -239,7 +259,7 @@
                             <div class="texto-ayuda">
                                 <p>Los/as evaluadores trabajan en forma autónoma de cualquier instancia política y pública.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="autonomia" id="autonomia" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['autonomia'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -259,7 +279,7 @@
                             <div class="texto-ayuda">
                                 <p>La evaluación incluye un análisis de las brechas de género y/o desigualdades en el acceso a los bienes y servicios entre hombres y mujeres.</p>
                             </div>
-                        </div>                
+                        </div>
                         <select class="form-select" name="genero" id="genero" required>
                             <?php for ($valor = 0; $valor <= 4; $valor++) { ?>
                                 <option value="<?=$valor?>" <?= $valoracion_evaluacion['genero'] == $valor ? 'selected' : '' ?> ><?=$valor?></option>
@@ -284,6 +304,11 @@
                             <?php
                                 $puntaje_valoracion_evaluacion = $valoracion_evaluacion['puntaje_valoracion_evaluacion'];
                                 switch(true) {
+                                    case $puntaje_valoracion_evaluacion == '':
+                                        $fondo_valoracion = 'text-bg-light';
+                                        $valoracion = '';
+                                        $interpretacion = '';
+                                        break;
                                     case $puntaje_valoracion_evaluacion <= 24:
                                         $fondo_valoracion = 'text-bg-danger';
                                         $valoracion = 'Calidad insuficiente';
@@ -291,17 +316,17 @@
                                         break;
                                     case $puntaje_valoracion_evaluacion >= 25 and $puntaje_valoracion_evaluacion <= 34:
                                         $fondo_valoracion = 'text-bg-warning';
-                                        $valoracion = 'Desempeño bajo';
+                                        $valoracion = 'Calidad incipiente';
                                         $interpretacion = 'El proceso de evaluación se ha implementado en forma asistemática o incompleta, por lo que su calidad es solo parcial. Se identifica algún grado de desarrollo, pero este resulta insuficiente pues presenta deficiencias en los ámbitos de precisión, éticos y/o jurídicos.';
                                         break;
                                     case $puntaje_valoracion_evaluacion >= 35 and $puntaje_valoracion_evaluacion <= 44:
                                         $fondo_valoracion = 'text-bg-success';
-                                        $valoracion = 'Desempeño medio';
+                                        $valoracion = 'Calidad buena';
                                         $interpretacion = 'El proceso de evaluación es efectivo, ya que cumple con los criterios, procedimientos, prácticas, cualidades o logros necesarios para que sea funcional a los objetivos esperados. Sin embargo, aún presenta ciertas debilidades en alguno de los ámbitos de precisión, éticos y/o jurídicos.';
                                         break;
                                     case $puntaje_valoracion_evaluacion >= 45:
                                         $fondo_valoracion = 'text-bg-primary';
-                                        $valoracion = 'Buen desempeño';
+                                        $valoracion = 'Calidad sobresaliente';
                                         $interpretacion = 'El proceso de evaluación es efectivo, e incluye prácticas reconocidas, destacadas o innovadoras que impactan positivamente los resultados de la evaluación, excede los parámetros esperados.';
                                         break;
                                     default:

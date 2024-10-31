@@ -26,6 +26,7 @@ class Valoracion extends CI_Controller {
         $this->load->model('actividades_model');
         $this->load->model('valoraciones_evaluador_model');
         $this->load->model('valoraciones_evaluacion_model');
+        $this->load->model('evaluadores_model');
 
         // globales
         $this->etapa_actual = 4;
@@ -646,6 +647,7 @@ class Valoracion extends CI_Controller {
                     'area_responsable' => $actividad['area_responsable'],
                     'resultados_esperados' => $actividad['resultados_esperados'],
                     'ponderacion' => $actividad['ponderacion'],
+                    'unidad_medida' => $actividad['unidad_medida'],
                 );
                 $id_actividad = $this->actividades_model->guardar($data, $id_actividad);
 
@@ -862,7 +864,7 @@ class Valoracion extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'evaluador' => $valoracion_evaluador['evaluador'],
+                    'id_evaluador' => $valoracion_evaluador['id_evaluador'],
                     'puntualidad' => $valoracion_evaluador['puntualidad'],
                     'solidez' => $valoracion_evaluador['solidez'],
                     'objetividad' => $valoracion_evaluador['objetividad'],
@@ -870,6 +872,7 @@ class Valoracion extends CI_Controller {
                     'disponibilidad' => $valoracion_evaluador['disponibilidad'],
                     'observaciones' => $valoracion_evaluador['observaciones'],
                     'elaborado' => $valoracion_evaluador['elaborado'],
+                    'cargo' => $valoracion_evaluador['cargo'],
                 );
                 $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, $valoracion_evaluador['id_valoracion_evaluador']);
 
@@ -880,7 +883,81 @@ class Valoracion extends CI_Controller {
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
 
-            redirect(base_url() . 'valoracion');
+            redirect(base_url() . 'valoracion/valoracion_evaluador_detalle/' . $id_valoracion_evaluador);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function frm_valoracion_evaluador($id_valoracion_evaluador)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['valoracion_evaluador'] = $this->valoraciones_evaluador_model->get_valoracion_evaluador($id_valoracion_evaluador);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('valoracion/frm_valoracion_evaluador', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluador_seleccionar_evaluador($id_valoracion_evaluador)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $filtros = $this->input->post();
+            if ($filtros) {
+                $buscar_evaluador = $filtros['buscar_evaluador'];
+            } else {
+                $buscar_evaluador = '';
+            }
+
+            $data['buscar_evaluador'] = $buscar_evaluador;
+
+            $data['evaluadores'] = $this->evaluadores_model->get_evaluadores_busqueda($buscar_evaluador);
+            $data['valoracion_evaluador'] = $this->valoraciones_evaluador_model->get_valoracion_evaluador($id_valoracion_evaluador);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/seleccionar_evaluador', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function valoracion_evaluador_actualizar_evaluador()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_evaluador = $this->input->post();
+            if ($valoracion_evaluador) {
+
+                // guardado
+                $data = array(
+                    'id_evaluador' => $valoracion_evaluador['id_evaluador'],
+                );
+                $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, $valoracion_evaluador['id_valoracion_evaluador']);
+
+                // registro en bitacora
+                $accion = 'modificó';
+                $entidad = 'valoraciones_evaluador';
+                $valor = $id_valoracion_evaluador;
+                $this->registro_bitacora($accion, $entidad, $valor);
+            }
+
+            redirect(base_url() . 'valoracion/valoracion_evaluador_detalle/' . $id_valoracion_evaluador);
 
         } else {
             redirect('inicio/login');
@@ -941,6 +1018,25 @@ class Valoracion extends CI_Controller {
         }
     }
 
+    public function frm_valoracion_evaluacion($id_valoracion_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['valoracion_evaluacion'] = $this->valoraciones_evaluacion_model->get_valoracion_evaluacion($id_valoracion_evaluacion);
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('valoracion/frm_valoracion_evaluacion', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
     public function valoracion_evaluacion_guardar()
     {
         if ($this->session->userdata('logueado')) {
@@ -963,6 +1059,9 @@ class Valoracion extends CI_Controller {
                     'autonomia' => $valoracion_evaluacion['autonomia'],
                     'genero' => $valoracion_evaluacion['genero'],
                     'observaciones' => $valoracion_evaluacion['observaciones'],
+                    'evaluador' => $valoracion_evaluacion['evaluador'],
+                    'elaborado' => $valoracion_evaluacion['elaborado'],
+                    'cargo' => $valoracion_evaluacion['cargo'],
                 );
                 $id_valoracion_evaluacion = $this->valoraciones_evaluacion_model->guardar($data, $valoracion_evaluacion['id_valoracion_evaluacion']);
 
@@ -973,7 +1072,7 @@ class Valoracion extends CI_Controller {
                 $this->registro_bitacora($accion, $entidad, $valor);
             }
 
-            redirect(base_url() . 'valoracion');
+            redirect(base_url() . 'valoracion/valoracion_evaluacion_detalle/' . $valoracion_evaluacion['id_valoracion_evaluacion']);
 
         } else {
             redirect('inicio/login');

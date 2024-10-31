@@ -12,17 +12,17 @@
                         </label>
                         <textarea rows="4" class="form-control" name="desc_actividad" id="desc_actividad" required></textarea>
                     </div>
+                    <div class="col-sm-2">
+                        <label for="unidad_medida">
+                            Unidad de medida
+                        </label>
+                        <input type="text" class="form-control" name="unidad_medida" id="unidad_medida" required >
+                    </div>
                     <div class="col-sm-5">
                         <label for="resultados_esperados">
                             Resultados esperados
                         </label>
                         <textarea rows="4" class="form-control" name="resultados_esperados" id="resultados_esperados" required></textarea>
-                    </div>
-                    <div class="col-sm-2">
-                        <label for="ponderacion">
-                            Ponderación
-                        </label>
-                        <input type="text" class="form-control" name="ponderacion" id="ponderacion" required >
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -38,11 +38,17 @@
                         </label>
                         <input type="date" class="form-control" name="fech_fin" id="fech_fin" required >
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         <label for="area_responsable">
                             Área responsable
                         </label>
                         <input type="text" class="form-control" name="area_responsable" id="area_responsable" required >
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="ponderacion">
+                            Ponderación
+                        </label>
+                        <input type="text" class="form-control" name="ponderacion" id="ponderacion" required >
                     </div>
                 </div>
                 <div class="row mb-3">

@@ -58,6 +58,16 @@
                 ?>
                 <?php
                     $permisos_requeridos = array(
+                    'evaluador.can_edit',
+                    );
+                    if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                        <div class="col-md-4">
+                            <?php include "evaluadores/boton.php" ?>
+                        </div>
+                    <?php } 
+                ?>
+                <?php
+                    $permisos_requeridos = array(
                     'calendario.can_edit',
                     );
                     if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>

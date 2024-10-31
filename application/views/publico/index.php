@@ -5,7 +5,7 @@
                 <div class="col-sm-1 fw-bold">
                     <p>Clave P/Q</p>
                 </div>
-                <div class="col-sm-4 fw-bold">
+                <div class="col-sm-3 fw-bold">
                     <p>Evaluación</p>
                 </div>
                 <div class="col-sm-1 fw-bold">
@@ -25,6 +25,12 @@
                 </div>
                 <div class="col-sm-1 fw-bold text-center">
                     <p>Ficha Conac</p>
+                </div>
+                <div class="col-sm-1 fw-bold text-center">
+                    <p>Doc. Op.</p>
+                </div>
+                <div class="col-sm-1 fw-bold text-center">
+                    <p>Plan acc.</p>
                 </div>
             </div>
         </div>
@@ -51,6 +57,20 @@
         $doc3_tipo_archivo = 'pdf';
         $doc3_dir = 'doc/';
 
+        // documento de opinión
+        $doc4_prefijo = '';
+        $doc4_tipo_doc = 'doc_op';
+        $doc4_icono = "bi-filetype-pdf";
+        $doc4_tipo_archivo = 'pdf';
+        $doc4_dir = 'doc/';
+
+        // plan de acción
+        $doc5_prefijo = '';
+        $doc5_tipo_doc = 'plan_ac';
+        $doc5_icono = "bi-filetype-pdf";
+        $doc5_tipo_archivo = 'pdf';
+        $doc5_dir = 'doc/';
+
         foreach ($proyectos as $proyectos_item) { 
             $doc1_nombre_archivo = $doc1_prefijo . $doc1_tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $doc1_tipo_archivo ;
             $doc1_fs = './' . $doc1_dir . $doc1_nombre_archivo ;
@@ -64,13 +84,21 @@
             $doc3_fs = './' . $doc3_dir . $doc3_nombre_archivo ;
             $doc3_url = base_url() . $doc3_dir . $doc3_nombre_archivo;
 
+            $doc4_nombre_archivo = $doc4_prefijo . $doc4_tipo_doc . '_' . strtolower($proyectos_item['cve_documento_opinion']) . '.' . $doc4_tipo_archivo ;
+            $doc4_fs = './' . $doc4_dir . $doc4_nombre_archivo ;
+            $doc4_url = base_url() . $doc4_dir . $doc4_nombre_archivo;
+
+            $doc5_nombre_archivo = $doc5_prefijo . $doc5_tipo_doc . '_' . strtolower($proyectos_item['id_plan_accion']) . '.' . $doc5_tipo_archivo ;
+            $doc5_fs = './' . $doc5_dir . $doc5_nombre_archivo ;
+            $doc5_url = base_url() . $doc5_dir . $doc5_nombre_archivo;
+
             if ( file_exists($doc1_fs) || file_exists($doc2_fs) || file_exists($doc3_fs) ) { ?>
                 <div class="col-sm-12 alternate-color">
                     <div class="row">
                         <div class="col-sm-1">
                             <p><?= $proyectos_item['cve_proyecto'] ?></p>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <p> <?= $proyectos_item['nom_proyecto'] ?> </p>
                         </div>
                         <div class="col-sm-1">
@@ -95,6 +123,16 @@
                         <div class="col-sm-1 text-center">
                             <?php if ( file_exists($doc3_fs) )  { ?>
                                 <p><a href="<?= $doc3_url ?>" target="_blank"><i class="bi <?= $doc3_icono ?> documento-g"></i></a></p>
+                            <?php } ?>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <?php if ( file_exists($doc4_fs) )  { ?>
+                                <p><a href="<?= $doc4_url ?>" target="_blank"><i class="bi <?= $doc4_icono ?> documento-g"></i></a></p>
+                            <?php } ?>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            <?php if ( file_exists($doc5_fs) )  { ?>
+                                <p><a href="<?= $doc5_url ?>" target="_blank"><i class="bi <?= $doc5_icono ?> documento-g"></i></a></p>
                             <?php } ?>
                         </div>
                     </div>

@@ -12,17 +12,26 @@
                     </div>
                 </div>
                 <div class="row mb-5">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="evaluador">
                             Evaluador
                         </label>
-                        <input type="text" class="form-control" name="evaluador" id="evaluador" value="<?=$valoracion_evaluador['evaluador']?>" required>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="id_evaluador" id="id_evaluador" value="<?= $valoracion_evaluador['id_evaluador'] ?> - <?= $valoracion_evaluador['nom_evaluador'] ?>" readonly>
+                            <a href="<?=base_url()?>valoracion/valoracion_evaluador_seleccionar_evaluador/<?=$valoracion_evaluador['id_valoracion_evaluador']?>" class="btn btn-outline-secondary"><i class="bi bi-search"></i></a>
+                        </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="elaborado">
                             Elaborado por
                         </label>
                         <input type="text" class="form-control" name="elaborado" id="elaborado" value="<?=$valoracion_evaluador['elaborado']?>" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="cargo">
+                            Cargo
+                        </label>
+                        <input type="text" class="form-control" name="cargo" id="cargo" value="<?=$valoracion_evaluador['cargo']?>" required>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -135,6 +144,10 @@
                             <?php
                                 $puntaje_valoracion_evaluador = $valoracion_evaluador['puntaje_valoracion_evaluador'];
                                 switch(true) {
+                                    case $puntaje_valoracion_evaluador == '':
+                                        $fondo_valoracion = 'text-bg-light';
+                                        $valoracion = '';
+                                        break;
                                     case $puntaje_valoracion_evaluador >= 0 and $puntaje_valoracion_evaluador <= 19:
                                         $fondo_valoracion = 'text-bg-danger';
                                         $valoracion = 'Mal desempeño';
@@ -151,7 +164,7 @@
                                         $fondo_valoracion = 'text-bg-success';
                                         $valoracion = 'Buen desempeño';
                                         break;
-                                    case $puntaje_valoracion_evaluador = 50:
+                                    case $puntaje_valoracion_evaluador == 50:
                                         $fondo_valoracion = 'text-bg-primary';
                                         $valoracion = 'Desempeño destacado';
                                         break;

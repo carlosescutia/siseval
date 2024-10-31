@@ -5,6 +5,7 @@
             <th scope="col">Inicio</th>
             <th scope="col">Fin</th>
             <th scope="col">Responsable</th>
+            <th scope="col">Unidad de medida</th>
             <th scope="col">Resultados esperados</th>
             <th scope="col">Ponderación</th>
             <th scope="col"></th>
@@ -18,6 +19,7 @@
                 <td><?= date('d-m-Y', strtotime($actividades_item['fech_ini'])) ?></td>
                 <td><?= date('d-m-Y', strtotime($actividades_item['fech_fin'])) ?></td>
                 <td><?= $actividades_item['area_responsable'] ?></td>
+                <td><?= $actividades_item['unidad_medida'] ?></td>
                 <td><?= $actividades_item['resultados_esperados'] ?></td>
                 <td><?= $actividades_item['ponderacion'] ?></td>
                 <td>

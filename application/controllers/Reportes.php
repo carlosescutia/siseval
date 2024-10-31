@@ -13,6 +13,7 @@ class Reportes extends CI_Controller {
         $this->load->model('parametros_sistema_model');
         $this->load->model('dependencias_model');
         $this->load->model('probabilidades_inclusion_model');
+        $this->load->model('evaluadores_model');
     }
 
     public function get_userdata()
@@ -317,5 +318,29 @@ class Reportes extends CI_Controller {
             redirect('inicio/login');
         }
     }
+
+    public function listado_evaluadores($salida='')
+    {
+        if ($this->session->userdata('logueado')) {
+            $this->load->helper('file');
+            $this->load->helper('download');
+
+            $data = [];
+            $data += $this->get_userdata();
+
+            $data['evaluadores'] = $this->evaluadores_model->get_listado_evaluadores($salida);
+
+            if ($salida == 'csv') {
+                force_download("listado_evaluadores.csv", $data['evaluadores']);
+            } else {
+                $this->load->view('templates/header', $data);
+                $this->load->view('reportes/listado_evaluadores', $data);
+                $this->load->view('templates/footer');
+            }
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
 
 }
