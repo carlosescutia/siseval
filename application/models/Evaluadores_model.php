@@ -5,7 +5,7 @@ class Evaluadores_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_evaluadores($salida) {
+    public function get_evaluadores($salida=null) {
         $this->load->dbutil();
 
         $sql = 'select * from evaluadores ;';
@@ -35,7 +35,7 @@ class Evaluadores_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_listado_evaluadores($salida) {
+    public function get_listado_evaluadores($salida=null) {
         $this->load->dbutil();
 
         $sql = ""

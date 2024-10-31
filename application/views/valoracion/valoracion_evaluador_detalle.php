@@ -18,7 +18,16 @@
                         </label>
                         <div class="input-group">
                             <input type="text" class="form-control" name="id_evaluador" id="id_evaluador" value="<?= $valoracion_evaluador['id_evaluador'] ?> - <?= $valoracion_evaluador['nom_evaluador'] ?>" readonly>
-                            <a href="<?=base_url()?>valoracion/valoracion_evaluador_seleccionar_evaluador/<?=$valoracion_evaluador['id_valoracion_evaluador']?>" class="btn btn-outline-secondary"><i class="bi bi-search"></i></a>
+
+                            <?php
+                                $permisos_requeridos = array(
+                                'valoracion_evaluador.can_edit',
+                                'valoracion.etapa_actual',
+                                );
+                            ?>
+                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                                <a href="<?=base_url()?>valoracion/valoracion_evaluador_seleccionar_evaluador/<?=$valoracion_evaluador['id_valoracion_evaluador']?>" class="btn btn-outline-secondary"><i class="bi bi-search"></i></a>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="col-sm-4">
