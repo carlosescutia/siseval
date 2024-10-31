@@ -47,6 +47,8 @@ class Evaluadores_model extends CI_Model {
             ."from  "
             ."valoraciones_evaluador ver  "
             ."left join evaluadores e on e.id_evaluador = ver.id_evaluador "
+            ."where "
+            ."ver.id_evaluador is not null "
             ."group by  "
             ."ver.id_evaluador, e.nom_evaluador, e.observaciones "
             ."";
