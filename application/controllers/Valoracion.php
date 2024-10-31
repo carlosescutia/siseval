@@ -864,7 +864,6 @@ class Valoracion extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'id_evaluador' => $valoracion_evaluador['id_evaluador'],
                     'puntualidad' => $valoracion_evaluador['puntualidad'],
                     'solidez' => $valoracion_evaluador['solidez'],
                     'objetividad' => $valoracion_evaluador['objetividad'],
