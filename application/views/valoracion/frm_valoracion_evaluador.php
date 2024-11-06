@@ -36,8 +36,6 @@
             <div class="row mb-3">
                 <div class="col-12 text-start">
                     <h5 class="text-center">Valoración del evaluador</h5>
-                    <br>
-                    <p>Nombre de la evaluación: <?=$valoracion_evaluador['cve_proyecto']?> - <?=$valoracion_evaluador['nom_proyecto']?></p>
                 </div>
             </div>
             <div class="row mb-3">
@@ -49,7 +47,7 @@
                 <p><strong>Arq. Graciela de la Luz Amaro Hernández<br>
                 Directora General del Instituto de Planeación, Estadística y Geografía del Estado de Guanajuato</strong></p>
 
-                <p>Le comento que se ha llevado a cabo la revisión del Informe final de la evaluación <?=$valoracion_evaluador['nom_proyecto']?> aplicada al programa <?=$valoracion_evaluador['nom_programa']?>, misma que fue realizada por <?=$valoracion_evaluador['nom_evaluador']?>.</p>
+                <p>Le comento que se ha llevado a cabo la revisión del Informe final de la evaluación de <?=$valoracion_evaluador['nom_tipo_evaluacion']?> aplicada al programa <?=$valoracion_evaluador['nom_proyecto']?>, misma que fue realizada por <?=$valoracion_evaluador['nom_evaluador']?>.</p>
 
                 <p>A continuación, me permito darle a conocer la valoración del desempeño de la consultoría encargada de realizar este trabajo. Para cada aspecto revisado se emite una calificación del 1 al 10, donde 1 es un desempeño muy bajo y 10 es un desempeño destacado.</p>
 

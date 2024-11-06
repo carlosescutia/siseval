@@ -1058,7 +1058,6 @@ class Valoracion extends CI_Controller {
                     'autonomia' => $valoracion_evaluacion['autonomia'],
                     'genero' => $valoracion_evaluacion['genero'],
                     'observaciones' => $valoracion_evaluacion['observaciones'],
-                    'evaluador' => $valoracion_evaluacion['evaluador'],
                     'elaborado' => $valoracion_evaluacion['elaborado'],
                     'cargo' => $valoracion_evaluacion['cargo'],
                 );
