@@ -31,8 +31,16 @@
                 
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
+                    $fondo_url = 'text-bg-secondary';
+                    if ($proyectos_item['url_sitio_tr'] or $proyectos_item['url_arch_tr']) {
+                        $fondo_url = 'text-bg-warning';
+                    }
+                    if ($proyectos_item['url_sitio_tr'] and $proyectos_item['url_arch_tr']) {
+                        $fondo_url = 'text-bg-success' ;
+                    }
                     ?>
-                    <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
+                    <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a><br>
+                    <a href="<?=base_url()?>gestion/urls/<?=$proyectos_item['id_propuesta_evaluacion']?>"><span class="badge rounded-pill <?=$fondo_url ?>">urls</span></a></p>
                 <?php } ?>
 
                 <?php
@@ -214,13 +222,13 @@
             <?php
                 switch ($num_docs) {
                 case 0:
-                    $fondo_actual = 'bg-danger';
+                    $fondo_actual = 'text-bg-danger';
                     break;
                 case 5:
-                    $fondo_actual = 'bg-success';
+                    $fondo_actual = 'text-bg-success';
                     break;
                 default:
-                    $fondo_actual = 'bg-warning';
+                    $fondo_actual = 'text-bg-warning';
                     break;
                 } 
             ?>

@@ -59,7 +59,7 @@
                             <div class="col-sm-1">
                                 <p>Propuesta por</p>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-1 text-center">
                                 <p>Documento de opinión</p>
                             </div>
                             <div class="col-sm-1">
@@ -94,7 +94,7 @@
                                     <div class="col-sm-1">
                                         <p><?= $proyectos_item['nom_dependencia_propuesta'] ?></p>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-1 text-center">
                                         <p>
                                         <?php if ($proyectos_item['status_documento_opinion']) { ?>
                                             <a href="<?=base_url()?>valoracion/documento_opinion_detalle/<?=$proyectos_item['cve_documento_opinion']?>"><?= $proyectos_item['desc_status_documento_opinion'] ?></a>
@@ -113,8 +113,18 @@
                                             $nombre_archivo = 'doc_op_' . $proyectos_item['cve_documento_opinion'] . '.pdf';
                                             $nombre_archivo_fs = './doc/' . $nombre_archivo;
                                             $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+
+                                            $fondo_url = 'text-bg-secondary';
+                                            if ($proyectos_item['url_sitio_do'] or $proyectos_item['url_arch_do']) {
+                                                $fondo_url = 'text-bg-warning';
+                                            }
+                                            if ($proyectos_item['url_sitio_do'] and $proyectos_item['url_arch_do']) {
+                                                $fondo_url = 'text-bg-success' ;
+                                            }
+
                                             if ( file_exists($nombre_archivo_fs) ) { ?>
-                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a><br>
+                                                <a href="<?=base_url()?>valoracion/urls/<?=$proyectos_item['id_propuesta_evaluacion']?>"><span class="badge rounded-pill <?=$fondo_url ?>">urls</span></a>
                                         <?php } ?>
                                         </p>
                                     </div>
@@ -139,8 +149,18 @@
                                             $nombre_archivo = 'plan_ac_' . $proyectos_item['id_plan_accion'] . '.pdf';
                                             $nombre_archivo_fs = './doc/' . $nombre_archivo;
                                             $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
+
+                                            $fondo_url = 'text-bg-secondary';
+                                            if ($proyectos_item['url_sitio_pa'] or $proyectos_item['url_arch_pa']) {
+                                                $fondo_url = 'text-bg-warning';
+                                            }
+                                            if ($proyectos_item['url_sitio_pa'] and $proyectos_item['url_arch_pa']) {
+                                                $fondo_url = 'text-bg-success' ;
+                                            }
+
                                             if ( file_exists($nombre_archivo_fs) ) { ?>
                                                 <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="15"></span></a>
+                                                <a href="<?=base_url()?>valoracion/urls/<?=$proyectos_item['id_propuesta_evaluacion']?>"><span class="badge rounded-pill <?=$fondo_url ?>">urls</span></a>
                                         <?php } ?>
                                         </p>
                                     </div>

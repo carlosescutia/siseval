@@ -15,7 +15,8 @@ class Ejecucion extends CI_Controller {
 
         $this->load->model('proyectos_model');
         $this->load->model('dependencias_model');
-        
+        $this->load->model('propuestas_evaluacion_model');
+
         // globales
         $this->etapa_actual = 3;
     }
@@ -65,7 +66,7 @@ class Ejecucion extends CI_Controller {
                         $cve_dependencia_filtro = '%';
                     }
                 }
-			}
+            }
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
 
             $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
@@ -80,6 +81,73 @@ class Ejecucion extends CI_Controller {
             $this->load->view('templates/dlg_borrar_archivos');
             $this->load->view('ejecucion/index', $data);
             $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function urls($id_propuesta_evaluacion)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $cve_dependencia = $data['cve_dependencia'];
+            $cve_rol = $data['cve_rol'];
+
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
+            $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('ejecucion/urls', $data);
+            $this->load->view('templates/footer');
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
+    public function guardar_urls()
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $propuesta_evaluacion = $this->input->post();
+            if ($propuesta_evaluacion) {
+
+                $id_propuesta_evaluacion = $propuesta_evaluacion['id_propuesta_evaluacion'];
+
+                // guardado
+                $data = array(
+                    'url_sitio_if' => $propuesta_evaluacion['url_sitio_if'],
+                    'url_arch_if' => $propuesta_evaluacion['url_arch_if'],
+                    'url_sitio_fc' => $propuesta_evaluacion['url_sitio_fc'],
+                    'url_arch_fc' => $propuesta_evaluacion['url_arch_fc'],
+                );
+                $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
+
+                // registro en bitacora
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_dependencia = $this->session->userdata('nom_dependencia');
+                $entidad = 'propuestas_evaluacion';
+                $accion = 'modificó';
+                $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_dependencia' => $nom_dependencia,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
+
+            }
+
+            redirect('ejecucion');
+
         } else {
             redirect('inicio/login');
         }
