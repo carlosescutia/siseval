@@ -30,8 +30,17 @@
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     $arch_requeridos += 1;
+
+                    $fondo_url = 'text-bg-secondary';
+                    if ($proyectos_item['url_sitio_if'] or $proyectos_item['url_arch_if']) {
+                        $fondo_url = 'text-bg-warning';
+                    }
+                    if ($proyectos_item['url_sitio_if'] and $proyectos_item['url_arch_if']) {
+                        $fondo_url = 'text-bg-success' ;
+                    }
                     ?>
-                    <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
+                    <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a><br>
+                    <a href="<?=base_url()?>ejecucion/urls/<?=$proyectos_item['id_propuesta_evaluacion']?>"><span class="badge rounded-pill <?=$fondo_url ?>">urls</span></a></p>
                 <?php } ?>
 
                 <?php
