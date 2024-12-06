@@ -12,7 +12,7 @@
         <?php $num_rec += 1; ?>
         <div class="card mt-3 mb-5">
             <div class="card-header text-bg-success">
-                Recomendación <?=$num_rec?> <?=$recomendaciones_item['desc_recomendacion']?>
+            Recomendación <?=$num_rec?> <?=$recomendaciones_item['desc_recomendacion']?> - ponderación: <?=$recomendaciones_item['ponderacion'] ?>
             </div>
             <div class="card-body">
                 <?php if (in_array($recomendaciones_item['cve_recomendacion'], array_column($actividades, 'cve_recomendacion'))) { ?>
