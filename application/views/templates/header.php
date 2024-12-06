@@ -81,6 +81,14 @@
                         ?>
                         <?php
                             $permisos_requeridos = array(
+                            'seguimiento.can_view',
+                            );
+                            if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                                <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>seguimiento">Seguimiento</a></li>
+                            <?php }
+                        ?>
+                        <?php
+                            $permisos_requeridos = array(
                             'reportes.can_view',
                             );
                             if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>

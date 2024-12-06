@@ -6,11 +6,11 @@
         <form method="post" action="<?= base_url() ?>valoracion/actividades_guardar">
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-sm-5">
+                    <div class="col-sm-7">
                         <label for="desc_actividad">
                             Actividad
                         </label>
-                        <textarea rows="4" class="form-control" name="desc_actividad" id="desc_actividad" required><?= $actividad['desc_actividad'] ?></textarea>
+                        <textarea rows="2" class="form-control" name="desc_actividad" id="desc_actividad" required><?= $actividad['desc_actividad'] ?></textarea>
                     </div>
                     <div class="col-sm-2">
                         <label for="unidad_medida">
@@ -18,11 +18,11 @@
                         </label>
                         <input type="text" class="form-control" name="unidad_medida" id="unidad_medida" value="<?= $actividad['unidad_medida'] ?>" required >
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-3">
                         <label for="resultados_esperados">
                             Resultados esperados
                         </label>
-                        <textarea rows="4" class="form-control" name="resultados_esperados" id="resultados_esperados" required><?= $actividad['resultados_esperados'] ?></textarea>
+                        <input type="text" class="form-control" name="resultados_esperados" id="resultados_esperados" value="<?= $actividad['resultados_esperados'] ?>" required >
                     </div>
                 </div>
                 <div class="row mb-3">
