@@ -30,6 +30,12 @@ class Valoraciones_evaluacion_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_valoracion_evaluacion_propuesta_evaluacion($id_propuesta_evaluacion) {
+        $sql = "select * from valoraciones_evaluacion where id_propuesta_evaluacion = ?";
+        $query = $this->db->query($sql, array($id_propuesta_evaluacion));
+        return $query->row_array();
+    }
+
     public function guardar($data, $id_valoracion_evaluacion)
     {
         if ($id_valoracion_evaluacion) {

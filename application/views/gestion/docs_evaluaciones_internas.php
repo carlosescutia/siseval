@@ -63,9 +63,9 @@
 
             <?php
                 if ($arch_requeridos > 0) {
-                    $fondo_actual = 'bg-success';
+                    $fondo_actual = 'text-bg-success';
                 } else {
-                    $fondo_actual = 'bg-danger';
+                    $fondo_actual = 'text-bg-secondary';
                 } 
             ?>
             <td><span class="badge rounded-pill <?=$fondo_actual?>"><?= $num_docs ?></span></td>

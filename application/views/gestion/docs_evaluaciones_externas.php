@@ -14,6 +14,7 @@
             <?php 
                 // valores comunes a todos los archivos
                 $num_docs = 0; 
+                $arch_requeridos = 0;
                 $prefijo_etapa = 'g';
                 $dir_docs = 'doc/';
                 $url_actual = base_url() . 'gestion';
@@ -31,6 +32,7 @@
                 
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
+                    $arch_requeridos += 1;
                     $fondo_url = 'text-bg-secondary';
                     if ($proyectos_item['url_sitio_tr'] or $proyectos_item['url_arch_tr']) {
                         $fondo_url = 'text-bg-warning';
@@ -156,6 +158,7 @@
                 
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
+                    $arch_requeridos += 1;
                     ?>
                     <p><a href="<?=$nombre_archivo_url?>" target="_blank"><i class="bi <?=$icono?> documento-g"></i></a></p>
                 <?php } ?>
@@ -220,15 +223,18 @@
             </td>
 
             <?php
-                switch ($num_docs) {
+                switch ($arch_requeridos) {
                 case 0:
-                    $fondo_actual = 'text-bg-danger';
+                    $fondo_actual = 'text-bg-secondary';
                     break;
-                case 5:
+                case 1:
+                    $fondo_actual = 'text-bg-warning';
+                    break;
+                case 2:
                     $fondo_actual = 'text-bg-success';
                     break;
                 default:
-                    $fondo_actual = 'text-bg-warning';
+                    $fondo_actual = 'text-bg-secondary';
                     break;
                 } 
             ?>

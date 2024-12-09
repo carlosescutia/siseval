@@ -835,19 +835,23 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
+            // si no existe registro con id_propuesta_evaluacion
+            $valoracion_evaluador_existente = $this->valoraciones_evaluador_model->get_valoracion_evaluador_propuesta_evaluacion($id_propuesta_evaluacion);
+            if ( ! $valoracion_evaluador_existente) {
+                // guardado
+                $data = array(
+                    'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
+                );
+                $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, null);
 
-            // guardado
-            $data = array(
-                'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
-            );
-            $id_valoracion_evaluador = $this->valoraciones_evaluador_model->guardar($data, null);
-
-            // registro en bitacora
-            $accion = 'agregó';
-            $entidad = 'valoraciones_evaluador';
-            $valor = 'valoracion evaluador ' . $id_valoracion_evaluador . ' nuevo';
-            $this->registro_bitacora($accion, $entidad, $valor);
-
+                // registro en bitacora
+                $accion = 'agregó';
+                $entidad = 'valoraciones_evaluador';
+                $valor = 'valoracion evaluador ' . $id_valoracion_evaluador . ' nuevo';
+                $this->registro_bitacora($accion, $entidad, $valor);
+            } else {
+                $id_valoracion_evaluador = $valoracion_evaluador_existente['id_valoracion_evaluador'];
+            }
             $this->valoracion_evaluador_detalle($id_valoracion_evaluador);
 
         } else {
@@ -997,19 +1001,23 @@ class Valoracion extends CI_Controller {
     {
         if ($this->session->userdata('logueado')) {
 
+            // si no existe registro con id_propuesta_evaluacion
+            $valoracion_evaluacion_existente = $this->valoraciones_evaluacion_model->get_valoracion_evaluacion_propuesta_evaluacion($id_propuesta_evaluacion);
+            if ( ! $valoracion_evaluacion_existente) {
+                // guardado
+                $data = array(
+                    'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
+                );
+                $id_valoracion_evaluacion = $this->valoraciones_evaluacion_model->guardar($data, null);
 
-            // guardado
-            $data = array(
-                'id_propuesta_evaluacion' => $id_propuesta_evaluacion,
-            );
-            $id_valoracion_evaluacion = $this->valoraciones_evaluacion_model->guardar($data, null);
-
-            // registro en bitacora
-            $accion = 'agregó';
-            $entidad = 'valoraciones_evaluacion';
-            $valor = 'valoracion evaluador ' . $id_valoracion_evaluacion . ' nuevo';
-            $this->registro_bitacora($accion, $entidad, $valor);
-
+                // registro en bitacora
+                $accion = 'agregó';
+                $entidad = 'valoraciones_evaluacion';
+                $valor = 'valoracion evaluador ' . $id_valoracion_evaluacion . ' nuevo';
+                $this->registro_bitacora($accion, $entidad, $valor);
+            } else {
+                $id_valoracion_evaluacion = $valoracion_evaluacion_existente['id_valoracion_evaluacion'];
+            }
             $this->valoracion_evaluacion_detalle($id_valoracion_evaluacion);
 
         } else {
