@@ -38,7 +38,7 @@ class Publico extends CI_Controller {
         // pagination
         $config = array();
         $config['base_url'] = base_url() . 'publico' ;
-        $config['total_rows'] = $this->proyectos_model->num_programas_agenda_evaluacion_archivos();
+        $config['total_rows'] = $this->proyectos_model->num_programas_agenda_evaluacion_publico();
         $config['per_page'] = $this->parametros_sistema_model->get_parametro_sistema_nom('num_registros_tabla_publico');
         $config['uri_segment'] = 2;
 
@@ -66,7 +66,7 @@ class Publico extends CI_Controller {
         $page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
         $data['links'] = $this->pagination->create_links();
 
-        $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion_archivos($config['per_page'], $page);
+        $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion_publico($config['per_page'], $page);
 
         $this->load->view('templates/pubheader', $data);
         $this->load->view('publico/index', $data);

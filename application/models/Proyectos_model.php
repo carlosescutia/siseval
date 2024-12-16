@@ -99,6 +99,60 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_programas_agenda_evaluacion_publico($limite=null, $inicio=null) {
+        $sql = ""
+            ."select "
+            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto, pe.objetivo, pe.monto_contratacion,  "
+            ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, pe.id_propuesta_evaluacion, "
+            ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, "
+            ."pcp.puntaje, pcp.probabilidad, dop.cve_documento_opinion, dop.status as status_documento_opinion, sdop.desc_status_documento_opinion, "
+            ."pa.id_plan_accion, pa.status as status_plan_accion, spa.desc_status_plan_accion, "
+            ."ver.id_valoracion_evaluador, (ver.puntualidad + ver.solidez + ver.objetividad + ver.claridad + ver.disponibilidad) as puntaje_valoracion_evaluador, "
+            ."ven.id_valoracion_evaluacion, (ven.informe + ven.antecedentes + ven.metodologia + ven.informacion + ven.analisis + ven.conclusiones "
+            ."+ ven.acuerdos_institucionales + ven.acuerdos_confidencialidad + ven.derechos + ven.orientacion + ven.autonomia + ven.genero ) as puntaje_valoracion_evaluacion, "
+            ."pe.url_sitio_tr, pe.url_arch_tr, pe.url_sitio_if, pe.url_arch_if, pe.url_sitio_fc, pe.url_arch_fc, pe.url_sitio_do, pe.url_arch_do, pe.url_sitio_pa, pe.url_arch_pa "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join puntaje_calificacion_propuesta pcp on py.cve_proyecto = pcp.cve_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
+            ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
+            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
+            ."left join documentos_opinion dop on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+            ."left join status_documentos_opinion sdop on sdop.cve_status_documento_opinion = dop.status "
+            ."left join planes_accion pa on pa.cve_documento_opinion = dop.cve_documento_opinion "
+            ."left join status_plan_accion spa on spa.cve_status_plan_accion = pa.status "
+            ."left join valoraciones_evaluador ver on ver.id_propuesta_evaluacion = pe.id_propuesta_evaluacion "
+            ."left join valoraciones_evaluacion ven on ven.id_propuesta_evaluacion = pe.id_propuesta_evaluacion "
+            ."where "
+            ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."order by "
+            ."d.nom_dependencia, pg.cve_programa, pe.cve_proyecto, pe.id_propuesta_evaluacion "
+            ."limit " . $limite . " offset " . $inicio
+            ."";
+
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function num_programas_agenda_evaluacion_publico() {
+        $sql = ""
+            ."select "
+            ."count(*) as num_programas "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."where "
+            ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."";
+
+        $query = $this->db->query($sql);
+        return $query->row_array()['num_programas'];
+    }
+
+
     public function get_programas_agenda_evaluacion_archivos($limite=null, $inicio=null) {
         // lista de proyectos con archivos
         $dire = './doc/' ;
@@ -116,7 +170,7 @@ class Proyectos_model extends CI_Model {
 
         $sql = ""
             ."select "
-            ."py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
+            ."pe.id_propuesta_evaluacion, py.cve_dependencia, d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.periodo, pe.cve_proyecto,  "
             ."py.nom_proyecto, dpe.nom_dependencia as nom_dependencia_propuesta, "
             ."te.orden as cve_tipo_evaluacion, te.nom_tipo_evaluacion, te.abrev_tipo_evaluacion, cs.cve_clasificacion_supervisor, cs.nom_clasificacion_supervisor, pcp.puntaje, pcp.probabilidad, dop.cve_documento_opinion, pa.id_plan_accion "
             ."from "

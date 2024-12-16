@@ -98,7 +98,7 @@ class Gestion extends CI_Controller {
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
 
             $this->load->view('templates/header', $data);
-            $this->load->view('templates/dlg_borrar');
+            $this->load->view('templates/dlg_borrar_archivos');
             $this->load->view('gestion/detalle', $data);
             $this->load->view('templates/footer');
         } else {
