@@ -1,10 +1,12 @@
 <div class="col-sm-8 offset-sm-2 mt-3">
+    <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/cancelacion_proyecto" id="frm_cancelacion">
+    </form>
     <div class="card mt-0 mb-3 tabla-datos">
-        <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
-        <div class="card-body">
-            <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/cancelacion_proyecto" id="frm_cancelacion">
-            </form>
-            <form method="post" action="<?= base_url() ?>gestion/guardar_monto/">
+        <div class="card-header text-white bg-primary">
+            Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?>
+        </div>
+        <form method="post" action="<?= base_url() ?>gestion/guardar_monto/">
+            <div class="card-body">
                 <div class="form-group row">
                     <label for="id_tipo_evaluacion">Clave PP</label>
                     <div class="col-sm-2">
@@ -17,7 +19,7 @@
                         <textarea rows="4" class="form-control" name="objetivo" id="objetivo"><?=$propuesta_evaluacion['objetivo']?></textarea>
                     </div>
                 </div>
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col">
                         <label for="id_tipo_evaluacion">Monto de contratación</label>
                         <div class="col-sm-8">
@@ -68,30 +70,22 @@
                         </div>
                     <?php } ?>
                 </div>
-
                 <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
                 <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
                 <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
-                <div class="card-footer text-end">
-                    <div class="row">
-
-                        <div class="col-sm-6 text-start">
-                            <?php
-                                $permisos_requeridos = array(
-                                'gestion.can_edit',
-                                'gestion.etapa_actual',
-                                );
-                            ?>
-                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-                                <?php if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
-                                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                                <?php } ?>
-                            <?php } ?>
-                        </div>
-                    </div>
+            </div>
+            <?php
+                $permisos_requeridos = array(
+                'gestion.can_edit',
+                'gestion.etapa_actual',
+                );
+            ?>
+            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                <div class="card-footer text-start">
+                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                 </div>
-            </form>
-        </div>
+            <?php } ?>
+        </form>
     </div>
 </div>
 
