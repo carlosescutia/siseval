@@ -213,7 +213,8 @@
         <?php
             $permisos_requeridos = array(
             'documento_opinion.can_edit',
-            'valoracion.etapa_actual',
+            'valoracion.etapa_activa',
+            'anio_activo',
             );
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

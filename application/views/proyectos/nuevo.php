@@ -1,3 +1,10 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <main role="main" class="ml-sm-auto px-4">
 
     <form method="post" action="<?= base_url() ?>proyectos/guardar">

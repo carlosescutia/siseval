@@ -1,8 +1,17 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <div class="col-sm-8 offset-sm-2 mt-3">
     <div class="card mt-0 mb-3 tabla-datos">
-        <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
-        <div class="card-body">
-            <form method="post" action="<?= base_url() ?>valoracion/guardar_urls/">
+        <div class="card-header text-white bg-primary">
+            Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> 
+        </div>
+        <form method="post" action="<?= base_url() ?>valoracion/guardar_urls/">
+            <div class="card-body">
                 <div class="form-group row">
                     <label for="cve_proyecto">Clave PP</label>
                     <div class="col-sm-2">
@@ -41,24 +50,20 @@
                 </div>
 
                 <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
+            </div>
+            <?php
+                $permisos_requeridos = array(
+                'urls.can_edit',
+                'valoracion.etapa_activa',
+                'anio_activo',
+                );
+            ?>
+            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                 <div class="card-footer text-end">
-                    <div class="row">
-
-                        <div class="col-sm-12 text-end">
-                            <?php
-                                $permisos_requeridos = array(
-                                'urls.can_edit',
-                                'valoracion.etapa_actual',
-                                );
-                            ?>
-                            <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                            <?php } ?>
-                        </div>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                 </div>
-            </form>
-        </div>
+            <?php } ?>
+        </form>
     </div>
 </div>
 

@@ -1,12 +1,18 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <main role="main" class="ml-sm-auto px-4">
     <div class="pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-3">
-                    <h2>Procesos y proyectos</h2>
+                    <h2>Planificación</h2>
                 </div>
             </div>
-
             <div class="col-sm-12 align-self-center mb-2">
                 <div class="row">
                     <div class="col-sm-11 align-self-center">
@@ -40,7 +46,7 @@
                                 </div>
                                 <?php
                                     $permisos_requeridos = array(
-                                    'proyecto.can_edit',
+                                        'proyecto.can_edit',
                                     );
                                 ?>
                                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -55,8 +61,9 @@
                     </div>
                     <?php
                         $permisos_requeridos = array(
-                        'proyecto.can_edit',
-                        'planificacion.etapa_actual',
+                            'proyecto.can_edit',
+                            'planificacion.etapa_activa',
+                            'anio_activo',
                         );
                     ?>
                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -102,8 +109,9 @@
                                         <?php if ($dependencia['carga_evaluaciones']) { ?>
                                             <p>Actualmente con solicitud de evaluaciones para el ejercicio fiscal</p>
                                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-                                                <form method="post" action="<?= base_url() ?>dependencias/desactivar_evaluaciones">
+                                                <form method="post" action="<?= base_url() ?>nocarga_evaluaciones/guardar">
                                                     <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                    <input type="hidden" name="periodo" value="<?= $anio_sesion ?>">
                                                     <button class="btn btn-primary" type="submit" >
                                                         No se solicitarán evaluaciones para el ejercicio fiscal
                                                     </button>
@@ -112,8 +120,9 @@
                                         <?php } else { ?>
                                             <p>Sin solicitud de evaluaciones para el ejercicio fiscal</p>
                                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
-                                                <form method="post" action="<?= base_url() ?>dependencias/activar_evaluaciones">
+                                                <form method="post" action="<?= base_url() ?>nocarga_evaluaciones/eliminar">
                                                     <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
+                                                    <input type="hidden" name="periodo" value="<?= $anio_sesion ?>">
                                                     <button class="btn btn-primary" type="submit" >
                                                         Solicitar evaluaciones para el ejercicio fiscal
                                                     </button>
@@ -127,26 +136,33 @@
                                 <div class="card mt-0 mb-3 border-0 texto-menor">
                                     <div class="card-body">
                                         <h4>Oficio de solicitud de evaluaciones</h4>
-                                        <p>Una vez cargada la propuesta de evaluaciones a realizar en 2023, favor de adjuntar el oficio mediante el que se hace la solicitud.</p>
+                                        <p>Una vez cargada la propuesta de evaluaciones a realizar en <?=$anio_sesion?>, favor de adjuntar el oficio mediante el que se hace la solicitud.</p>
                                         <p>Cargar un sólo documento en formato PDF incluyendo el oficio y el reporte de propuestas de evaluación.</p>
                                         <p>En caso de no solicitar evaluaciones para el ejercicio fiscal actual, de igual forma le solicitamos cargar el oficio de confirmación.</p>
                                         <p class="text-end">Máximo 9 MB.</p>
                                         <div class="mt-3">
+                                            <?php
+                                                $prefijo = 'sol_ev' ;
+                                                $tipo_archivo = 'pdf';
+                                                $nombre_archivo = $prefijo . '_' . $cve_dependencia . '_' . $anio_sesion . '.' . $tipo_archivo;
+                                                $dir_docs = './doc/';
+                                                $url_actual = base_url() . 'proyectos' ;
+                                                $descripcion = 'solicitud evaluacion';
+                                            ?>
                                             <?php 
-                                            $nombre_archivo = 'oficio_' . $nom_dependencia . '.pdf';
-                                            $nombre_archivo_fs = './oficios/' . $nombre_archivo;
-                                            $nombre_archivo_url = base_url() . 'oficios/' . $nombre_archivo;
-                                            if ( file_exists($nombre_archivo_fs) ) { ?>
-                                            <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="30"></span>Oficio cargado</a>
+                                                $nombre_archivo_fs = $dir_docs . $nombre_archivo;
+                                                $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
+                                                if ( file_exists($nombre_archivo_fs) ) { ?>
+                                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="30"></span>Oficio cargado</a>
                                             <?php } ?>
                                         </div>
                                     </div>
                                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                         <div class="card-footer text-center">
-                                            <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/oficio_dependencia">
+                                            <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/subir">
                                                 <div class="row text-danger">
                                                     <?php if ($error) { 
-                                                    echo $error;
+                                                        echo $error;
                                                     } ?>
                                                 </div>
                                                 <div class="row">
@@ -158,6 +174,10 @@
                                                     </div>
                                                 </div>
                                                 <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                                                <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
+                                                <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
+                                                <input type="hidden" name="url_actual" value="<?=$url_actual?>">
+                                                <input type="hidden" name="descripcion" value="<?=$descripcion?>">
                                             </form>
                                         </div>
                                     <?php } ?>
@@ -228,9 +248,10 @@
                                             <?php } ?>
                                         <?php } ?>
                                         <p>
-                                        <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['cve_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
+                                        <a href="<?=base_url()?>proyectos/detalle/<?=$proyectos_item['id_proyecto']?>"><?= $proyectos_item['nom_proyecto'] ?></a>
                                         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                                             <?php if ($cve_dependencia == $proyectos_item['cve_dependencia'] and ($proyectos_item['cve_programa'] == 'PRO'.$cve_dependencia)) { ?>
+                                                <?php
                                                 $item_eliminar = 'Proyecto: '.$proyectos_item['cve_proyecto']. ' ' .$proyectos_item['nom_proyecto'];
                                                 $url = base_url() . "proyectos/eliminar/". $proyectos_item['id_proyecto']; ?>
                                                 <a class="ps-3" href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
@@ -247,36 +268,36 @@
                                     <div class="col-sm-2">
                                         <?php
 
-                                        if ($proyectos_item['status_actual'] == '0') {
+                                        if ($proyectos_item['evaluaciones_propuestas'] == '0') {
                                             $fondo_actual = 'bg-secondary';
                                         } else{
                                             $fondo_actual = 'bg-primary';
                                         }
 
                                         $fondo_calificadas = 'bg-dark';
-                                        if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
+                                        if (($proyectos_item['evaluaciones_propuestas'] == $proyectos_item['propuestas_calificadas']) and 
                                         ($proyectos_item['num_calif_dependencias'] == $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
                                             $fondo_calificadas = 'bg-success';
                                         }
-                                        if (($proyectos_item['status_actual'] == $proyectos_item['propuestas_calificadas']) and 
+                                        if (($proyectos_item['evaluaciones_propuestas'] == $proyectos_item['propuestas_calificadas']) and 
                                         ($proyectos_item['num_calif_dependencias'] < $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
                                             $fondo_calificadas = 'bg-warning';
                                         }
-                                        if ($proyectos_item['status_actual'] > $proyectos_item['propuestas_calificadas']) {
+                                        if ($proyectos_item['evaluaciones_propuestas'] > $proyectos_item['propuestas_calificadas']) {
                                             $fondo_calificadas = 'bg-danger';
                                         }
-                                        if (($proyectos_item['propuestas_calificadas'] == '0') and ($proyectos_item['status_actual'] == '0')) {
+                                        if (($proyectos_item['propuestas_calificadas'] == '0') and ($proyectos_item['evaluaciones_propuestas'] == '0')) {
                                             $fondo_calificadas = 'bg-secondary';
                                         }
 
-                                        if ($proyectos_item['status_previo'] == '0') {
+                                        if ($proyectos_item['evaluaciones_previas'] == '0') {
                                             $fondo_previo = 'bg-secondary';
                                         } else{
                                             $fondo_previo = 'bg-primary';
                                         } ?>
-                                        <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $proyectos_item['status_actual'] ?></span> evaluaciones propuestas<br>
+                                        <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $proyectos_item['evaluaciones_propuestas'] ?></span> evaluaciones propuestas<br>
                                         <span class="badge rounded-pill <?=$fondo_calificadas?>"><?= $proyectos_item['propuestas_calificadas'] ?></span> propuestas calificadas<br>
-                                        <span class="badge rounded-pill <?=$fondo_previo?>"><?= $proyectos_item['status_previo'] ?></span> evaluaciones previas</p>
+                                        <span class="badge rounded-pill <?=$fondo_previo?>"><?= $proyectos_item['evaluaciones_previas'] ?></span> evaluaciones previas</p>
                                     </div>
                                 </div>
                             </div>

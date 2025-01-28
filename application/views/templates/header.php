@@ -19,14 +19,6 @@
 
         <!-- jquery -->
         <script src="<?=base_url()?>js/jquery-3.6.3.min.js"></script>
-
-        <!-- bootstrap 5.3 
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-        -->
-
     </head>
     <body>
         <nav class="navbar navbar-expand-sm navbar-light fixed-top d-print-none pr-3">
@@ -42,11 +34,29 @@
 
             <!-- opciones del menu -->
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="col-sm-7">
-                <h5 class="my-0 mr-md-auto texto-titulo">Sistema de Evaluación de Guanajuato</h5>
+                <div class="col-sm-7 mt-2">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="my-0 mr-md-auto texto-titulo">Sistema de Evaluación de Guanajuato</h5>
+                        </div>
+                        <div class="col">
+                            <form method="post" name="frm_update_anio" action="<?= base_url() ?>Inicio/update_anio_sesion">
+                                <select class="form-select text-primary-emphasis bg-primary-subtle fw-bold" name="anio_sesion" id="anio_sesion" onchange="frm_update_anio.submit()">
+                                <?php foreach ($userdata['periodos'] as $periodos_item) { ?>
+                                    <option value="<?=$periodos_item['periodo']?>" <?= ($periodos_item['periodo'] == $userdata['anio_sesion']) ? 'selected' : ''?> ><?=$periodos_item['periodo']?></option>
+                                <?php } ?>
+                                </select>
+                                <input type="hidden" name="previous_url" value="<?= current_url() ?>">
+                            </form>
+                        </div>
+                    </div>
+
                     <hr class="mb-0 mt-2 pt-0 pb-0 " />
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item d-print-none"><a class="nav-link" href="<?=base_url()?>">Inicio</a></li>
+                        <?php
+                            $permisos_usuario = $userdata['permisos_usuario'];
+                        ?>
                         <?php
                             $permisos_requeridos = array(
                             'planificacion.can_view',
@@ -106,10 +116,16 @@
                     </ul>
                 </div>
                 <div class="col-sm-5 text-end d-print-none">
-                    <p class="m-2 texto-titulo"><?php echo $nom_usuario ?> · <?php echo $nom_dependencia ?> | <a class="m-2 texto-titulo" href="<?= base_url() ?>inicio/cerrar_sesion">Cerrar sesión</a></p>
+                    <p class="m-2 texto-titulo"><?= $userdata['nom_usuario'] ?> · <?= $userdata['nom_dependencia'] ?> | <a class="m-2 texto-titulo" href="<?= base_url() ?>inicio/cerrar_sesion">Cerrar sesión</a></p>
                 </div>
             </div> <!-- opciones del menu -->
         </nav>
         <div class="container-fluid">
-        <div class="printer_margin d-none d-print-block">
-        </div>
+            <div class="printer_margin d-none d-print-block">
+            </div>
+
+<script>
+    function update_anio_sesion() {
+
+    }
+</script>

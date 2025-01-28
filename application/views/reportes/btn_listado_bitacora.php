@@ -1,4 +1,4 @@
-<a href="<?= base_url() ?>reportes/listado_bitacora_01" style="text-decoration: none; color: black">
+<a href="<?= base_url() ?>reportes/listado_bitacora" style="text-decoration: none; color: black">
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">

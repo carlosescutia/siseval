@@ -7,13 +7,16 @@
             <div class="col-md-6">
                 <h3>Listados</h3>
                     <?php
+                        $permisos_usuario = $userdata['permisos_usuario'];
+                    ?>
+                    <?php
                         $permisos_requeridos = array(
                         'reportes_supervisor.can_view',
                         'reportes_secretario.can_view',
                         'reportes_administrador.can_view',
                         );
                         if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
-                            include "btn_listado_programas_agenda_evaluacion_01.php";
+                            include "btn_listado_programas_agenda_evaluacion.php";
                         } 
                     ?>
                     <?php
@@ -32,7 +35,7 @@
                         'reportes_administrador.can_view',
                         );
                         if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
-                            include "btn_listado_propuestas_evaluacion_01.php";
+                            include "btn_listado_propuestas_evaluacion.php";
                         } 
                     ?>
                     <?php
@@ -54,7 +57,7 @@
                         'reportes_administrador.can_view',
                         );
                         if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
-                            include "btn_listado_bitacora_01.php";
+                            include "btn_listado_bitacora.php";
                         } 
                     ?>
             </div>

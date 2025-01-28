@@ -1,16 +1,13 @@
 <?php
 class Valoracion extends CI_Controller {
     // globales
-    var $etapa_actual;
+    var $etapa_modulo;
+    var $nom_etapa_modulo;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('usuarios_model');
-        $this->load->model('accesos_sistema_model');
-        $this->load->model('opciones_sistema_model');
-        $this->load->model('bitacora_model');
-        $this->load->model('parametros_sistema_model');
+        $this->load->library('funciones_sistema');
 
         $this->load->model('proyectos_model');
         $this->load->model('dependencias_model');
@@ -27,60 +24,22 @@ class Valoracion extends CI_Controller {
         $this->load->model('valoraciones_evaluador_model');
         $this->load->model('valoraciones_evaluacion_model');
         $this->load->model('evaluadores_model');
+        $this->load->model('periodos_model');
 
-        // globales
-        $this->etapa_actual = 4;
-    }
-
-    public function get_userdata()
-    {
-        $cve_usuario = $this->session->userdata('cve_usuario');
-        $cve_rol = $this->session->userdata('cve_rol');
-        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-        $data['cve_rol'] = $cve_rol;
-        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-        $data['error'] = $this->session->flashdata('error');
-        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
-
-        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-        if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'valoracion.etapa_actual'); 
-        }
-
-        return $data;
-    }
-
-    public function registro_bitacora($accion, $entidad, $valor)
-    {
-        // registro en bitacora
-        $separador = ' -> ';
-        $usuario = $this->session->userdata('usuario');
-        $nom_usuario = $this->session->userdata('nom_usuario');
-        $nom_dependencia = $this->session->userdata('nom_dependencia');
-        $data = array(
-            'fecha' => date("Y-m-d"),
-            'hora' => date("H:i"),
-            'origen' => $_SERVER['REMOTE_ADDR'],
-            'usuario' => $usuario,
-            'nom_usuario' => $nom_usuario,
-            'nom_dependencia' => $nom_dependencia,
-            'accion' => $accion,
-            'entidad' => $entidad,
-            'valor' => $valor
-        );
-        $this->bitacora_model->guardar($data);
+        $this->etapa_modulo = 4;
+        $this->nom_etapa_modulo = 'valoracion.etapa_activa';
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $periodos = $this->proyectos_model->get_anios_proyectos();
+            $this->session->set_userdata('periodos', $periodos);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -100,15 +59,17 @@ class Valoracion extends CI_Controller {
                 }
             }
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
+            $data['error'] = $this->session->flashdata('error');
 
-            $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion($cve_dependencia_filtro);
-            $data['dependencias'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia_filtro);
+            $anio_sesion = $this->session->userdata('anio_sesion');
+            $data['proyectos'] = $this->proyectos_model->get_programas_agenda_evaluacion_valoracion($cve_dependencia_filtro, $anio_sesion);
+            $data['dependencias'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia_filtro, $anio_sesion);
             if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
 
-            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia);
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_evaluaciones($cve_dependencia, $anio_sesion);
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar_archivos');
@@ -125,10 +86,11 @@ class Valoracion extends CI_Controller {
     public function documento_opinion_detalle($cve_documento_opinion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+            $data['error'] = $this->session->flashdata('error');
 
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
@@ -164,7 +126,7 @@ class Valoracion extends CI_Controller {
             $accion = 'agregó';
             $entidad = 'documentos_opinion';
             $valor = 'doc_op ' . $cve_documento_opinion . ' nuevo';
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             $this->documento_opinion_detalle($cve_documento_opinion);
 
@@ -192,7 +154,7 @@ class Valoracion extends CI_Controller {
             $accion = 'modificó';
             $entidad = 'documentos_opinion';
             $valor = 'doc_op ' . $cve_documento_opinion . ' revision';
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             redirect('valoracion');
 
@@ -225,7 +187,7 @@ class Valoracion extends CI_Controller {
                 }
                 $entidad = 'documentos_opinion';
                 $valor = $cve_documento_opinion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $cve_documento_opinion);
@@ -249,7 +211,7 @@ class Valoracion extends CI_Controller {
             $accion = 'agregó';
             $entidad = 'recomendaciones';
             $valor = $cve_recomendacion;
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             redirect('valoracion/documento_opinion_detalle/' . $cve_documento_opinion);
 
@@ -285,7 +247,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'recomendaciones';
                 $valor = $cve_recomendacion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $recomendacion['cve_documento_opinion']);
@@ -312,7 +274,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'recomendaciones';
                 $valor = $cve_recomendacion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/plan_accion_detalle/' . $recomendacion['id_plan_accion']);
@@ -338,7 +300,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'eliminó';
                 $entidad = 'recomendaciones';
                 $valor = "Recomendacion ". $cve_recomendacion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             } else {
                 $this->session->set_flashdata('error_recomendaciones', 'No se puede eliminar la recomendación porque ya tiene Valoraciones.');
@@ -353,10 +315,10 @@ class Valoracion extends CI_Controller {
     public function valoracion_recomendacion_detalle($cve_valoracion_recomendacion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['valoracion_recomendacion'] = $this->valoraciones_recomendacion_model->get_valoracion_recomendacion($cve_valoracion_recomendacion);
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($data['valoracion_recomendacion']['cve_documento_opinion']);
@@ -389,7 +351,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'agregó';
                 $entidad = 'valoraciones_recomendacion';
                 $valor = 'doc_op ' . $cve_valoracion_recomendacion . ' nuevo';
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             $this->valoracion_recomendacion_detalle($cve_valoracion_recomendacion);
@@ -416,12 +378,16 @@ class Valoracion extends CI_Controller {
                 );
                 $cve_valoracion_recomendacion = $this->valoraciones_recomendacion_model->guardar($data, $valoracion_recomendacion['cve_valoracion_recomendacion']);
 
+                $data['userdata'] = $this->session->userdata;
+
                 $cve_documento_opinion = $valoracion_recomendacion['cve_documento_opinion'];
                 $num_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_num_valoraciones_documento_opinion($cve_documento_opinion);
                 $status_valoraciones_documento_opinion = $this->valoraciones_recomendacion_model->get_status_valoraciones_documento_opinion($cve_documento_opinion);
                 // probar si se completaron las valoraciones solamente si todas las valoraciones tienen status valorada
-                $num_supervisores = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+                $num_supervisores = $this->periodos_model->get_periodo_nom_periodo($data['userdata']['anio_sesion'])['num_supervisores'];
                 $num_recomendaciones = $this->recomendaciones_model->get_num_recomendaciones_documento_opinion($cve_documento_opinion);
+
+
                 if ($num_valoraciones_documento_opinion == ($num_supervisores * $num_recomendaciones) and $status_valoraciones_documento_opinion == 'valorada') {
 
                     // probar si no hay observaciones
@@ -448,7 +414,7 @@ class Valoracion extends CI_Controller {
                 }
                 $entidad = 'valoraciones_recomendacion';
                 $valor = $cve_valoracion_recomendacion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/documento_opinion_detalle/' . $valoracion_recomendacion['cve_documento_opinion']);
@@ -471,7 +437,7 @@ class Valoracion extends CI_Controller {
             $accion = 'eliminó';
             $entidad = 'valoraciones_recomendacion';
             $valor = "valoracion_recomendacion ". $cve_valoracion_recomendacion;
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             redirect('valoracion/documento_opinion_detalle/' . $valoracion_recomendacion['cve_documento_opinion']);
 
@@ -493,10 +459,11 @@ class Valoracion extends CI_Controller {
     public function plan_accion_detalle($id_plan_accion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+            $data['error'] = $this->session->flashdata('error');
 
             $data['plan_accion'] = $this->planes_accion_model->get_plan_accion($id_plan_accion);
             $cve_documento_opinion = $data['plan_accion']['cve_documento_opinion'];
@@ -535,7 +502,7 @@ class Valoracion extends CI_Controller {
             $accion = 'agregó';
             $entidad = 'planes_accion';
             $valor = 'plan_acc ' . $id_plan_accion;
-            $this->registro_bitacora($accion, $entidad, $valor);
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             $this->plan_accion_detalle($id_plan_accion);
 
@@ -568,7 +535,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'planes_accion';
                 $valor = 'plan_accion ' . $id_plan_accion . ' revision';
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
                 redirect(base_url() . 'valoracion');
             } else {
@@ -584,10 +551,10 @@ class Valoracion extends CI_Controller {
     public function actividades_detalle($id_actividad)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['actividad'] = $this->actividades_model->get_actividad($id_actividad);
             $data['plan_accion'] = $this->planes_accion_model->get_plan_accion_actividad($id_actividad);
@@ -604,10 +571,10 @@ class Valoracion extends CI_Controller {
     public function actividades_nuevo()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $datos = $this->input->post();
             if ($datos) {
@@ -655,7 +622,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'agregó';
                 $entidad = 'actividades';
                 $valor = 'actividad ' . $id_actividad;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
                 redirect(base_url() . 'valoracion/plan_accion_detalle/' . $id_plan_accion);
             }
@@ -677,7 +644,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'eliminó';
                 $entidad = 'actividades';
                 $valor = "Actividad ". $id_actividad;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
                 // eliminado
                 $this->actividades_model->eliminar($id_actividad);
@@ -693,10 +660,10 @@ class Valoracion extends CI_Controller {
     public function valoracion_plan_accion_detalle($id_valoracion_plan_accion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['valoracion_plan_accion'] = $this->valoraciones_plan_accion_model->get_valoracion_plan_accion($id_valoracion_plan_accion);
             $data['plan_accion'] = $this->planes_accion_model->get_plan_accion($data['valoracion_plan_accion']['id_plan_accion']);
@@ -733,7 +700,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'agregó';
                 $entidad = 'valoraciones_plan_accion';
                 $valor = 'valoracion_plan_acc ' . $id_valoracion_plan_accion . ' nuevo';
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             $this->valoracion_plan_accion_detalle($id_valoracion_plan_accion);
@@ -760,11 +727,13 @@ class Valoracion extends CI_Controller {
                 );
                 $id_valoracion_plan_accion = $this->valoraciones_plan_accion_model->guardar($data, $valoracion_plan_accion['id_valoracion_plan_accion']);
 
+                $data['userdata'] = $this->session->userdata;
+
                 $id_plan_accion = $valoracion_plan_accion['id_plan_accion'];
                 $num_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_num_valoraciones_plan_accion($id_plan_accion);
                 $status_valoraciones_plan_accion = $this->valoraciones_plan_accion_model->get_status_valoraciones_plan_accion($id_plan_accion);
                 // probar si se completaron las valoraciones solamente si todas las valoraciones tienen status valorada
-                $num_supervisores = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+                $num_supervisores = $this->periodos_model->get_periodo_nom_periodo($data['userdata']['anio_sesion'])['num_supervisores'];
                 if ($num_valoraciones_plan_accion == $num_supervisores and $status_valoraciones_plan_accion == 'valorada') {
 
                     // probar si no hay observaciones
@@ -791,7 +760,7 @@ class Valoracion extends CI_Controller {
                 }
                 $entidad = 'valoraciones_plan_accion';
                 $valor = $id_valoracion_plan_accion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('valoracion/plan_accion_detalle/' . $valoracion_plan_accion['id_plan_accion']);
@@ -801,6 +770,27 @@ class Valoracion extends CI_Controller {
         }
     }
 
+    public function valoracion_plan_accion_eliminar($id_valoracion_plan_accion)
+    {
+        if ($this->session->userdata('logueado')) {
+
+            $valoracion_plan_accion = $this->valoraciones_plan_accion_model->get_valoracion_plan_accion($id_valoracion_plan_accion);
+
+            // eliminado
+            $this->valoraciones_plan_accion_model->eliminar($id_valoracion_plan_accion);
+            //
+            // registro en bitacora
+            $accion = 'eliminó';
+            $entidad = 'valoraciones_plan_accion';
+            $valor = "valoracion_plan_accion ". $id_valoracion_plan_accion;
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
+
+            redirect('valoracion/plan_accion_detalle/' . $valoracion_plan_accion['id_plan_accion']);
+
+        } else {
+            redirect('inicio/login');
+        }
+    }
 
     /*
     * /Plan de acción
@@ -815,10 +805,11 @@ class Valoracion extends CI_Controller {
     public function valoracion_evaluador_detalle($id_valoracion_evaluador)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+            $data['error'] = $this->session->flashdata('error');
 
             $data['valoracion_evaluador'] = $this->valoraciones_evaluador_model->get_valoracion_evaluador($id_valoracion_evaluador);
 
@@ -848,7 +839,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'agregó';
                 $entidad = 'valoraciones_evaluador';
                 $valor = 'valoracion evaluador ' . $id_valoracion_evaluador . ' nuevo';
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             } else {
                 $id_valoracion_evaluador = $valoracion_evaluador_existente['id_valoracion_evaluador'];
             }
@@ -883,7 +874,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'valoraciones_evaluador';
                 $valor = $id_valoracion_evaluador;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect(base_url() . 'valoracion/valoracion_evaluador_detalle/' . $id_valoracion_evaluador);
@@ -896,10 +887,10 @@ class Valoracion extends CI_Controller {
     public function frm_valoracion_evaluador($id_valoracion_evaluador)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['valoracion_evaluador'] = $this->valoraciones_evaluador_model->get_valoracion_evaluador($id_valoracion_evaluador);
 
@@ -914,10 +905,10 @@ class Valoracion extends CI_Controller {
     public function valoracion_evaluador_seleccionar_evaluador($id_valoracion_evaluador)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $filtros = $this->input->post();
             if ($filtros) {
@@ -957,7 +948,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'valoraciones_evaluador';
                 $valor = $id_valoracion_evaluador;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect(base_url() . 'valoracion/valoracion_evaluador_detalle/' . $id_valoracion_evaluador);
@@ -981,10 +972,11 @@ class Valoracion extends CI_Controller {
     public function valoracion_evaluacion_detalle($id_valoracion_evaluacion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+            $data['error'] = $this->session->flashdata('error');
 
             $data['valoracion_evaluacion'] = $this->valoraciones_evaluacion_model->get_valoracion_evaluacion($id_valoracion_evaluacion);
 
@@ -1014,7 +1006,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'agregó';
                 $entidad = 'valoraciones_evaluacion';
                 $valor = 'valoracion evaluador ' . $id_valoracion_evaluacion . ' nuevo';
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             } else {
                 $id_valoracion_evaluacion = $valoracion_evaluacion_existente['id_valoracion_evaluacion'];
             }
@@ -1028,10 +1020,10 @@ class Valoracion extends CI_Controller {
     public function frm_valoracion_evaluacion($id_valoracion_evaluacion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['valoracion_evaluacion'] = $this->valoraciones_evaluacion_model->get_valoracion_evaluacion($id_valoracion_evaluacion);
 
@@ -1075,7 +1067,7 @@ class Valoracion extends CI_Controller {
                 $accion = 'modificó';
                 $entidad = 'valoraciones_evaluacion';
                 $valor = $id_valoracion_evaluacion;
-                $this->registro_bitacora($accion, $entidad, $valor);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect(base_url() . 'valoracion/valoracion_evaluacion_detalle/' . $valoracion_evaluacion['id_valoracion_evaluacion']);
@@ -1088,10 +1080,10 @@ class Valoracion extends CI_Controller {
     public function urls($id_propuesta_evaluacion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
@@ -1123,25 +1115,10 @@ class Valoracion extends CI_Controller {
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
 
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
                 $entidad = 'propuestas_evaluacion';
                 $accion = 'modificó';
                 $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             }
 

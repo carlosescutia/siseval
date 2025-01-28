@@ -1,3 +1,10 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <div class="card mt-0 mb-3">
     <div class="card-body">
         <table class="table table-striped table-sm">
@@ -36,7 +43,8 @@
                         <?php
                             $permisos_requeridos = array(
                             'plan_accion.can_edit',
-                            'valoracion.etapa_actual',
+                            'valoracion.etapa_activa',
+                            'anio_activo',
                             );
                         ?>
                         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

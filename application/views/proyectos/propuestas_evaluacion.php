@@ -1,13 +1,18 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <div class="card mt-0 mb-3 tabla-datos">
-    <div class="card-header text-white bg-primary">Propuestas de evaluación <?= $anio_propuestas ?></div>
+    <div class="card-header text-white bg-primary">Propuestas de evaluación <?= $proyecto['periodo'] ?></div>
     <div class="card-body">
         <?php foreach ($propuestas_evaluacion as $propuestas_evaluacion_item) { ?>
             <div class="col-sm-12 ps-3 alternate-color">
                 <?php if ($err_propuestas_evaluacion) { ?>
-				<div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
-					<?php echo $err_propuestas_evaluacion ?>
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
+                    <div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
+                        <?php echo $err_propuestas_evaluacion ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 <?php } ?>
                 <div class="row">
                     <div class="col-sm-8">
@@ -17,7 +22,8 @@
                             <?php
                                 $permisos_requeridos = array(
                                 'propuesta_evaluacion.can_edit',
-                                'planificacion.etapa_actual',
+                                'planificacion.etapa_activa',
+                                'anio_activo',
                                 );
                             ?>
                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -52,23 +58,28 @@
         <?php } ?>
     </div>
     <?php
+        $permisos_usuario = $userdata['permisos_usuario'];
+        $cve_dependencia = $userdata['cve_dependencia'];
+        $cve_rol = $userdata['cve_rol'];
+
         $permisos_requeridos = array(
         'propuesta_evaluacion.can_edit',
-        'planificacion.etapa_actual',
+        'planificacion.etapa_activa',
+        'anio_activo',
         );
     ?>
     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
         <?php if ( $cve_rol == 'usr' ) { ?>
             <?php if ( $num_propuestas_evaluacion_proyecto_dependencia['num'] == 0 ) { ?>
                 <div class="card-footer text-end">
-                    <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['cve_proyecto']?>">
+                    <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['id_proyecto']?>">
                         <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
                     </form>
                 </div>
             <?php } ?>
         <?php } else { ?>
             <div class="card-footer text-end">
-                <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['cve_proyecto']?>">
+                <form method="post" action="<?= base_url() ?>propuestas_evaluacion/nuevo/<?=$proyecto['id_proyecto']?>">
                     <button type="submit" class="btn btn-primary btn-sm">Agregar</button>
                 </form>
             </div>

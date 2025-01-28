@@ -5,9 +5,9 @@ class Eventos_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_eventos() {
-        $sql = 'select * from eventos order by id_evento;';
-        $query = $this->db->query($sql);
+    public function get_eventos($periodo) {
+        $sql = 'select * from eventos where extract(year from fecha_evento) = ? order by id_evento;';
+        $query = $this->db->query($sql, array($periodo));
         return $query->result_array();
     }
 

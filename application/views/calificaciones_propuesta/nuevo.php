@@ -135,7 +135,7 @@
                                 ?>
                                 <div class="card border-<?=$color?>">
                                     <div class="card-header">
-                                        Semáforo de desempeño físico <?= $anio_propuestas - 1 ?>
+                                        Semáforo de desempeño físico <?= $proyecto['periodo'] - 1 ?>
                                     </div>
                                     <div class="card-body text-<?=$color?>">
                                         <?php if ($semaforo_proyecto) { ?>

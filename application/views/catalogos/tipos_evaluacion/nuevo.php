@@ -16,8 +16,14 @@
         <div class="col-md-12">
             <div class="form-group row">
                 <label for="nom_tipo_evaluacion" class="col-sm-2 col-form-label">Nombre</label>
-                <div class="col-sm-10">
+                <div class="col-sm-4">
                     <input type="text" class="form-control" name="nom_tipo_evaluacion" id="nom_tipo_evaluacion">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="orden" class="col-sm-2 col-form-label">Orden</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" name="orden" id="orden">
                 </div>
             </div>
         </div>

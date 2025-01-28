@@ -26,7 +26,8 @@
                     <?php
                         $permisos_requeridos = array(
                         'plan_accion.can_edit',
-                        'valoracion.etapa_actual',
+                        'valoracion.etapa_activa',
+                        'anio_activo',
                         );
                     ?>
                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

@@ -1,5 +1,5 @@
 <main role="main" class="ml-sm-auto px-4">
-    <div class="card mt-0 mb-3 tabla-datos">
+    <div class="card mt-3 mb-3 tabla-datos">
         <div class="card-header text-white bg-primary">Calificación <?= $calificacion_propuesta['nom_dependencia'] ?></div>
         <div class="card-body">
             <form method="post" action="<?= base_url() ?>calificaciones_propuesta/guardar/">
@@ -140,7 +140,7 @@
                                 ?>
                                 <div class="card border-<?=$color?>">
                                     <div class="card-header">
-                                        Semáforo de desempeño físico 2022
+                                        Semáforo de desempeño físico <?= $proyecto['periodo'] - 1 ?>
                                     </div>
                                     <div class="card-body text-<?=$color?>">
                                         <?php if ($semaforo_proyecto) { ?>
@@ -198,9 +198,13 @@
                 <input type="hidden" name="clasificacion_supervisor" value="0">
 
                 <?php
+                    $permisos_usuario = $userdata['permisos_usuario'];
+                    $cve_dependencia = $userdata['cve_dependencia'];
+
                     $permisos_requeridos = array(
-                    'calificacion_propuesta.can_edit',
-                    'planificacion.etapa_actual',
+                        'calificacion_propuesta.can_edit',
+                        'planificacion.etapa_activa',
+                        'anio_activo',
                     );
                 ?>
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

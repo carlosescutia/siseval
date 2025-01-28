@@ -1,11 +1,18 @@
-<div class="card mt-0 mb-3 tabla-datos">
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $cve_rol = $userdata['cve_rol'];
+?>
+<div class="card mt-3 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
     <div class="card-body">
         <?php
             $permisos_requeridos = array(
             'propuesta_evaluacion.can_edit',
             'propuesta_evaluacion.can_exclude',
-            'planificacion.etapa_actual',
+            'planificacion.etapa_activa',
+            'anio_activo',
             );
         ?>
         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -47,7 +54,7 @@
                         <button type="submit" class="btn btn-primary btn-sm form-control">Guardar</button>
                     </div>
                     <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
-                    <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
+                    <input type="hidden" name="id_proyecto" value="<?= $propuesta_evaluacion['id_proyecto']; ?>">
                     <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
                     <hr >
                 </div>
@@ -317,7 +324,7 @@
 
 
             <input type="hidden" name="id_propuesta_evaluacion" value="<?= $propuesta_evaluacion['id_propuesta_evaluacion']; ?>">
-            <input type="hidden" name="cve_proyecto" value="<?= $propuesta_evaluacion['cve_proyecto']; ?>">
+            <input type="hidden" name="id_proyecto" value="<?= $propuesta_evaluacion['id_proyecto']; ?>">
             <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
         </form>
         <div class="card-footer text-end">
@@ -326,7 +333,8 @@
                     <?php
                         $permisos_requeridos = array(
                         'propuesta_evaluacion.can_edit',
-                        'planificacion.etapa_actual',
+                        'planificacion.etapa_activa',
+                        'anio_activo',
                         );
                     ?>
                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -339,27 +347,35 @@
                 <div class="col-sm-6 texto-menor text-end">
                     <div class="row">
                         <div class="col-sm-4">
+                            <?php
+                                $prefijo = 'adj_prop_ev' ;
+                                $tipo_archivo = 'zip';
+                                $nombre_archivo = $prefijo . '_' . $id_propuesta_evaluacion . '.' . $tipo_archivo;
+                                $dir_docs = './doc/';
+                                $url_actual = uri_string();
+                                $descripcion = 'propuesta evaluacion';
+                            ?>
                             <?php 
-                            $nombre_archivo = 'adjunto_' . $id_propuesta_evaluacion . '.zip';
-                            $nombre_archivo_fs = './adjuntos_propuestas/' . $nombre_archivo;
-                            $nombre_archivo_url = base_url() . 'adjuntos_propuestas/' . $nombre_archivo;
-                            if ( file_exists($nombre_archivo_fs) ) { ?>
-                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
+                                $nombre_archivo_fs = $dir_docs . $nombre_archivo;
+                                $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
+                                if ( file_exists($nombre_archivo_fs) ) { ?>
+                                    <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-zip.svg" height="30"></span>Adjunto de la propuesta</a>
                             <?php } ?>
                         </div>
                         <?php
                             $permisos_requeridos = array(
                             'propuesta_evaluacion.can_edit',
-                            'planificacion.etapa_actual',
+                            'planificacion.etapa_activa',
+                            'anio_activo',
                             );
                         ?>
                         <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                             <?php if ($cve_dependencia == $propuesta_evaluacion['cve_dependencia']) { ?>
                                 <div class="col-sm-8">
-                                    <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/adjunto_propuesta">
+                                    <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/subir">
                                         <div class="row text-danger">
                                             <?php if ($error) { 
-                                            echo $error;
+                                                echo $error;
                                             } ?>
                                         </div>
                                         <div class="row">
@@ -379,8 +395,11 @@
                                                 </div>
                                             </div>                
                                         </div>
-                                        <input type="hidden" name="id_propuesta_evaluacion" value="<?=$id_propuesta_evaluacion?>">
                                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                                        <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
+                                        <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
+                                        <input type="hidden" name="url_actual" value="<?=$url_actual?>">
+                                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
                                     </form>
                                 </div>
                             <?php } ?>

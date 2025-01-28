@@ -1,7 +1,8 @@
 <?php
     $permisos_requeridos = array(
     'documento_opinion.can_edit',
-    'valoracion.etapa_actual',
+    'valoracion.etapa_activa',
+    'anio_activo',
     );
 ?>
 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -18,16 +19,23 @@
                     <a href="javascript:window.print()" class="btn btn-primary boton">Imprimir Documento de opinión</a>
                     <hr />
                 </div>
+                <?php
+                    $prefijo = 'doc_op' ;
+                    $tipo_archivo = 'pdf';
+                    $nombre_archivo = $prefijo . '_' . $documento_opinion['cve_documento_opinion'] . '.' . $tipo_archivo;
+                    $dir_docs = './doc/';
+                    $url_actual = base_url() . 'valoracion/documento_opinion_detalle/' . $documento_opinion['cve_documento_opinion'] ;
+                    $descripcion = 'doc opinion';
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
+                    $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
+                ?>
                 <?php 
-                    $nombre_archivo = 'doc_op_' . $documento_opinion['cve_documento_opinion'] . '.pdf';
-                    $nombre_archivo_fs = './doc/' . $nombre_archivo;
-                    $nombre_archivo_url = base_url() . 'doc/' . $nombre_archivo;
                     if ( file_exists($nombre_archivo_fs) ) { ?>
                         <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="30"></span>Documento de opinión firmado</a>
                 <?php } ?>
             </div>
             <div class="card-footer">
-                <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/documento_opinion">
+                <form method="post" enctype="multipart/form-data" action="<?=base_url()?>archivos/subir">
                     <div class="row">
                         <div class="col-md-8">
                             <input type="file" class="form-control-file" name="subir_archivo">
@@ -36,8 +44,11 @@
                             <button type="submit" class="btn btn-primary btn-sm">Subir pdf</button>
                         </div>
                     </div>
-                    <input type="hidden" name="cve_documento_opinion" value="<?=$documento_opinion['cve_documento_opinion']?>">
                     <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
+                    <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
+                    <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
+                    <input type="hidden" name="url_actual" value="<?=$url_actual?>">
+                    <input type="hidden" name="descripcion" value="<?=$descripcion?>">
                 </form>
             </div>
         </div>

@@ -1,3 +1,7 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+?>
 <div class="card mt-0 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Calificaciones de la propuesta</div>
     <div class="card-body">
@@ -22,7 +26,8 @@
                                     <?php
                                         $permisos_requeridos = array(
                                         'calificacion_propuesta.can_edit',
-                                        'planificacion.etapa_actual',
+                                        'planificacion.etapa_activa',
+                                        'anio_activo',
                                         );
                                     ?>
                                     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -69,8 +74,9 @@
     </div>
     <?php
         $permisos_requeridos = array(
-        'calificacion_propuesta.can_edit',
-        'planificacion.etapa_actual',
+            'calificacion_propuesta.can_edit',
+            'planificacion.etapa_activa',
+            'anio_activo',
         );
     ?>
     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

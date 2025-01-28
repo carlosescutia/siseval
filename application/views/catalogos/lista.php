@@ -7,6 +7,9 @@
             <h2>Aplicación</h2>
             <div class="row mb-3 gy-3">
                 <?php
+                    $permisos_usuario = $userdata['permisos_usuario'];
+                ?>
+                <?php
                     $permisos_requeridos = array(
                     'dependencia.can_edit',
                     );
@@ -73,6 +76,26 @@
                     if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
                         <div class="col-md-4">
                             <?php include "eventos/boton.php" ?>
+                        </div>
+                    <?php } 
+                ?>
+                <?php
+                    $permisos_requeridos = array(
+                    'periodo.can_edit',
+                    );
+                    if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                        <div class="col-md-4">
+                            <?php include "periodos/boton.php" ?>
+                        </div>
+                    <?php } 
+                ?>
+                <?php
+                    $permisos_requeridos = array(
+                    'criterio_calificacion.can_edit',
+                    );
+                    if (has_permission_or($permisos_requeridos, $permisos_usuario)) { ?>
+                        <div class="col-md-4">
+                            <?php include "criterios_calificacion/boton.php" ?>
                         </div>
                     <?php } 
                 ?>

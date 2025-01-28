@@ -1,3 +1,6 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+?>
 <table class="table table-sm table-bordered border-dark text-center">
     <thead>
         <tr>
@@ -15,21 +18,22 @@
                 // valores comunes a todos los archivos
                 $num_docs = 0; 
                 $arch_requeridos = 0;
-                $prefijo_etapa = 'g';
                 $dir_docs = 'doc/';
                 $url_actual = base_url() . 'gestion';
+                $tipo_archivo = 'pdf';
+                $icono = "bi-filetype-pdf";
             ?>
 
             <td>
                 <?php
-                    $tipo_doc = 'tr';
-                    $icono = "bi-filetype-pdf";
-                    $tipo_archivo = 'pdf';
-                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
-                    $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
+                    $prefijo = 'tr' ;
+                    $descripcion = 'term refer';
+                    $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
-                
+
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     $arch_requeridos += 1;
@@ -48,19 +52,21 @@
                 <?php
                     $permisos_requeridos = array(
                     'gestion.can_add_files',
-                    'gestion.etapa_actual',
+                    'gestion.etapa_activa',
+                    'anio_activo',
                     );
                 ?>
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
-                        <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
-                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
+                        <label tabindex="0" name="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" id="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
+                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').removeClass('d-none'); $('#btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').addClass('d-none');">
                         </label>
                         <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                         <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
                         <input type="hidden" name="url_actual" value="<?=$url_actual?>">
-                        <button id="btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
+                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
+                        <button id="btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
                             <i class="bi bi-upload boton-subir-sm"></i>
                         </button>
                         <?php if ( file_exists($nombre_archivo_fs) ) { 
@@ -74,14 +80,14 @@
             </td>
             <td>
                 <?php
-                    $tipo_doc = 'bp';
-                    $icono = "bi-filetype-pdf";
-                    $tipo_archivo = 'pdf';
-                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
-                    $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
+                    $prefijo = 'bp' ;
+                    $descripcion = 'base particip';
+                    $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
-                
+
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     ?>
@@ -90,14 +96,15 @@
 
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
-                        <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
-                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
+                        <label tabindex="0" name="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" id="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
+                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').removeClass('d-none'); $('#btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').addClass('d-none');">
                         </label>
                         <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                         <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
                         <input type="hidden" name="url_actual" value="<?=$url_actual?>">
-                        <button id="btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
+                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
+                        <button id="btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
                             <i class="bi bi-upload boton-subir-sm"></i>
                         </button>
                         <?php if ( file_exists($nombre_archivo_fs) ) { 
@@ -111,14 +118,14 @@
             </td>
             <td>
                 <?php
-                    $tipo_doc = 'cv';
-                    $icono = "bi-filetype-pdf";
-                    $tipo_archivo = 'pdf';
-                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
-                    $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
+                    $prefijo = 'cv' ;
+                    $descripcion = 'convocatoria';
+                    $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
-                
+
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     ?>
@@ -127,14 +134,15 @@
 
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
-                        <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
-                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
+                        <label tabindex="0" name="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" id="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
+                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').removeClass('d-none'); $('#btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').addClass('d-none');">
                         </label>
                         <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                         <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
                         <input type="hidden" name="url_actual" value="<?=$url_actual?>">
-                        <button id="btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
+                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
+                        <button id="btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
                             <i class="bi bi-upload boton-subir-sm"></i>
                         </button>
                         <?php if ( file_exists($nombre_archivo_fs) ) { 
@@ -148,14 +156,14 @@
             </td>
             <td>
                 <?php
-                    $tipo_doc = 'ct';
-                    $icono = "bi-filetype-pdf";
-                    $tipo_archivo = 'pdf';
-                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
-                    $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
+                    $prefijo = 'ct' ;
+                    $descripcion = 'contrato';
+                    $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
-                
+
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     $arch_requeridos += 1;
@@ -165,14 +173,15 @@
 
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
-                        <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
-                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
+                        <label tabindex="0" name="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" id="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
+                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').removeClass('d-none'); $('#btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').addClass('d-none');">
                         </label>
                         <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                         <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
                         <input type="hidden" name="url_actual" value="<?=$url_actual?>">
-                        <button id="btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
+                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
+                        <button id="btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
                             <i class="bi bi-upload boton-subir-sm"></i>
                         </button>
                         <?php if ( file_exists($nombre_archivo_fs) ) { 
@@ -186,14 +195,14 @@
             </td>
             <td>
                 <?php
-                    $tipo_doc = 'ef';
-                    $icono = "bi-filetype-pdf";
-                    $tipo_archivo = 'pdf';
-                    $nombre_archivo = $prefijo_etapa . $tipo_doc . '_' . strtolower($proyectos_item['cve_proyecto']) . $proyectos_item['abrev_tipo_evaluacion'] . '.' . $tipo_archivo ;
-                    $nombre_archivo_fs = './' . $dir_docs . $nombre_archivo ;
+                    $prefijo = 'ef' ;
+                    $descripcion = 'emision fallo';
+                    $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+
+                    $nombre_archivo_fs = $dir_docs . $nombre_archivo;
                     $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
                 ?>
-                
+
                 <?php if ( file_exists($nombre_archivo_fs) ) { 
                     $num_docs += 1;
                     ?>
@@ -202,14 +211,15 @@
 
                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
                     <form method="post" enctype="multipart/form-data" action="<?= base_url() ?>archivos/subir">
-                        <label tabindex="0" name="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" id="btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
-                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').removeClass('d-none'); $('#btn_arch_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>').addClass('d-none');">
+                        <label tabindex="0" name="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" id="btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>"><i class="bi bi-file-plus boton-archivo-sm"></i>
+                            <input name="subir_archivo" id="subir_archivo" type="file" class="d-none" onchange="$('#btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').removeClass('d-none'); $('#btn_arch_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>').addClass('d-none');">
                         </label>
                         <input type="hidden" name="dir_docs" value="<?=$dir_docs?>">
                         <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
                         <input type="hidden" name="tipo_archivo" value="<?=$tipo_archivo?>">
                         <input type="hidden" name="url_actual" value="<?=$url_actual?>">
-                        <button id="btn_<?=$tipo_doc?>_<?=strtolower($proyectos_item['cve_proyecto'])?><?=$proyectos_item['abrev_tipo_evaluacion']?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
+                        <input type="hidden" name="descripcion" value="<?=$descripcion?>">
+                        <button id="btn_<?=$prefijo?>_<?=strtolower($proyectos_item['id_propuesta_evaluacion'])?>" type="submit" class="btn btn-sm d-none" style="background: none; color: #28A745">
                             <i class="bi bi-upload boton-subir-sm"></i>
                         </button>
                         <?php if ( file_exists($nombre_archivo_fs) ) { 

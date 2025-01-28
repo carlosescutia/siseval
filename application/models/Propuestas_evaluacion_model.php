@@ -6,7 +6,15 @@ class Propuestas_evaluacion_model extends CI_Model {
     }
 
     public function get_propuesta_evaluacion($id_propuesta_evaluacion) {
-        $sql = 'select pe.*, te.nom_tipo_evaluacion, d.nom_dependencia from propuestas_evaluacion pe left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion left join dependencias d on pe.cve_dependencia = d.cve_dependencia where id_propuesta_evaluacion = ?;';
+        $sql = ""
+            ."select "
+            ."py.cve_proyecto, pe.*, te.nom_tipo_evaluacion, d.nom_dependencia "
+            ."from propuestas_evaluacion pe "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join dependencias d on pe.cve_dependencia = d.cve_dependencia "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where id_propuesta_evaluacion = ?"
+            ."";
         $query = $this->db->query($sql, array($id_propuesta_evaluacion));
         return $query->row_array();
     }
@@ -14,12 +22,12 @@ class Propuestas_evaluacion_model extends CI_Model {
     public function get_propuesta_evaluacion_doc_op($cve_documento_opinion) {
         $sql = ""
             ."select "
-            ."pe.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, py.nom_proyecto, py.periodo "
+            ."py.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, py.nom_proyecto, py.periodo "
             ."from "
             ."propuestas_evaluacion pe "
             ."left join dependencias d on d.cve_dependencia = pe.cve_dependencia "
             ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
-            ."left join proyectos py on py.cve_proyecto = pe.cve_proyecto "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
             ."left join documentos_opinion dop on dop.id_propuesta_evaluacion = pe.id_propuesta_evaluacion "
             ."where "
             ."dop.cve_documento_opinion = ? ; "
@@ -28,27 +36,27 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia) {
-        $sql = 'select count(*) as num from propuestas_evaluacion where cve_proyecto = ? and cve_dependencia = ? ;';
-        $query = $this->db->query($sql, array($cve_proyecto, $cve_dependencia));
+    public function get_num_propuestas_evaluacion_proyecto_dependencia($id_proyecto, $cve_dependencia) {
+        $sql = 'select count(*) as num from propuestas_evaluacion where id_proyecto = ? and cve_dependencia = ? ;';
+        $query = $this->db->query($sql, array($id_proyecto, $cve_dependencia));
         return $query->row_array();
     }
 
-    public function get_propuestas_evaluacion_proyecto($cve_proyecto) {
+    public function get_propuestas_evaluacion_proyecto($id_proyecto) {
         $sql = ""
-			."select "
-			."pe.*, te.nom_tipo_evaluacion, d.nom_dependencia, "
-			."(select count(*) from calificaciones_propuesta cap where cap.id_propuesta_evaluacion = pe.id_propuesta_evaluacion) as num_calificaciones "
-			."from  "
-			."propuestas_evaluacion pe  "
-			."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion  "
-			."left join dependencias d on pe.cve_dependencia = d.cve_dependencia  "
-			."where  "
-			."cve_proyecto = ?  "
-			."order by  "
-			."d.nom_dependencia, te.nom_tipo_evaluacion "
-			."";
-        $query = $this->db->query($sql, array($cve_proyecto));
+            ."select "
+            ."pe.*, te.nom_tipo_evaluacion, d.nom_dependencia, "
+            ."(select count(*) from calificaciones_propuesta cap where cap.id_propuesta_evaluacion = pe.id_propuesta_evaluacion) as num_calificaciones "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion  "
+            ."left join dependencias d on pe.cve_dependencia = d.cve_dependencia  "
+            ."where  "
+            ."id_proyecto = ?  "
+            ."order by  "
+            ."d.nom_dependencia, te.nom_tipo_evaluacion "
+            ."";
+        $query = $this->db->query($sql, array($id_proyecto));
         return $query->result_array();
     }
 
@@ -58,13 +66,13 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."distinct od.cve_objetivo_desarrollo, od.nom_objetivo_desarrollo "
             ."from "
             ."propuestas_evaluacion pe "
-            ."left join proyectos py on pe.cve_proyecto = py.cve_proyecto "
+            ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
             ."left join programas_metas pm on pm.cve_programa = py.cve_programa "
             ."left join metas_ods mo on pm.cve_meta_ods = mo.cve_meta_ods "
             ."left join objetivos_desarrollo od on od.cve_objetivo_desarrollo = mo.cve_objetivo_desarrollo "
             ."where "
             ."pe.id_propuesta_evaluacion = ? "
-			."";
+            ."";
         $query = $this->db->query($sql, array($id_propuesta_evaluacion));
         return $query->result_array();
     }
@@ -90,9 +98,16 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."propuestas_evaluacion "
             ."where "
             ."id_propuesta_evaluacion = ? ; "
-			."";
+            ."";
         $query = $this->db->query($sql, array($id_propuesta_evaluacion));
         return $query->row_array()['tot_info_disponible'] ?? null ;
+    }
+
+    public function get_proyecto($id_propuesta_evaluacion)
+    {
+        $sql = "select py.* from proyectos py left join propuestas_evaluacion pe on pe.id_proyecto = py.id_proyecto where pe.id_propuesta_evaluacion = ? ";
+        $query = $this->db->query($sql, array($id_propuesta_evaluacion));
+        return $query->row_array();
     }
 
     public function guardar($data, $id_propuesta_evaluacion)

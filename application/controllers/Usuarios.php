@@ -1,48 +1,34 @@
 <?php
 class Usuarios extends CI_Controller {
+    // globales
+    var $etapa_modulo;
+    var $nom_etapa_modulo;
 
     public function __construct() {
         parent::__construct();
-        $this->load->helper('url');
+        $this->load->library('funciones_sistema');
+
         $this->load->model('usuarios_model');
         $this->load->model('roles_model');
         $this->load->model('dependencias_model');
-        $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
-        $this->load->model('bitacora_model');
-        $this->load->model('parametros_sistema_model');
+        $this->load->model('accesos_sistema_model');
         $this->load->model('accesos_sistema_usuario_model');
-    }
 
-    public function get_userdata()
-    {
-        $cve_usuario = $this->session->userdata('cve_usuario');
-        $cve_rol = $this->session->userdata('cve_rol');
-        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-        $data['cve_rol'] = $cve_rol;
-        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-        $data['error'] = $this->session->flashdata('error');
-        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
-
-        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-
-        return $data;
+        $this->etapa_modulo = 0;
+        $this->nom_etapa_modulo = '';
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
 
             $permisos_requeridos = array(
                 'usuario.can_edit',
             );
-            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+            if (has_permission_or($permisos_requeridos, $data['userdata']['permisos_usuario'])) {
                 $data['usuarios'] = $this->usuarios_model->get_usuarios();
 
                 $this->load->view('templates/header', $data);
@@ -58,15 +44,13 @@ class Usuarios extends CI_Controller {
     public function detalle($cve_usuario)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
 
             $permisos_requeridos = array(
                 'usuario.can_edit',
             );
-            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+            if (has_permission_or($permisos_requeridos, $data['userdata']['permisos_usuario'])) {
                 $data['usuarios'] = $this->usuarios_model->get_usuario($cve_usuario);
                 $data['roles'] = $this->roles_model->get_roles();
                 $data['dependencias'] = $this->dependencias_model->get_dependencias();
@@ -87,15 +71,13 @@ class Usuarios extends CI_Controller {
     public function nuevo()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
 
             $permisos_requeridos = array(
                 'usuario.can_edit',
             );
-            if (has_permission_or($permisos_requeridos, $data['permisos_usuario'])) {
+            if (has_permission_or($permisos_requeridos, $data['userdata']['permisos_usuario'])) {
                 $data['roles'] = $this->roles_model->get_roles();
                 $data['dependencias'] = $this->dependencias_model->get_dependencias();
 
@@ -114,7 +96,7 @@ class Usuarios extends CI_Controller {
 
             $usuarios = $this->input->post();
             if ($usuarios) {
-                
+
                 if ($cve_usuario) {
                     $accion = 'modificó';
                 } else {
@@ -134,23 +116,9 @@ class Usuarios extends CI_Controller {
                 // registro en bitacora
                 $dependencia = $this->dependencias_model->get_dependencia($usuarios['cve_dependencia']);
                 $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
                 $entidad = 'usuarios';
                 $valor = $cve_usuario ." ". $usuarios['nom_usuario'] . $separador . $dependencia['nom_dependencia'];
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             }
             redirect('usuarios');
@@ -166,32 +134,18 @@ class Usuarios extends CI_Controller {
 
             // registro en bitacora
             $datos_usuario = $this->usuarios_model->get_usuario($cve_usuario);
-			$separador = ' -> ';
-			$usuario = $this->session->userdata('usuario');
-			$nom_usuario = $this->session->userdata('nom_usuario');
-			$nom_dependencia = $this->session->userdata('nom_dependencia');
+            $separador = ' -> ';
             $accion = 'eliminó';
-			$entidad = 'usuarios';
-			$valor = $cve_usuario ." ". $datos_usuario['nom_usuario'] . $separador . $datos_usuario['nom_dependencia'];
-			$data = array(
-				'fecha' => date("Y-m-d"),
-				'hora' => date("H:i"),
-				'origen' => $_SERVER['REMOTE_ADDR'],
-				'usuario' => $usuario,
-				'nom_usuario' => $nom_usuario,
-				'nom_dependencia' => $nom_dependencia,
-				'accion' => $accion,
-				'entidad' => $entidad,
-				'valor' => $valor
-			);
-			$this->bitacora_model->guardar($data);
+            $entidad = 'usuarios';
+            $valor = $cve_usuario ." ". $datos_usuario['nom_usuario'] . $separador . $datos_usuario['nom_dependencia'];
+            $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             // eliminado
-			$this->usuarios_model->eliminar($cve_usuario);
+            $this->usuarios_model->eliminar($cve_usuario);
 
-			redirect('usuarios');
-		} else {
-			redirect('inicio/login');
-		}
-	}
+            redirect('usuarios');
+        } else {
+            redirect('inicio/login');
+        }
+    }
 }

@@ -1,66 +1,42 @@
 <?php
 class Propuestas_evaluacion extends CI_Controller {
     // globales
-    var $etapa_actual;
-
+    var $etapa_modulo;
+    var $nom_etapa_modulo;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper('url');
-        $this->load->model('usuarios_model');
-        $this->load->model('accesos_sistema_model');
-        $this->load->model('opciones_sistema_model');
-        $this->load->model('bitacora_model');
-        $this->load->model('parametros_sistema_model');
+        $this->load->library('funciones_sistema');
 
         $this->load->model('tipos_evaluacion_model');
         $this->load->model('justificaciones_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('calificaciones_propuesta_model');
         $this->load->model('clasificaciones_supervisor_model');
-        
+
         // globales
-        $this->etapa_actual = 1;
-    }
-
-    public function get_userdata()
-    {
-        $cve_usuario = $this->session->userdata('cve_usuario');
-        $cve_rol = $this->session->userdata('cve_rol');
-        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-        $data['cve_rol'] = $cve_rol;
-        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-        $data['error'] = $this->session->flashdata('error');
-        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
-
-        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-        if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'planificacion.etapa_actual'); 
-        }
-
-        return $data;
+        $this->etapa_modulo = 1;
+        $this->nom_etapa_modulo = 'planificacion.etapa_activa';
     }
 
     public function detalle($id_propuesta_evaluacion)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
             $data['calificaciones_propuesta'] = $this->calificaciones_propuesta_model->get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
             $data['calificacion_final_propuesta_evaluacion'] = $this->calificaciones_propuesta_model->get_calificacion_final_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['num_calificaciones_propuesta_dependencia'] = $this->calificaciones_propuesta_model->get_num_calificaciones_propuesta_dependencia($id_propuesta_evaluacion, $cve_dependencia);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
+            $data['error'] = $this->session->flashdata('error');
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -71,17 +47,15 @@ class Propuestas_evaluacion extends CI_Controller {
         }
     }
 
-    public function nuevo($cve_proyecto)
+    public function nuevo($id_proyecto)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
 
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
-            $data['cve_proyecto'] = $cve_proyecto;
+            $data['id_proyecto'] = $id_proyecto;
 
             $this->load->view('templates/header', $data);
             $this->load->view('propuestas_evaluacion/nuevo', $data);
@@ -131,32 +105,18 @@ class Propuestas_evaluacion extends CI_Controller {
                     'info_normativa' => empty($propuesta_evaluacion['info_normativa']) ? null : $propuesta_evaluacion['info_normativa'],
                     'info_otro' => empty($propuesta_evaluacion['info_otro']) ? null : $propuesta_evaluacion['info_otro'],
                     'otra_info_disponible' => $propuesta_evaluacion['otra_info_disponible'],
+                    'id_proyecto' => $propuesta_evaluacion['id_proyecto'],
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
-                
+
                 // registro en bitacora
-				$separador = ' -> ';
-				$usuario = $this->session->userdata('usuario');
-				$nom_usuario = $this->session->userdata('nom_usuario');
-				$nom_dependencia = $this->session->userdata('nom_dependencia');
-				$entidad = 'propuestas_evaluacion';
+                $entidad = 'propuestas_evaluacion';
                 $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
-				$data = array(
-					'fecha' => date("Y-m-d"),
-					'hora' => date("H:i"),
-					'origen' => $_SERVER['REMOTE_ADDR'],
-					'usuario' => $usuario,
-					'nom_usuario' => $nom_usuario,
-					'nom_dependencia' => $nom_dependencia,
-					'accion' => $accion,
-					'entidad' => $entidad,
-					'valor' => $valor
-				);
-				$this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             }
 
-            redirect('proyectos/detalle/'.$propuesta_evaluacion['cve_proyecto']);
+            redirect('proyectos/detalle/'.$propuesta_evaluacion['id_proyecto']);
 
         } else {
             redirect('inicio/login');
@@ -179,31 +139,16 @@ class Propuestas_evaluacion extends CI_Controller {
                     'comentarios_exclusion' => $propuesta_evaluacion['comentarios_exclusion'],
                 );
                 $id_propuesta_evaluacion = $this->propuestas_evaluacion_model->guardar($data, $id_propuesta_evaluacion);
-                
+
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
                 $entidad = 'propuestas_evaluacion';
                 $accion = 'modificó';
                 $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
             }
 
-            redirect('proyectos/detalle/'.$propuesta_evaluacion['cve_proyecto']);
+            redirect('proyectos/detalle/'.$propuesta_evaluacion['id_proyecto']);
 
         } else {
             redirect('inicio/login');
@@ -215,35 +160,21 @@ class Propuestas_evaluacion extends CI_Controller {
         if ($this->session->userdata('logueado')) {
 
             $propuesta_evaluacion = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $id_proyecto = $propuesta_evaluacion['id_proyecto'];
             $calificaciones = $this->calificaciones_propuesta_model->get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion);
             if ($calificaciones) {
                 $this->session->set_flashdata('err_propuestas_evaluacion', 'Esta propuesta ya está calificada, no se puede eliminar');
             } else {
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
                 $accion = 'eliminó';
                 $entidad = 'propuestas_evaluacion';
                 $valor = $id_propuesta_evaluacion . " " . $propuesta_evaluacion['cve_proyecto'];
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
                 // eliminado
                 $this->propuestas_evaluacion_model->eliminar($id_propuesta_evaluacion);
             }
-            redirect('proyectos/detalle/'.$propuesta_evaluacion['cve_proyecto']);
+            redirect(base_url() . 'proyectos/detalle/' . $id_proyecto);
         } else {
             redirect('inicio/login');
         }

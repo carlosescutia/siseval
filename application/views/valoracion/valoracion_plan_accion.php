@@ -42,7 +42,8 @@
                                 <?php
                                     $permisos_requeridos = array(
                                     'plan_accion_valoracion.can_edit',
-                                    'valoracion.etapa_actual',
+                                    'valoracion.etapa_activa',
+                                    'anio_activo',
                                     );
                                 ?>
                                 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -65,7 +66,8 @@
     <?php
         $permisos_requeridos = array(
         'plan_accion_valoracion.can_edit',
-        'valoracion.etapa_actual',
+        'valoracion.etapa_activa',
+        'anio_activo',
         );
     ?>
     <?php if (has_permission_and($permisos_requeridos, $permisos_usuario) and ($num_valoraciones_plan_accion_dependencia == 0)) { ?>

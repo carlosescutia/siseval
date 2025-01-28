@@ -76,7 +76,6 @@ CREATE TABLE tipos_evaluacion (
     id_tipo_evaluacion serial,
     nom_tipo_evaluacion text,
     orden integer,
-    abrev_tipo_evaluacion text
 );
 
 DROP TABLE IF EXISTS justificaciones_evaluacion CASCADE;

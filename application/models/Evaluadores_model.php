@@ -3,21 +3,13 @@ class Evaluadores_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        $this->load->dbutil();
     }
 
-    public function get_evaluadores($salida=null) {
-        $this->load->dbutil();
-
+    public function get_evaluadores() {
         $sql = 'select * from evaluadores ;';
         $query = $this->db->query($sql);
-
-        if ($salida == 'csv') {
-            $delimiter = ",";
-            $newline = "\r\n";
-            return $this->dbutil->csv_from_result($query, $delimiter, $newline);
-        } else {
-            return $query->result_array();
-        }
+        return $query->result_array();
     }
 
     public function get_evaluadores_busqueda($buscar_evaluador) {
@@ -36,8 +28,6 @@ class Evaluadores_model extends CI_Model {
     }
 
     public function get_listado_evaluadores($salida=null) {
-        $this->load->dbutil();
-
         $sql = ""
             ."select  "
             ."ver.id_evaluador, e.nom_evaluador, e.observaciones, "

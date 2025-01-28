@@ -1,3 +1,10 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <main role="main" class="ml-sm-auto px-4 mb-3 col-print-12">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12 alternate-color">
@@ -7,7 +14,7 @@
                         <h1 class="h2">Estatus de dependencias</h1>
                     </div>
                     <div class="col-sm-4 text-end d-print-none">
-                        <button formaction="<?= base_url() ?>reportes/listado_status_dependencias_csv" class="btn btn-primary">Exportar a excel</button>
+                        <button formaction="<?= base_url() ?>reportes/listado_status_dependencias/csv" class="btn btn-primary">Exportar a excel</button>
                         <a href="javascript:window.print()" class="btn btn-primary boton">Generar pdf</a>
                     </div>
                 </div>
@@ -59,12 +66,16 @@
                             <td class="text-center"><?= $status_dependencias_item['solicita_evaluaciones'] ?></td>
                             <td class="text-center"><?= $status_dependencias_item['num_propuestas'] ?></td>
                             <td>
-                            <?php 
-                            $nombre_archivo = 'oficio_' . $status_dependencias_item['nom_dependencia'] . '.pdf';
-                            $nombre_archivo_fs = './oficios/' . $nombre_archivo;
-                            $nombre_archivo_url = base_url() . 'oficios/' . $nombre_archivo;
-                            if ( file_exists($nombre_archivo_fs) ) { ?>
-                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="20"></span><span class="d-print-none">Ver</span></a>
+                            <?php
+                                $prefijo = 'sol_ev' ;
+                                $tipo_archivo = 'pdf';
+                                $nombre_archivo = $prefijo . '_' . $status_dependencias_item['cve_dependencia'] . '_' . $anio_sesion . '.' . $tipo_archivo;
+                                $dir_docs = './doc/';
+                                $nombre_archivo_fs = $dir_docs . $nombre_archivo;
+                                $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
+                            ?>
+                            <?php if ( file_exists($nombre_archivo_fs) ) { ?>
+                                <a href="<?= $nombre_archivo_url ?>" target="_blank"><span class="mr-2"><img src="<?=base_url()?>img/application-pdf.svg" height="20"></span><span class="d-print-none"></span></a>
                             <?php } ?>
                             </td>
 

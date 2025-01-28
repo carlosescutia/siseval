@@ -7,6 +7,9 @@
                 </div>
                 <div class="col-sm-2 text-end">
                     <?php
+                        $permisos_usuario = $userdata['permisos_usuario'];
+                    ?>
+                    <?php
                         $permisos_requeridos = array(
                         'parametro_sistema.can_create',
                         );

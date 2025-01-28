@@ -17,26 +17,32 @@
     <div class="col-sm-12">
         <div style="min-height: 46vh">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-3 align-self-center">
                             <p class="small"><strong>Clave</strong></p>
                         </div>
-                        <div class="col-sm-8 align-self-center">
+                        <div class="col-sm-4 align-self-center">
                             <p class="small"><strong>Nombre</strong></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="small"><strong>Orden</strong></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <?php foreach ($tipos_evaluacion as $tipos_evaluacion_item) { ?>
-                <div class="col-sm-7 alternate-color">
+                <div class="col-sm-8 alternate-color">
                     <div class="row">
                         <div class="col-sm-3 align-self-center">
                             <p><?= $tipos_evaluacion_item['id_tipo_evaluacion'] ?></p>
                         </div>
-                        <div class="col-sm-8 align-self-center">
+                        <div class="col-sm-4 align-self-center">
                             <p><a href="<?=base_url()?>tipos_evaluacion/detalle/<?=$tipos_evaluacion_item['id_tipo_evaluacion']?>"><?= $tipos_evaluacion_item['nom_tipo_evaluacion'] ?></a></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p><?= $tipos_evaluacion_item['orden'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 

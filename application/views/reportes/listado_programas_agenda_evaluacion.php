@@ -6,9 +6,10 @@
                     <h1 class="h2">Proyecto de programas a integrar la Agenda anual de evaluación</h1>
                 </div>
                 <div class="col-sm-4 text-end d-print-none">
-                    <form>
-                        <button formaction="<?= base_url() ?>reportes/listado_programas_agenda_evaluacion_01_csv" class="btn btn-primary">Exportar a excel</button>
+                    <form method="post" action="<?= base_url() ?>reportes/listado_programas_agenda_evaluacion">
+                        <button type="submit" class="btn btn-primary">Exportar a excel</button>
                         <a href="javascript:window.print()" class="btn btn-primary boton">Generar pdf</a>
+                        <input type="hidden" name="salida" value="csv">
                     </form>
                 </div>
             </div>

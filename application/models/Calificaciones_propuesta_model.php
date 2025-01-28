@@ -5,6 +5,13 @@ class Calificaciones_propuesta_model extends CI_Model {
         parent::__construct();
     }
 
+    public function get_proyecto($id_calificacion_propuesta)
+    {
+        $sql = "select py.* from proyectos py left join propuestas_evaluacion pe on pe.id_proyecto = py.id_proyecto left join calificaciones_propuesta cp on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where cp.id_calificacion_propuesta = ? ";
+        $query = $this->db->query($sql, array($id_calificacion_propuesta));
+        return $query->row_array();
+    }
+
     public function get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion) {
         $sql = 'select * from puntaje_calificacion_dependencia where id_propuesta_evaluacion = ?';
         $query = $this->db->query($sql, array($id_propuesta_evaluacion));

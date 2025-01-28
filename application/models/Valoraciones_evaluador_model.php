@@ -15,13 +15,13 @@ class Valoraciones_evaluador_model extends CI_Model {
         $sql = 'select * from valoraciones_evaluador where id_valoracion_evaluador = ?;';
         $sql = ""
             ."select  "
-            ."ver.*, e.nom_evaluador, pe.cve_proyecto, te.nom_tipo_evaluacion, py.nom_proyecto, pg.nom_programa, "
+            ."ver.*, e.nom_evaluador, py.cve_proyecto, te.nom_tipo_evaluacion, py.nom_proyecto, pg.nom_programa, "
             ."(ver.puntualidad + ver.solidez + ver.objetividad + ver.claridad + ver.disponibilidad) as puntaje_valoracion_evaluador "
             ."from valoraciones_evaluador ver  "
             ."left join evaluadores e on e.id_evaluador = ver.id_evaluador "
             ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = ver.id_propuesta_evaluacion  "
             ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
-            ."left join proyectos py on py.cve_proyecto = pe.cve_proyecto  "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
             ."left join programas pg on pg.cve_programa = py.cve_programa "
             ."where ver.id_valoracion_evaluador = ? "
             ."";

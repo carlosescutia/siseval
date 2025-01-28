@@ -1,3 +1,6 @@
+<?php
+    $cve_dependencia = $userdata['cve_dependencia'];
+?>
 <main role="main" class="ml-sm-auto px-4">
 
     <div class="card mt-0 mb-3 tabla-datos">
@@ -266,7 +269,7 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="cve_proyecto" value="<?= $cve_proyecto ?>">
+                <input type="hidden" name="id_proyecto" value="<?= $id_proyecto ?>">
                 <input type="hidden" name="cve_dependencia" value="<?= $cve_dependencia ?>">
 
             </div>
@@ -279,7 +282,7 @@
     <hr />
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=base_url()?>proyectos/detalle/<?=$cve_proyecto?>" class="btn btn-secondary boton">Volver</a>
+            <a href="<?=base_url()?>proyectos/detalle/<?=$id_proyecto?>" class="btn btn-secondary boton">Volver</a>
         </div>
     </div>
 

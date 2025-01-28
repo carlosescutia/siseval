@@ -2,22 +2,43 @@
 Vista totales_calificaciones
 -----------------------
 Se obtiene suma y conteo de criterios de calificación de propuesta
- */
+*/
 DROP VIEW IF EXISTS totales_calificacion CASCADE;
 CREATE VIEW totales_calificacion AS
+/*
 SELECT
-	cp.id_calificacion_propuesta,
-	(
-	(case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
-	+ (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) 
-	) as suma,
-	(
-	(case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
-	+ (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end) 
-	) as conteo
+    cp.id_calificacion_propuesta,
+    (
+    (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
+    + (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) 
+    ) as suma,
+    (
+    (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
+    + (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end) 
+    ) as conteo
 FROM 
-	calificaciones_propuesta cp ;
-
+    calificaciones_propuesta cp ;
+ */
+SELECT
+    cp.id_calificacion_propuesta,
+    (
+        (case when 'agenda2030' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.agenda2030 >= 0 then cp.agenda2030 else 0 end) +
+        (case when 'pertinencia_evaluacion' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) +
+        (case when 'ciclo_evaluativo' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) +
+        (case when 'recomendaciones_previas' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.recomendaciones_previas >= 0 then cp.recomendaciones_previas else 0 end) +
+        (case when 'informacion_disponible' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.informacion_disponible >= 0 then cp.informacion_disponible else 0 end)
+    ) as suma,
+    (
+        (case when 'agenda2030' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.agenda2030 >= 0 then 1 else 0 end) +
+        (case when 'pertinencia_evaluacion' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.pertinencia_evaluacion >= 0 then 1 else 0 end) +
+        (case when 'ciclo_evaluativo' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.ciclo_evaluativo >= 0 then 1 else 0 end) +
+        (case when 'recomendaciones_previas' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.recomendaciones_previas >= 0 then 1 else 0 end) +
+        (case when 'informacion_disponible' in (select ccp.nom_criterio from criterios_calificacion_periodo ccp where ccp.periodo = p.periodo) and cp.informacion_disponible >= 0 then 1 else 0 end)
+    ) as conteo
+FROM 
+    calificaciones_propuesta cp
+    left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = cp.id_propuesta_evaluacion
+    left join proyectos p on p.id_proyecto = pe.id_proyecto ;
 
 /*
 Vista puntaje_calificacion_dependencia
@@ -28,16 +49,18 @@ DROP VIEW IF EXISTS puntaje_calificacion_dependencia CASCADE;
 CREATE VIEW puntaje_calificacion_dependencia AS
 SELECT 
     cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, 
-    pe.cve_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion, 
+    pe.id_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion, 
     (case 
         when cp.evaluacion_obligatoria = 1 then 100
         when conteo = 0 then 0
         else suma / conteo 
-    end) + coalesce(cp.criterio_institucional, 0) as puntaje
+    end) + coalesce(cp.criterio_institucional, 0) as puntaje,
+    py.periodo
 FROM 
     calificaciones_propuesta cp
     left join totales_calificacion tc on cp.id_calificacion_propuesta = tc.id_calificacion_propuesta
     left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
+    left join proyectos py on py.id_proyecto = pe.id_proyecto
     left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
     left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
 /*
@@ -48,13 +71,13 @@ Se obtiene puntaje de calificaciones de propuestas
 DROP VIEW IF EXISTS puntaje_calificacion_propuesta CASCADE;
 CREATE VIEW puntaje_calificacion_propuesta AS
 SELECT 
-    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, 
+    pcd.id_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, 
     sum(pcd.puntaje) as puntaje,
-    (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max) as probabilidad
+    (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max and periodo = pcd.periodo) as probabilidad
 FROM 
     puntaje_calificacion_dependencia pcd
 GROUP BY 
-    pcd.cve_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion ;
+    pcd.id_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, pcd.periodo ;
 
 
 /*
@@ -66,10 +89,11 @@ DROP VIEW IF EXISTS estadisticas_dependencia CASCADE;
 CREATE VIEW estadisticas_dependencia AS
 SELECT 
     py.cve_dependencia,
-    count(py.cve_proyecto) as num_proyectos,
-    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where proy.cve_dependencia = py.cve_dependencia) as num_proyectos_propuesta,
-    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.cve_proyecto = proy.cve_proyecto where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta) and proy.cve_dependencia = py.cve_dependencia) as num_propuestas_calificadas
+    py.periodo,
+    count(py.id_proyecto) as num_proyectos,
+    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.id_proyecto = proy.id_proyecto where proy.cve_dependencia = py.cve_dependencia and proy.periodo = py.periodo) as num_proyectos_propuesta,
+    (select count(*) from propuestas_evaluacion pe left join proyectos proy on pe.id_proyecto = proy.id_proyecto where pe.id_propuesta_evaluacion in (select id_propuesta_evaluacion from calificaciones_propuesta) and proy.cve_dependencia = py.cve_dependencia and proy.periodo = py.periodo) as num_propuestas_calificadas
 FROM 
     proyectos py  
 GROUP BY
-    py.cve_dependencia ;
+    py.cve_dependencia, py.periodo ;

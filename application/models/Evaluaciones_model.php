@@ -5,9 +5,9 @@ class Evaluaciones_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_evaluaciones_proyecto($cve_proyecto) {
-        $sql = 'select e.* from evaluaciones e where e.cve_proyecto = ? order by e.periodo, e.dependencia_responsable, e.tipo_evaluacion';
-        $query = $this->db->query($sql, array($cve_proyecto));
+    public function get_evaluaciones_proyecto($cve_proyecto, $periodo) {
+        $sql = 'select e.* from evaluaciones e where e.cve_proyecto = ? and e.periodo < ? order by e.periodo, e.dependencia_responsable, e.tipo_evaluacion';
+        $query = $this->db->query($sql, array($cve_proyecto, $periodo));
         return $query->result_array();
     }
 

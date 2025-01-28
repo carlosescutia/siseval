@@ -1,3 +1,10 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <div class="card mt-0 mb-3">
     <div class="card-body">
         <form method="post" action="<?= base_url() ?>valoracion/documento_opinion_guardar/<?=$documento_opinion['cve_documento_opinion']?>" id="doc_op">
@@ -37,7 +44,8 @@
                             <?php
                                 $permisos_requeridos = array(
                                 'documento_opinion.can_edit',
-                                'valoracion.etapa_actual',
+                                'valoracion.etapa_activa',
+                                'anio_activo',
                                 );
                             ?>
                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
@@ -63,7 +71,8 @@
 <?php
     $permisos_requeridos = array(
     'documento_opinion.can_edit',
-    'valoracion.etapa_actual',
+    'valoracion.etapa_activa',
+    'anio_activo',
     );
 ?>
 <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

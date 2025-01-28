@@ -1,3 +1,10 @@
+<?php
+    $permisos_usuario = $userdata['permisos_usuario'];
+    $cve_dependencia = $userdata['cve_dependencia'];
+    $nom_dependencia = $userdata['nom_dependencia'];
+    $anio_sesion = $userdata['anio_sesion'];
+    $cve_rol = $userdata['cve_rol'];
+?>
 <div class="col-sm-8 offset-sm-2 mt-3">
     <div class="card mt-0 mb-3 tabla-datos">
         <div class="card-header text-white bg-primary">Propuesta de evaluación <?=$propuesta_evaluacion['nom_dependencia'] ?> <?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?> </div>
@@ -36,7 +43,8 @@
                             <?php
                                 $permisos_requeridos = array(
                                 'urls.can_edit',
-                                'gestion.etapa_actual',
+                                'gestion.etapa_activa',
+                                'anio_activo',
                                 );
                             ?>
                             <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>

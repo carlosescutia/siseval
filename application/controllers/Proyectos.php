@@ -1,17 +1,13 @@
 <?php
 class Proyectos extends CI_Controller {
     // globales
-    var $etapa_actual;
-
+    var $etapa_modulo;
+    var $nom_etapa_modulo;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('usuarios_model');
-        $this->load->model('accesos_sistema_model');
-        $this->load->model('opciones_sistema_model');
-        $this->load->model('bitacora_model');
-        $this->load->model('parametros_sistema_model');
+        $this->load->library('funciones_sistema');
 
         $this->load->model('proyectos_model');
         $this->load->model('programas_model');
@@ -21,39 +17,24 @@ class Proyectos extends CI_Controller {
         $this->load->model('justificaciones_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('metas_ods_model');
-        
-        // globales
-        $this->etapa_actual = 1;
-    }
+        $this->load->model('parametros_sistema_model');
+        $this->load->model('periodos_model');
 
-    public function get_userdata()
-    {
-        $cve_usuario = $this->session->userdata('cve_usuario');
-        $cve_rol = $this->session->userdata('cve_rol');
-        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-        $data['cve_rol'] = $cve_rol;
-        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-        $data['error'] = $this->session->flashdata('error');
-        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
-
-        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-        $data['etapa_siseval'] = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
-        if ($data['etapa_siseval'] == $this->etapa_actual) { 
-            array_push($data['permisos_usuario'], 'planificacion.etapa_actual'); 
-        }
-
-        return $data;
+        $this->etapa_modulo = 1;
+        $this->nom_etapa_modulo = 'planificacion.etapa_activa';
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $periodos = $this->proyectos_model->get_anios_proyectos();
+            $this->session->set_userdata('periodos', $periodos);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+            $data['error'] = $this->session->flashdata('error');
 
             $data['err_proyectos'] = $this->session->flashdata('err_proyectos');
 
@@ -87,23 +68,23 @@ class Proyectos extends CI_Controller {
                 } else {
                     $evaluaciones_propuestas = '0';
                 }
-			}
-
-            $data['dependencia'] = $this->dependencias_model->get_dependencia($cve_dependencia);
-            $data['estadisticas_proyectos'] = $this->proyectos_model->get_estadisticas_proyectos_dependencia($cve_dependencia);
+            }
 
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
             $data['anexo_social'] = $anexo_social;
             $data['evaluaciones_propuestas'] = $evaluaciones_propuestas;
 
-            $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
-            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas);
+            $anio_sesion = $this->session->userdata('anio_sesion');
+            $data['proyectos'] = $this->proyectos_model->get_proyectos_dependencia($cve_dependencia_filtro, $anio_sesion, $anexo_social, $evaluaciones_propuestas);
+            $data['dependencia'] = $this->dependencias_model->get_dependencia_periodo($cve_dependencia, $anio_sesion);
+            $data['estadisticas_proyectos'] = $this->proyectos_model->get_estadisticas_proyectos_dependencia($cve_dependencia, $anio_sesion);
+            $data['dependencias'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia_filtro, $anexo_social, $evaluaciones_propuestas, $anio_sesion);
             if ($cve_rol != 'usr') {
                 $cve_dependencia = '%';
             }
 
-            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0);
-            $data['num_supervisores'] = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0, $anio_sesion);
+            $data['num_supervisores'] = $this->periodos_model->get_periodo_nom_periodo($data['userdata']['anio_sesion'])['num_supervisores'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -114,28 +95,32 @@ class Proyectos extends CI_Controller {
         }
     }
 
-    public function detalle($cve_proyecto)
+    public function detalle($id_proyecto)
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $data['err_propuestas_evaluacion'] = $this->session->flashdata('err_propuestas_evaluacion');
 
-            $data['proyecto'] = $this->proyectos_model->get_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
+            $data['proyecto'] = $this->proyectos_model->get_proyecto($id_proyecto, $cve_dependencia, $cve_rol);
             $cve_proyecto = $data['proyecto']['cve_proyecto'];
             $cve_anterior_proyecto = $data['proyecto']['cve_anterior_proyecto'];
-            $data['programa'] = $this->programas_model->get_programa_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
-            $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $cve_dependencia, $cve_rol);
+            $periodo = $data['proyecto']['periodo'];
+
+            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto);
+            $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $periodo, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
-            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($cve_proyecto);
-            $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($cve_proyecto, $cve_dependencia);
-            $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
             $data['metas'] = $this->metas_ods_model->get_metas_proyecto($cve_proyecto);
-            $data['num_supervisores'] = $this->parametros_sistema_model->get_parametro_sistema_nom('num_supervisores');
+            $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($id_proyecto, $cve_dependencia);
+
+            // Obtener un solo registro, se están generando varios
+            $data['programa'] = $this->programas_model->get_programa_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
+
+            $data['num_supervisores'] = $this->periodos_model->get_periodo_nom_periodo($data['userdata']['anio_sesion'])['num_supervisores'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/dlg_borrar');
@@ -149,10 +134,10 @@ class Proyectos extends CI_Controller {
     public function nuevo()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
 
             $this->load->view('templates/header', $data);
             $this->load->view('proyectos/nuevo', $data);
@@ -175,7 +160,8 @@ class Proyectos extends CI_Controller {
                     $accion = 'agregó';
                 }
 
-                $periodo = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
+                $data = [];
+                $periodo = $this->session->userdata['anio_sesion'];
 
                 $cve_dependencia = $this->session->userdata('cve_dependencia');
                 $reg_consecutivo = $this->proyectos_model->get_consecutivo_dependencia($cve_dependencia);
@@ -194,27 +180,11 @@ class Proyectos extends CI_Controller {
                     'cve_programa' => $proyecto['cve_programa']
                 );
                 $id_proyecto = $this->proyectos_model->guardar($data, $id_proyecto);
-                
-                // registro en bitacora
-				$separador = ' -> ';
-				$usuario = $this->session->userdata('usuario');
-				$nom_usuario = $this->session->userdata('nom_usuario');
-				$nom_dependencia = $this->session->userdata('nom_dependencia');
-				$entidad = 'proyectos';
-                $valor = $cve_proyecto_nuevo . " " . $proyecto['nom_proyecto'];
-				$data = array(
-					'fecha' => date("Y-m-d"),
-					'hora' => date("H:i"),
-					'origen' => $_SERVER['REMOTE_ADDR'],
-					'usuario' => $usuario,
-					'nom_usuario' => $nom_usuario,
-					'nom_dependencia' => $nom_dependencia,
-					'accion' => $accion,
-					'entidad' => $entidad,
-					'valor' => $valor
-				);
-				$this->bitacora_model->guardar($data);
 
+                // registro en bitacora
+                $entidad = 'proyectos';
+                $valor = $cve_proyecto_nuevo . " " . $proyecto['nom_proyecto'];
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
             }
 
             redirect('proyectos');
@@ -231,31 +201,16 @@ class Proyectos extends CI_Controller {
             $cve_rol = $this->session->userdata('cve_rol');
             $cve_dependencia = $this->session->userdata('cve_dependencia');
             $proyecto = $this->proyectos_model->get_proyecto_id($id_proyecto);
-            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['cve_proyecto']);
+            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['id_proyecto']);
             if ($propuestas) {
                 $err_proyectos = array('cve_proyecto' => $proyecto['cve_proyecto'], 'error' => 'Este proyecto tiene propuestas de evaluación, no se puede eliminar');
                 $this->session->set_flashdata('err_proyectos', $err_proyectos);
             } else {
                 // registro en bitacora
-                $separador = ' -> ';
-                $usuario = $this->session->userdata('usuario');
-                $nom_usuario = $this->session->userdata('nom_usuario');
-                $nom_dependencia = $this->session->userdata('nom_dependencia');
                 $accion = 'eliminó';
                 $entidad = 'proyectos';
                 $valor = $proyecto['cve_proyecto'] . " " . $proyecto['nom_proyecto'];
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario,
-                    'nom_usuario' => $nom_usuario,
-                    'nom_dependencia' => $nom_dependencia,
-                    'accion' => $accion,
-                    'entidad' => $entidad,
-                    'valor' => $valor
-                );
-                $this->bitacora_model->guardar($data);
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
 
                 // eliminado
                 $this->proyectos_model->eliminar($id_proyecto);

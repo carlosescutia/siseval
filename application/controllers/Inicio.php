@@ -1,57 +1,44 @@
 <?php
 class Inicio extends CI_Controller {
+    // globales
+    var $etapa_modulo;
+    var $nom_etapa_modulo;
 
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('funciones_sistema');
+
         $this->load->model('usuarios_model');
+        $this->load->model('eventos_model');
+        $this->load->model('proyectos_model');
+        $this->load->model('parametros_sistema_model');
         $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
-        $this->load->model('bitacora_model');
-        $this->load->model('parametros_sistema_model');
 
-        $this->load->model('proyectos_model');
-        $this->load->model('dependencias_model');
-        $this->load->model('eventos_model');
-    }
-
-    public function get_userdata()
-    {
-        $cve_usuario = $this->session->userdata('cve_usuario');
-        $cve_rol = $this->session->userdata('cve_rol');
-        $data['cve_usuario'] = $this->session->userdata('cve_usuario');
-        $data['cve_dependencia'] = $this->session->userdata('cve_dependencia');
-        $data['nom_dependencia'] = $this->session->userdata('nom_dependencia');
-        $data['cve_rol'] = $cve_rol;
-        $data['nom_usuario'] = $this->session->userdata('nom_usuario');
-        $data['error'] = $this->session->flashdata('error');
-        $data['permisos_usuario'] = explode(',', $this->accesos_sistema_model->get_permisos_usuario($cve_usuario));
-
-        $data['opciones_sistema'] = $this->opciones_sistema_model->get_opciones_sistema();
-
-        return $data;
+        $this->etapa_modulo = 0;
+        $this->nom_etapa_modulo = '';
     }
 
     public function index()
     {
         if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $cve_dependencia = $data['cve_dependencia'];
-            $cve_rol = $data['cve_rol'];
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            // en la funcion recargar_permisos, periodo = anio_sesion para valor default
+            // en funciones index, recargar periodos desde la bd
+            $periodos = $this->proyectos_model->get_anios_proyectos();
+            $this->session->set_userdata('periodos', $periodos);
+            $data['userdata'] = $this->session->userdata;
 
-            $data['anio_propuestas'] = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_propuestas');
-            $data['fecha_ini_evaluaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_evaluaciones');
-            $data['fecha_fin_evaluaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_evaluaciones');
-            $data['fecha_ini_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_ini_observaciones');
-            $data['fecha_fin_observaciones'] = $this->parametros_sistema_model->get_parametro_sistema_nom('fecha_fin_observaciones');
-            $data['eventos'] = $this->eventos_model->get_eventos();
+            $anio_sesion = $this->session->userdata('anio_sesion');
+            $data['eventos'] = $this->eventos_model->get_eventos($anio_sesion);
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);
             $this->load->view('templates/footer');
         } else {
-            redirect('inicio/login');
+            redirect(base_url() . 'inicio/login');
         }
     }
 
@@ -66,24 +53,15 @@ class Inicio extends CI_Controller {
         $usuario_data = array(
             'logueado' => FALSE
         );
-        $usuario = $this->session->userdata('usuario');
-        $nom_usuario = $this->session->userdata('nom_usuario');
-        $cve_dependencia = $this->session->userdata('cve_dependencia');
-        $nom_dependencia = $this->session->userdata('nom_dependencia');
-        $data = array(
-            'fecha' => date("Y-m-d"),
-            'hora' => date("H:i"),
-            'origen' => $_SERVER['REMOTE_ADDR'],
-            'usuario' => $usuario,
-            'nom_usuario' => $nom_usuario,
-            'nom_dependencia' => $nom_dependencia,
-            'accion' => 'logout',
-            'entidad' => '',
-            'valor' => ''
-        );
-        $this->bitacora_model->guardar($data);
+
+        // registro en bitacora
+        $accion = 'logout';
+        $entidad = '';
+        $valor = '';
+        $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
+
         $this->session->set_userdata($usuario_data);
-        redirect('inicio/login');
+        redirect(base_url() . 'inicio/login');
     }
 
     public function post_login() {
@@ -92,6 +70,12 @@ class Inicio extends CI_Controller {
             $password = $this->input->post('password');
             $usuario_db = $this->usuarios_model->usuario_por_nombre($usuario, $password);
             if ($usuario_db) {
+                $permisos_usuario = explode(',', $this->accesos_sistema_model->get_permisos_usuario($usuario_db->cve_usuario));
+                $opciones_sistema = $this->opciones_sistema_model->get_opciones_sistema();
+                $etapa_siseval = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
+                $anio_activo = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_activo');
+                $anio_sesion = $anio_activo;
+                $periodos = $this->proyectos_model->get_anios_proyectos();
                 $usuario_data = array(
                     'cve_usuario' => $usuario_db->cve_usuario,
                     'cve_dependencia' => $usuario_db->cve_dependencia,
@@ -99,29 +83,37 @@ class Inicio extends CI_Controller {
                     'cve_rol' => $usuario_db->cve_rol,
                     'nom_usuario' => $usuario_db->nom_usuario,
                     'usuario' => $usuario_db->usuario,
+                    'permisos_usuario' => $permisos_usuario,
+                    'opciones_sistema' => $opciones_sistema,
+                    'etapa_siseval' => $etapa_siseval,
+                    'anio_activo' => $anio_activo,
+                    'anio_sesion' => $anio_sesion,
+                    'periodos' => $periodos,
                     'logueado' => TRUE
                 );
                 $this->session->set_userdata($usuario_data);
-                $data = array(
-                    'fecha' => date("Y-m-d"),
-                    'hora' => date("H:i"),
-                    'origen' => $_SERVER['REMOTE_ADDR'],
-                    'usuario' => $usuario_db->usuario,
-                    'nom_usuario' => $usuario_db->nom_usuario,
-                    'nom_dependencia' => $usuario_db->nom_dependencia,
-                    'accion' => 'login',
-                    'entidad' => '',
-                    'valor' => ''
-                );
-                $this->bitacora_model->guardar($data);
-                redirect('inicio');
+
+                // registro en bitacora
+                $accion = 'login';
+                $entidad = '';
+                $valor = '';
+                $this->funciones_sistema->registro_bitacora($accion, $entidad, $valor);
+                redirect(base_url() . 'inicio');
             } else {
                 $this->session->set_flashdata('error', 'Usuario o contraseña incorrectos');
-                redirect('inicio/login');
+                redirect(base_url() . 'inicio/login');
             }
         } else {
-            redirect('inicio/login');
+            redirect(base_url() . 'inicio/login');
+        }
+    }
+
+    public function update_anio_sesion() {
+        if ($this->input->post()){
+            $anio_sesion = $this->input->post('anio_sesion');
+            $previous_url = $this->input->post('previous_url');
+            $this->session->set_userdata('anio_sesion', $anio_sesion);
+            redirect($previous_url);
         }
     }
 }
-

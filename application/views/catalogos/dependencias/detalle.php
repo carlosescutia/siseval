@@ -16,25 +16,29 @@
         <div class="col-md-12">
             <div class="form-group row">
                 <label for="cve_dependencia" class="col-sm-2 col-form-label">Clave</label>
-                <div class="col-sm-10">
+                <div class="col-sm-2">
                     <input type="text" class="form-control" name="cve_dependencia" id="cve_dependencia" value="<?=$dependencias['cve_dependencia'] ?>" readonly>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="nom_completo_dependencia" class="col-sm-2 col-form-label">Nombre</label>
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" name="nom_completo_dependencia" id="nom_completo_dependencia" value="<?=$dependencias['nom_completo_dependencia'] ?>">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="nom_dependencia" class="col-sm-2 col-form-label">Siglas</label>
-                <div class="col-sm-10">
+                <div class="col-sm-2">
                     <input type="text" class="form-control" name="nom_dependencia" id="nom_dependencia" value="<?=$dependencias['nom_dependencia'] ?>">
                 </div>
             </div>
         </div>
 
     </form>
+
+    <div class="col-10 offset-1 mt-5">
+        <?php include 'dependencias_periodos.php' ?>
+    </div>
 
     <hr />
 
