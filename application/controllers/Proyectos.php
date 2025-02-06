@@ -114,7 +114,7 @@ class Proyectos extends CI_Controller {
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $periodo, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
-            $data['metas'] = $this->metas_ods_model->get_metas_proyecto($cve_proyecto);
+            $data['metas'] = $this->metas_ods_model->get_metas_proyecto($id_proyecto);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($id_proyecto, $cve_dependencia);
 
             // Obtener un solo registro, se están generando varios
