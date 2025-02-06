@@ -17,7 +17,7 @@
     <div class="col-sm-12">
         <div style="min-height: 46vh">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Clave</strong></p>
@@ -25,21 +25,24 @@
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Probabilidad</strong></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-1 align-self-center">
                             <p class="small"><strong>Min</strong></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-1 align-self-center">
                             <p class="small"><strong>Max</strong></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-2 align-self-center text-center">
                             <p class="small"><strong>Orden</strong></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="small"><strong>Periodo</strong></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <?php foreach ($probabilidades_inclusion as $probabilidades_inclusion_item) { ?>
-                <div class="col-sm-7 alternate-color">
+                <div class="col-sm-8 alternate-color">
                     <div class="row">
                         <div class="col-sm-2 align-self-center">
                             <p><?= $probabilidades_inclusion_item['id_probabilidad_inclusion'] ?></p>
@@ -47,14 +50,17 @@
                         <div class="col-sm-2 align-self-center">
                             <p><a href="<?=base_url()?>probabilidades_inclusion/detalle/<?=$probabilidades_inclusion_item['id_probabilidad_inclusion']?>"><?= $probabilidades_inclusion_item['nom_probabilidad_inclusion'] ?></a></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-1 align-self-center">
                             <p><?= $probabilidades_inclusion_item['min'] ?></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-1 align-self-center">
                             <p><?= $probabilidades_inclusion_item['max'] ?></p>
                         </div>
-                        <div class="col-sm-2 align-self-center">
+                        <div class="col-sm-2 align-self-center text-center">
                             <p><?= $probabilidades_inclusion_item['orden'] ?></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p><?= $probabilidades_inclusion_item['periodo'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 

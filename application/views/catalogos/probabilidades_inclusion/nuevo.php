@@ -38,6 +38,12 @@
                     <input type="text" class="form-control" name="orden" id="orden">
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="periodo" class="col-sm-2 col-form-label">Periodo</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="periodo" id="periodo">
+                </div>
+            </div>
         </div>
 
     </form>

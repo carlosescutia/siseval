@@ -96,6 +96,7 @@ class Probabilidades_inclusion extends CI_Controller {
                     'max' => $probabilidad_inclusion['max'],
                     'nom_probabilidad_inclusion' => $probabilidad_inclusion['nom_probabilidad_inclusion'],
                     'orden' => $probabilidad_inclusion['orden'],
+                    'periodo' => $probabilidad_inclusion['periodo'],
                 );
                 $id_probabilidad_inclusion = $this->probabilidades_inclusion_model->guardar($data, $id_probabilidad_inclusion);
 
