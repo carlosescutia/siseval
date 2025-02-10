@@ -4,6 +4,8 @@ class Accesos_sistema_usuario extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('funciones_sistema');
+
         $this->load->model('accesos_sistema_usuario_model');
     }
 
@@ -48,6 +50,7 @@ class Accesos_sistema_usuario extends CI_Controller {
 
             // registro en bitacora
             $acceso_sistema_usuario = $this->accesos_sistema_usuario_model->get_acceso_sistema_usuario($cve_acceso);
+            $cve_usuario = $acceso_sistema_usuario['cve_usuario'];
             $accion = 'eliminó';
             $entidad = 'accesos_sistema_usuario';
             $valor = $cve_acceso . " " . $acceso_sistema_usuario['cod_opcion'];

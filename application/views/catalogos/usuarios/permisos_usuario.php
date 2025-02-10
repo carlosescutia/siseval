@@ -4,9 +4,9 @@
     </div>
     <div class="card-body">
         <ul>
-                <?php foreach( $accesos_sistema_usuario as $accesos_sistema_usuario_item) { ?>
-                    <li>
-            <div class="row">
+            <?php foreach( $accesos_sistema_usuario as $accesos_sistema_usuario_item) { ?>
+                <li>
+                    <div class="row">
                         <div class="col-sm-6">
                             <?= $accesos_sistema_usuario_item['nom_opcion'] ?>
                         </div>
@@ -14,13 +14,13 @@
                             <?php 
                                 $item_eliminar = $accesos_sistema_usuario_item['nom_opcion'] ;
                                 $url = base_url() . "accesos_sistema_usuario/eliminar/". $accesos_sistema_usuario_item['cve_acceso']; 
-                                ?>
-                                <a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                </a>
+                            ?>
+                            <a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            </a>
                         </div>
-            </div>
-                    </li>
-                <?php } ?>
+                    </div>
+                </li>
+            <?php } ?>
         </ul>
     </div>
     <div class="card-footer text-end">
@@ -29,7 +29,7 @@
                 <div class="col-md-8">
                     <select class="form-select" name="cod_opcion" id="cod_opcion">
                         <?php foreach ($opciones_sistema_otorgables as $opciones_sistema_otorgables_item) { ?>
-                        <option value="<?= $opciones_sistema_otorgables_item['cod_opcion'] ?>"><?= $opciones_sistema_otorgables_item['nom_opcion'] ?></option>
+                            <option value="<?= $opciones_sistema_otorgables_item['cod_opcion'] ?>"><?= $opciones_sistema_otorgables_item['nom_opcion'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
