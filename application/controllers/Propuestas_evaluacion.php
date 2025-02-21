@@ -81,7 +81,6 @@ class Propuestas_evaluacion extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'cve_proyecto' => $propuesta_evaluacion['cve_proyecto'],
                     'cve_dependencia' => $propuesta_evaluacion['cve_dependencia'],
                     'id_tipo_evaluacion' => empty($propuesta_evaluacion['id_tipo_evaluacion']) ? null : $propuesta_evaluacion['id_tipo_evaluacion'],
                     'otro_tipo_evaluacion' => $propuesta_evaluacion['otro_tipo_evaluacion'],
