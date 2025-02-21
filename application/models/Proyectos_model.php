@@ -16,9 +16,9 @@ class Proyectos_model extends CI_Model {
             .'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.id_proyecto = py.id_proyecto) as num_calif_dependencias '
             .'from '
             .'proyectos py '
-            .'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
+            .'left join programas pg on py.cve_programa = pg.cve_programa '
             .'where '
-            .'pg.cve_dependencia::text LIKE ? '
+            .'py.cve_dependencia::text LIKE ? '
             .'and py.periodo = ? '
             .'';
 
@@ -51,7 +51,7 @@ class Proyectos_model extends CI_Model {
         if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
-        $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia left join dependencias d on pg.cve_dependencia = d.cve_dependencia where py.id_proyecto = ? and pg.cve_dependencia::text LIKE ?';
+        $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on py.cve_dependencia = d.cve_dependencia where py.id_proyecto = ? and py.cve_dependencia::text LIKE ?';
         $query = $this->db->query($sql, array($id_proyecto, $cve_dependencia));
         return $query->row_array();
     }
@@ -66,7 +66,7 @@ class Proyectos_model extends CI_Model {
         if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
-        $sql = 'select py.* from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where py.cve_anterior_proyecto = ? and pg.cve_dependencia::text LIKE ? and py.periodo = ? ';
+        $sql = 'select py.* from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where py.cve_anterior_proyecto = ? and py.cve_dependencia::text LIKE ? and py.periodo = ? ';
         $query = $this->db->query($sql, array($cve_anterior_proyecto, $cve_dependencia, $periodo));
         return $query->row_array();
     }
@@ -81,7 +81,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
@@ -114,7 +114,7 @@ class Proyectos_model extends CI_Model {
             .'from  '
             .'propuestas_evaluacion pe  '
             .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
-            .'left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia '
+            .'left join programas pg on py.cve_programa = pg.cve_programa '
             .'left join dependencias d on py.cve_dependencia = d.cve_dependencia '
             .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
             .'where  '
@@ -153,7 +153,7 @@ class Proyectos_model extends CI_Model {
 
     public function get_consecutivo_dependencia($cve_dependencia)
     {
-        $sql = "select max(right(py.cve_proyecto, 2)) as consecutivo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where left(pg.cve_programa, 3) = 'PRO' and pg.cve_dependencia = ?";
+        $sql = "select max(right(py.cve_proyecto, 2)) as consecutivo from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where left(pg.cve_programa, 3) = 'PRO' and py.cve_dependencia = ?";
         $query = $this->db->query($sql, array($cve_dependencia));
         return $query->row_array();
     }
@@ -196,7 +196,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -223,7 +223,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -256,7 +256,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -296,7 +296,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
@@ -417,7 +417,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa and py.cve_dependencia = pg.cve_dependencia "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "

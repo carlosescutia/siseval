@@ -18,8 +18,7 @@ DROP TABLE IF EXISTS programas CASCADE;
 CREATE TABLE programas (
     id_programa serial,
     cve_programa text,
-    nom_programa text,
-    cve_dependencia integer
+    nom_programa text
 );
 
 DROP TABLE IF EXISTS evaluaciones CASCADE;
