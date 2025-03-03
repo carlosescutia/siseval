@@ -29,6 +29,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
+            $periodo = $data['proyecto']['periodo'];
 
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
@@ -37,7 +38,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['num_proyectos_ods'] = $this->proyectos_model->get_num_proyectos_ods($proyecto['periodo']);
 
             $id_propuesta_evaluacion = $data['calificacion_propuesta']['id_propuesta_evaluacion'];
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
             $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['proyecto'] = $this->propuestas_evaluacion_model->get_proyecto($id_propuesta_evaluacion);
@@ -58,12 +59,13 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
+            $periodo = $data['proyecto']['periodo'];
 
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
             $data['cve_dependencia'] = $cve_dependencia;
 
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
             $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);

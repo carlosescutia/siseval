@@ -110,7 +110,7 @@ class Proyectos extends CI_Controller {
             $cve_anterior_proyecto = $data['proyecto']['cve_anterior_proyecto'];
             $periodo = $data['proyecto']['periodo'];
 
-            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto);
+            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto, $periodo);
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $periodo, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
@@ -201,7 +201,8 @@ class Proyectos extends CI_Controller {
             $cve_rol = $this->session->userdata('cve_rol');
             $cve_dependencia = $this->session->userdata('cve_dependencia');
             $proyecto = $this->proyectos_model->get_proyecto_id($id_proyecto);
-            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['id_proyecto']);
+            $periodo = $data['proyecto']['periodo'];
+            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['id_proyecto'], $periodo);
             if ($propuestas) {
                 $err_proyectos = array('cve_proyecto' => $proyecto['cve_proyecto'], 'error' => 'Este proyecto tiene propuestas de evaluación, no se puede eliminar');
                 $this->session->set_flashdata('err_proyectos', $err_proyectos);

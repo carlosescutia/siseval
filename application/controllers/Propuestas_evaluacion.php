@@ -27,8 +27,9 @@ class Propuestas_evaluacion extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
+            $periodo = $data['proyecto']['periodo'];
 
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['calificaciones_propuesta'] = $this->calificaciones_propuesta_model->get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
@@ -157,8 +158,11 @@ class Propuestas_evaluacion extends CI_Controller {
     public function eliminar($id_propuesta_evaluacion)
     {
         if ($this->session->userdata('logueado')) {
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $periodo = $data['proyecto']['periodo'];
 
-            $propuesta_evaluacion = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion);
+            $propuesta_evaluacion = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $id_proyecto = $propuesta_evaluacion['id_proyecto'];
             $calificaciones = $this->calificaciones_propuesta_model->get_calificaciones_propuesta_propuesta_evaluacion($id_propuesta_evaluacion);
             if ($calificaciones) {

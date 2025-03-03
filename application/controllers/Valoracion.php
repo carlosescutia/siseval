@@ -91,9 +91,10 @@ class Valoracion extends CI_Controller {
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
             $data['error'] = $this->session->flashdata('error');
+            $periodo = $data['proyecto']['periodo'];
 
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion, $periodo);
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_doc_op($cve_documento_opinion);
             $data['tipos_actor'] = $this->tipos_actor_model->get_tipos_actor();
             $data['status_documentos_opinion'] = $this->status_documentos_opinion_model->get_status_documentos_opinion();
@@ -464,12 +465,13 @@ class Valoracion extends CI_Controller {
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
             $data['error'] = $this->session->flashdata('error');
+            $periodo = $data['proyecto']['periodo'];
 
             $data['plan_accion'] = $this->planes_accion_model->get_plan_accion($id_plan_accion);
             $cve_documento_opinion = $data['plan_accion']['cve_documento_opinion'];
             $data['status_plan_accion_all'] = $this->status_plan_accion_model->get_status_plan_accion_all();
             $data['documento_opinion'] = $this->documentos_opinion_model->get_documento_opinion($cve_documento_opinion);
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion_doc_op($cve_documento_opinion, $periodo);
             $data['valoraciones_plan_accion'] = $this->valoraciones_plan_accion_model->get_valoraciones_plan_accion($id_plan_accion);
             $data['actividades'] = $this->actividades_model->get_actividades_plan_accion($id_plan_accion);
             $data['recomendaciones'] = $this->recomendaciones_model->get_recomendaciones_plan_accion($id_plan_accion);
@@ -1084,8 +1086,9 @@ class Valoracion extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
+            $periodo = $data['proyecto']['periodo'];
 
-            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $cve_dependencia, $cve_rol);
+            $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
 
             $this->load->view('templates/header', $data);
