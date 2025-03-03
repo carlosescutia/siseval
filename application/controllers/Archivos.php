@@ -26,7 +26,7 @@ class Archivos extends CI_Controller {
             $config['upload_path'] = $dir_docs;
             $config['file_name'] = $nombre_archivo;
             $config['allowed_types'] = $tipo_archivo;
-            $config['max_size'] = '20480';
+            $config['max_size'] = '92160';
             $config['overwrite'] = TRUE;
             $this->load->library('upload', $config);
             if ( ! $this->upload->do_upload('subir_archivo') ) {
