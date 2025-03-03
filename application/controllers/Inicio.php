@@ -15,6 +15,7 @@ class Inicio extends CI_Controller {
         $this->load->model('parametros_sistema_model');
         $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
+        $this->load->model('dependencias_model');
 
         $this->etapa_modulo = 0;
         $this->nom_etapa_modulo = '';
@@ -68,21 +69,22 @@ class Inicio extends CI_Controller {
         if ($this->input->post()) {
             $usuario = $this->input->post('usuario');
             $password = $this->input->post('password');
-            $usuario_db = $this->usuarios_model->usuario_por_nombre($usuario, $password);
-            if ($usuario_db) {
-                $permisos_usuario = explode(',', $this->accesos_sistema_model->get_permisos_usuario($usuario_db->cve_usuario));
+            $usuario = $this->usuarios_model->get_usuario_credenciales($usuario, $password);
+            if ($usuario) {
+                $permisos_usuario = explode(',', $this->accesos_sistema_model->get_permisos_usuario($usuario->cve_usuario));
                 $opciones_sistema = $this->opciones_sistema_model->get_opciones_sistema();
                 $etapa_siseval = $this->parametros_sistema_model->get_parametro_sistema_nom('etapa_siseval');
                 $anio_activo = $this->parametros_sistema_model->get_parametro_sistema_nom('anio_activo');
                 $anio_sesion = $anio_activo;
                 $periodos = $this->proyectos_model->get_anios_proyectos();
+                $dependencia_periodo = $this->dependencias_model->get_dependencia_periodo($usuario->cve_dependencia, $anio_sesion);
                 $usuario_data = array(
-                    'cve_usuario' => $usuario_db->cve_usuario,
-                    'cve_dependencia' => $usuario_db->cve_dependencia,
-                    'nom_dependencia' => $usuario_db->nom_dependencia,
-                    'cve_rol' => $usuario_db->cve_rol,
-                    'nom_usuario' => $usuario_db->nom_usuario,
-                    'usuario' => $usuario_db->usuario,
+                    'cve_usuario' => $usuario->cve_usuario,
+                    'cve_dependencia' => $usuario->cve_dependencia,
+                    'nom_dependencia' => $dependencia_periodo['nom_dependencia'],
+                    'cve_rol' => $usuario->cve_rol,
+                    'nom_usuario' => $usuario->nom_usuario,
+                    'usuario' => $usuario->usuario,
                     'permisos_usuario' => $permisos_usuario,
                     'opciones_sistema' => $opciones_sistema,
                     'etapa_siseval' => $etapa_siseval,

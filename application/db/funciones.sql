@@ -1,5 +1,5 @@
 /*
-Función get_dependencia_periodo(periodo)
+Función get_dependencia_periodo(cve_dependencia, periodo)
 -----------------------
 Obtiene valores de dependencias del periodo igual o inmediato anterior de la tabla dependencias_periodos
 Si no existe, usa valores de la tabla dependencia

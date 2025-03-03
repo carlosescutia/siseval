@@ -5,17 +5,23 @@ class Usuarios_model extends CI_Model {
         parent::__construct();
     }
 
-    public function usuario_por_nombre($usuario, $password) {
-        $this->db->select('u.cve_usuario, u.nom_usuario, u.usuario, u.cve_dependencia, d.nom_dependencia, u.cve_rol, r.nom_rol');
-        $this->db->from('usuarios u');
-        $this->db->join('roles r', 'u.cve_rol = r.cve_rol', 'left');
-        $this->db->join('dependencias d', 'u.cve_dependencia = d.cve_dependencia', 'left');
-        $this->db->where('u.usuario', $usuario);
-        $this->db->where('u.password', $password);
-        $this->db->where('u.activo', '1');
-        $consulta = $this->db->get();
-        $resultado = $consulta->row();
-        return $resultado;
+    public function get_usuario_credenciales($usuario, $pwd) {
+        $sql = ''
+            .'select '
+            .'u.*, '
+            .'d.nom_dependencia, '
+            .'r.nom_rol '
+            .'from '
+            .'usuarios u '
+            .'left join roles r on u.cve_rol = r.cve_rol '
+            .'left join dependencias d on u.cve_dependencia = d.cve_dependencia '
+            .'where '
+            .'u.usuario = ? '
+            .'and u.password = ? '
+            .'and u.activo = 1 '
+            .'';
+        $query = $this->db->query($sql, array($usuario, $pwd));
+        return $query->row();
     }
 
     public function get_usuarios() {

@@ -82,11 +82,11 @@ class Proyectos_model extends CI_Model {
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
             ."left join programas pg on py.cve_programa = pg.cve_programa "
-            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
-            ."left join dependencias dpe on pe.cve_dependencia = dpe.cve_dependencia "
+            ."left join get_dependencia_periodo(pe.cve_dependencia, ?) dpe on pe.cve_dependencia = dpe.cve_dependencia "
             ."where "
             ."py.cve_dependencia::text LIKE ? "
             ."and py.periodo = ? "
@@ -95,7 +95,7 @@ class Proyectos_model extends CI_Model {
             ."d.nom_dependencia, pg.cve_programa, py.cve_proyecto, pe.id_propuesta_evaluacion "
             ."";
 
-        $query = $this->db->query($sql, array($cve_dependencia, $periodo));
+        $query = $this->db->query($sql, array($periodo, $periodo, $cve_dependencia, $periodo));
 
         if ($salida == 'csv') {
             $delimiter = ",";
@@ -115,7 +115,7 @@ class Proyectos_model extends CI_Model {
             .'propuestas_evaluacion pe  '
             .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
             .'left join programas pg on py.cve_programa = pg.cve_programa '
-            .'left join dependencias d on py.cve_dependencia = d.cve_dependencia '
+            ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
             .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
             .'where  '
             .'py.cve_dependencia::text LIKE ? '
@@ -123,7 +123,7 @@ class Proyectos_model extends CI_Model {
             .'order by '
             .'d.nom_dependencia, pg.cve_programa, py.cve_proyecto  '
             .'';
-        $query = $this->db->query($sql, array($cve_dependencia, $periodo));
+        $query = $this->db->query($sql, array($periodo, $cve_dependencia, $periodo));
 
         if ($salida == 'csv') {
             $delimiter = ",";

@@ -81,7 +81,7 @@ class Dependencias_model extends CI_Model {
     public function get_status_dependencias($evaluaciones, $propuestas, $periodo, $salida) {
         $sql = ""
             ."select  "
-            ."d.cve_dependencia, d.nom_dependencia, d.nom_completo_dependencia, "
+            ."d.cve_dependencia, dp.nom_dependencia, dp.nom_completo_dependencia, "
             ."(case when nce.cve_dependencia > 0 then 'no' else 'si' end) as solicita_evaluaciones, "
             ."(select count(pe.id_propuesta_evaluacion) from propuestas_evaluacion pe left join proyectos py on pe.id_proyecto = py.id_proyecto where py.periodo = ? and py.cve_dependencia = d.cve_dependencia) as num_propuestas "
             ."from  "
