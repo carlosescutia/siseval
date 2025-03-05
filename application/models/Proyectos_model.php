@@ -47,12 +47,22 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_proyecto($id_proyecto, $cve_dependencia, $cve_rol) {
+    public function get_proyecto($id_proyecto, $cve_dependencia, $cve_rol, $periodo) {
         if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
-        $sql = 'select py.*, d.nom_dependencia from proyectos py left join programas pg on py.cve_programa = pg.cve_programa left join dependencias d on py.cve_dependencia = d.cve_dependencia where py.id_proyecto = ? and py.cve_dependencia::text LIKE ?';
-        $query = $this->db->query($sql, array($id_proyecto, $cve_dependencia));
+        $sql = ''
+            .'select p'
+            .'y.*, d.nom_dependencia '
+            .'from '
+            .'proyectos py '
+            .'left join programas pg on py.cve_programa = pg.cve_programa '
+            ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
+            .'where '
+            .'py.id_proyecto = ? '
+            .'and py.cve_dependencia::text LIKE ? '
+            .'';
+        $query = $this->db->query($sql, array($periodo, $id_proyecto, $cve_dependencia));
         return $query->row_array();
     }
 

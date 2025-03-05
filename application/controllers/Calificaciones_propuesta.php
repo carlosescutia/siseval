@@ -29,7 +29,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
-            $periodo = $data['proyecto']['periodo'];
+            $periodo = $data['userdata']['anio_sesion'];
 
             $data['calificacion_propuesta'] = $this->calificaciones_propuesta_model->get_calificacion_propuesta($id_calificacion_propuesta);
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
@@ -59,7 +59,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
-            $periodo = $data['proyecto']['periodo'];
+            $periodo = $data['userdata']['anio_sesion'];
 
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;

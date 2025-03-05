@@ -74,7 +74,7 @@ class Ejecucion extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             $cve_rol = $data['userdata']['cve_rol'];
-            $periodo = $data['proyecto']['periodo'];
+            $periodo = $data['userdata']['anio_sesion'];
 
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
