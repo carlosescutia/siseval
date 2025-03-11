@@ -13,6 +13,8 @@ class Periodos extends CI_Controller {
         $this->load->model('periodos_model');
         $this->load->model('criterios_calificacion_model');
         $this->load->model('criterios_calificacion_periodo_model');
+        $this->load->model('tipos_evaluacion_model');
+        $this->load->model('tipos_evaluacion_periodo_model');
 
         $this->etapa_modulo = 0;
         $this->nom_etapa_modulo = '';
@@ -54,6 +56,8 @@ class Periodos extends CI_Controller {
                 $data['periodo'] = $this->periodos_model->get_periodo($id_periodo);
                 $data['criterios_calificacion'] = $this->criterios_calificacion_model->get_criterios_calificacion();
                 $data['criterios_calificacion_periodo'] = $this->criterios_calificacion_periodo_model->get_criterios_calificacion_periodo($data['periodo']['nom_periodo']);
+                $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
+                $data['tipos_evaluacion_periodo'] = $this->tipos_evaluacion_periodo_model->get_tipos_evaluacion_periodo($data['periodo']['nom_periodo']);
 
                 $this->load->view('templates/header', $data);
                 $this->load->view('templates/dlg_borrar');

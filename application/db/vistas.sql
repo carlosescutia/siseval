@@ -5,20 +5,6 @@ Se obtiene suma y conteo de criterios de calificación de propuesta
 */
 DROP VIEW IF EXISTS totales_calificacion CASCADE;
 CREATE VIEW totales_calificacion AS
-/*
-SELECT
-    cp.id_calificacion_propuesta,
-    (
-    (case when cp.pertinencia_evaluacion >= 0 then cp.pertinencia_evaluacion else 0 end) 
-    + (case when cp.ciclo_evaluativo >= 0 then cp.ciclo_evaluativo else 0 end) 
-    ) as suma,
-    (
-    (case when cp.pertinencia_evaluacion >= 0 then 1 else 0 end) 
-    + (case when cp.ciclo_evaluativo >= 0 then 1 else 0 end) 
-    ) as conteo
-FROM 
-    calificaciones_propuesta cp ;
- */
 SELECT
     cp.id_calificacion_propuesta,
     (
@@ -49,7 +35,7 @@ DROP VIEW IF EXISTS puntaje_calificacion_dependencia CASCADE;
 CREATE VIEW puntaje_calificacion_dependencia AS
 SELECT 
     cp.id_calificacion_propuesta, cp.cve_dependencia, d.nom_dependencia, 
-    pe.id_proyecto, cp.id_propuesta_evaluacion, te.nom_tipo_evaluacion, 
+    pe.id_proyecto, cp.id_propuesta_evaluacion, pe.id_tipo_evaluacion, te.nom_tipo_evaluacion, 
     (case 
         when cp.evaluacion_obligatoria = 1 then 100
         when conteo = 0 then 0
@@ -66,18 +52,34 @@ FROM
 /*
 Vista puntaje_calificacion_propuesta
 -----------------------
-Se obtiene puntaje de calificaciones de propuestas
+Se obtiene puntaje,conteo,probabilidad y status de calificaciones de propuestas
  */
 DROP VIEW IF EXISTS puntaje_calificacion_propuesta CASCADE;
 CREATE VIEW puntaje_calificacion_propuesta AS
-SELECT 
-    pcd.id_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, 
-    sum(pcd.puntaje) as puntaje,
-    (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max and periodo = pcd.periodo) as probabilidad
-FROM 
-    puntaje_calificacion_dependencia pcd
-GROUP BY 
-    pcd.id_proyecto, pcd.id_propuesta_evaluacion, pcd.nom_tipo_evaluacion, pcd.periodo ;
+select
+    pe.id_proyecto, d.cve_dependencia, d.nom_dependencia, pe.id_propuesta_evaluacion, pe.id_tipo_evaluacion, te.nom_tipo_evaluacion,
+    sum(pcd.puntaje) as puntaje, count(pcd.id_propuesta_evaluacion) as num_calificaciones,
+    (case
+        when pe.id_tipo_evaluacion in (select id_tipo_evaluacion from tipos_evaluacion_periodo where periodo = py.periodo) then 'Por normativa'
+        else (select nom_probabilidad_inclusion from probabilidades_inclusion where sum(pcd.puntaje) between min and max and periodo = py.periodo)
+    end
+    ) as probabilidad,
+    (case 
+        when pe.id_tipo_evaluacion in (select id_tipo_evaluacion from tipos_evaluacion_periodo where periodo = py.periodo) then 'totalmente_calificada'
+        when coalesce(count(pcd.id_propuesta_evaluacion), 0) = 0 then 'no_calificada'
+        when count(pcd.id_propuesta_evaluacion) < (select num_supervisores from periodos where nom_periodo = py.periodo) then 'parcialmente_calificada'
+        when count(pcd.id_propuesta_evaluacion) = (select num_supervisores from periodos where nom_periodo = py.periodo) then 'totalmente_calificada'
+    end
+    ) as status_calificacion
+from
+    propuestas_evaluacion pe
+    left join proyectos py on py.id_proyecto = pe.id_proyecto
+    left join get_dependencia_periodo(pe.cve_dependencia, py.periodo) d on pe.cve_dependencia = d.cve_dependencia
+    left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion
+    left join puntaje_calificacion_dependencia pcd on pcd.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
+group by
+    pe.id_proyecto, d.cve_dependencia, d.nom_dependencia, pe.id_propuesta_evaluacion, pe.id_tipo_evaluacion, te.nom_tipo_evaluacion, py.periodo
+;
 
 
 /*

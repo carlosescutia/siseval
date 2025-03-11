@@ -39,20 +39,30 @@
 
     </form>
 
-    <?php
-        $permisos_requeridos = array(
-            'criterio_calificacion.can_edit',
-        );
-    ?>
-    <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
         <div class="col-md-12 mt-5">
             <div class="row">
-                <div class="col-md-5 offset-md-1">
-                    <?php include 'criterios_calificacion_periodo.php' ?>
-                </div>
+                <?php
+                    $permisos_requeridos = array(
+                        'criterio_calificacion.can_edit',
+                    );
+                ?>
+                <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                    <div class="col-md-5 offset-md-1">
+                        <?php include 'criterios_calificacion_periodo.php' ?>
+                    </div>
+                <?php } ?>
+                <?php
+                    $permisos_requeridos = array(
+                        'tipo_evaluacion.can_edit',
+                    );
+                ?>
+                <?php if (has_permission_and($permisos_requeridos, $permisos_usuario)) { ?>
+                    <div class="col-md-5 offset-md-1">
+                        <?php include 'aprobar_tipos_evaluacion_por_normativa.php' ?>
+                    </div>
+                <?php } ?>
             </div>
         </div>
-    <?php } ?>
 
     <hr />
 

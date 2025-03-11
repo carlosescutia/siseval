@@ -19,6 +19,7 @@ class Proyectos extends CI_Controller {
         $this->load->model('metas_ods_model');
         $this->load->model('parametros_sistema_model');
         $this->load->model('periodos_model');
+        $this->load->model('tipos_evaluacion_periodo_model');
 
         $this->etapa_modulo = 1;
         $this->nom_etapa_modulo = 'planificacion.etapa_activa';
@@ -110,11 +111,12 @@ class Proyectos extends CI_Controller {
             $cve_proyecto = $data['proyecto']['cve_proyecto'];
             $cve_anterior_proyecto = $data['proyecto']['cve_anterior_proyecto'];
 
-            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto, $periodo);
+            $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto);
             $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $periodo, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['metas'] = $this->metas_ods_model->get_metas_proyecto($id_proyecto);
+            $data['tipos_evaluacion_periodo'] =$this->tipos_evaluacion_periodo_model->get_id_tipos_evaluacion_periodo($periodo);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($id_proyecto, $cve_dependencia);
 
             // Obtener un solo registro, se están generando varios
@@ -201,7 +203,7 @@ class Proyectos extends CI_Controller {
             $cve_rol = $this->session->userdata('cve_rol');
             $cve_dependencia = $this->session->userdata('cve_dependencia');
             $proyecto = $this->proyectos_model->get_proyecto_id($id_proyecto);
-            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['id_proyecto'], $proyecto['periodo']);
+            $propuestas = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($proyecto['id_proyecto']);
             if ($propuestas) {
                 $err_proyectos = array('cve_proyecto' => $proyecto['cve_proyecto'], 'error' => 'Este proyecto tiene propuestas de evaluación, no se puede eliminar');
                 $this->session->set_flashdata('err_proyectos', $err_proyectos);

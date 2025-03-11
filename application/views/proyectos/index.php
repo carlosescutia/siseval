@@ -275,18 +275,16 @@
                                         }
 
                                         $fondo_calificadas = 'bg-dark';
-                                        if (($proyectos_item['evaluaciones_propuestas'] == $proyectos_item['propuestas_calificadas']) and 
-                                        ($proyectos_item['num_calif_dependencias'] == $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
+                                        if ($proyectos_item['status_propuesta'] == 'totalmente_calificada') {
                                             $fondo_calificadas = 'bg-success';
                                         }
-                                        if (($proyectos_item['evaluaciones_propuestas'] == $proyectos_item['propuestas_calificadas']) and 
-                                        ($proyectos_item['num_calif_dependencias'] < $proyectos_item['propuestas_calificadas'] * $num_supervisores)) {
+                                        if ($proyectos_item['status_propuesta'] == 'parcialmente_calificada') {
                                             $fondo_calificadas = 'bg-warning';
                                         }
-                                        if ($proyectos_item['evaluaciones_propuestas'] > $proyectos_item['propuestas_calificadas']) {
+                                        if ($proyectos_item['status_propuesta'] == 'no_calificada') {
                                             $fondo_calificadas = 'bg-danger';
                                         }
-                                        if (($proyectos_item['propuestas_calificadas'] == '0') and ($proyectos_item['evaluaciones_propuestas'] == '0')) {
+                                        if ($proyectos_item['evaluaciones_propuestas'] == '0') {
                                             $fondo_calificadas = 'bg-secondary';
                                         }
 

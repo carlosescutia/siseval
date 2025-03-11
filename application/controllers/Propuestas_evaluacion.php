@@ -14,6 +14,7 @@ class Propuestas_evaluacion extends CI_Controller {
         $this->load->model('propuestas_evaluacion_model');
         $this->load->model('calificaciones_propuesta_model');
         $this->load->model('clasificaciones_supervisor_model');
+        $this->load->model('tipos_evaluacion_periodo_model');
 
         // globales
         $this->etapa_modulo = 1;
@@ -37,6 +38,7 @@ class Propuestas_evaluacion extends CI_Controller {
             $data['num_calificaciones_propuesta_dependencia'] = $this->calificaciones_propuesta_model->get_num_calificaciones_propuesta_dependencia($id_propuesta_evaluacion, $cve_dependencia);
             $data['id_propuesta_evaluacion'] = $id_propuesta_evaluacion;
             $data['clasificaciones_supervisor'] = $this->clasificaciones_supervisor_model->get_clasificaciones_supervisor();
+            $data['tipos_evaluacion_periodo'] =$this->tipos_evaluacion_periodo_model->get_id_tipos_evaluacion_periodo($periodo);
             $data['error'] = $this->session->flashdata('error');
 
             $this->load->view('templates/header', $data);

@@ -6,14 +6,14 @@
 <div class="card mt-0 mb-3 tabla-datos">
     <div class="card-header text-white bg-primary">Propuestas de evaluación <?= $proyecto['periodo'] ?></div>
     <div class="card-body">
+        <?php if ($err_propuestas_evaluacion) { ?>
+            <div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
+                <?php echo $err_propuestas_evaluacion ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
         <?php foreach ($propuestas_evaluacion as $propuestas_evaluacion_item) { ?>
             <div class="col-sm-12 ps-3 alternate-color">
-                <?php if ($err_propuestas_evaluacion) { ?>
-                    <div class="alert alert-warning alert-dismissible fade show texto-menor" role="alert">
-                        <?php echo $err_propuestas_evaluacion ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php } ?>
                 <div class="row">
                     <div class="col-sm-8">
                         <p>
@@ -37,15 +37,14 @@
                     </div>
                     <div class="col-sm-4">
                         <?php 
-                            $num_calificaciones = $propuestas_evaluacion_item['num_calificaciones'];
-                            switch (true) {
-                            case $num_calificaciones == 0:
+                            switch ($propuestas_evaluacion_item['status_calificacion']) {
+                            case 'no_calificada':
                                 $fondo_actual = 'bg-danger'; 
                                 break;
-                            case $num_calificaciones > 0 and $num_calificaciones < $num_supervisores:
+                            case 'parcialmente_calificada':
                                 $fondo_actual = 'bg-warning'; 
                                 break;
-                            case $num_calificaciones == $num_supervisores:
+                            case 'totalmente_calificada':
                                 $fondo_actual = 'bg-success'; 
                                 break;
                             default:

@@ -1,4 +1,3 @@
-/*
 ALTER TABLE probabilidades_inclusion ADD COLUMN IF NOT EXISTS periodo integer ;
 ALTER TABLE semaforo_proyectos ADD COLUMN IF NOT EXISTS periodo integer ;
 ALTER TABLE propuestas_evaluacion ADD COLUMN IF NOT EXISTS id_proyecto integer ;
@@ -47,4 +46,3 @@ ALTER TABLE actividades ALTER COLUMN resultados_esperados TYPE integer USING res
 ALTER TABLE actividades ALTER COLUMN unidad_medida TYPE integer USING unidad_medida::integer;
 
 ALTER TABLE tipos_evaluacion DROP COLUMN IF EXISTS abrev_tipo_evaluacion;
-*/
