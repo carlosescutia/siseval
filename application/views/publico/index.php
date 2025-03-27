@@ -41,35 +41,7 @@
             $icono = "bi-filetype-pdf";
         ?>
 
-        <?php foreach ($proyectos as $proyectos_item) {
-            $prefijo = 'ct' ;
-            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
-            $contrato_fs = $dir_docs . $nombre_archivo;
-
-            $prefijo = 'on' ;
-            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
-            $oficio_notificacion_fs = $dir_docs . $nombre_archivo;
-
-            $prefijo = 'if' ;
-            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
-            $informe_final_fs = $dir_docs . $nombre_archivo;
-            $nombre_archivo_url = base_url() . $dir_docs . $nombre_archivo;
-
-            $prefijo = 'cl' ;
-            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
-            $cancelacion_fs = $dir_docs . $nombre_archivo;
-
-            $status = 'Por iniciar';
-            if ( file_exists($contrato_fs) or file_exists($oficio_notificacion_fs) ) {
-                $status = 'En proceso' ;
-            }
-            if ( file_exists($informe_final_fs) ) {
-                $status = 'Concluído' ;
-            }
-            if ( file_exists($cancelacion_fs) ) {
-                $status = 'Cancelado' ;
-            } ?>
-
+        <?php foreach ($proyectos as $proyectos_item) { ?>
             <div class="col-sm-12 alternate-color">
                 <div class="row">
                     <div class="col-sm-1">
@@ -88,9 +60,9 @@
                         <p><?= $proyectos_item['nom_dependencia'] ?></p>
                     </div>
                     <div class="col-sm-1">
-                        <p><?= $status ?></p>
+                        <p><?= $proyectos_item['status'] ?></p>
                     </div>
-                    <?php if ( $status !== 'Cancelado' ) { ?>
+                    <?php if ( $proyectos_item['status'] !== 'cancelado' ) { ?>
                         <?php
                             // Términos de referencia
                             $prefijo = 'tr' ;

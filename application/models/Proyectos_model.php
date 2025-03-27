@@ -347,6 +347,85 @@ class Proyectos_model extends CI_Model {
     }
 
     public function get_programas_agenda_evaluacion_publico($limite=null, $inicio=null) {
+        // obtener lista de posibles archivos para cada registro
+        $sql = ""
+            ."select "
+            ."pe.id_propuesta_evaluacion "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."where "
+            ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."order by "
+            ."pe.id_propuesta_evaluacion "
+            ."";
+        $query = $this->db->query($sql);
+        $proyectos = $query->result_array();
+        $tipo_archivo = 'pdf';
+        $dir_docs = './doc/';
+        $docs_por_iniciar = [];
+        $docs_en_proceso = [];
+        $docs_concluido = [];
+        $docs_cancelado = [];
+        foreach ($proyectos as $proyectos_item) {
+            $prefijo = 'ct' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $contrato_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'on' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $oficio_notificacion_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'if' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $informe_final_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'cl' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $cancelacion_fs = $dir_docs . $nombre_archivo;
+
+            $status = 'por_iniciar';
+            if ( file_exists($contrato_fs) or file_exists($oficio_notificacion_fs) ) {
+                $status = 'en_proceso' ;
+            }
+            if ( file_exists($informe_final_fs) ) {
+                $status = 'concluido' ;
+            }
+            if ( file_exists($cancelacion_fs) ) {
+                $status = 'cancelado' ;
+            }
+
+            switch ($status) {
+                case 'por_iniciar':
+                    array_push($docs_por_iniciar, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'en_proceso':
+                    array_push($docs_en_proceso, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'concluido':
+                    array_push($docs_concluido, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'cancelado':
+                    array_push($docs_cancelado, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+            };
+        }
+        $lista_por_iniciar = implode(',', $docs_por_iniciar);
+        if (empty($lista_por_iniciar)) {
+            $lista_por_iniciar = '0';
+        }
+        $lista_en_proceso = implode(',', $docs_en_proceso);
+        if (empty($lista_en_proceso)) {
+            $lista_en_proceso = '0';
+        }
+        $lista_concluido = implode(',', $docs_concluido);
+        if (empty($lista_concluido)) {
+            $lista_concluido = '0';
+        }
+        $lista_cancelado = implode(',', $docs_cancelado);
+        if (empty($lista_cancelado)) {
+            $lista_cancelado = '0';
+        }
+
         $sql = ""
             ."select "
             ."d.nom_dependencia, "
@@ -354,7 +433,13 @@ class Proyectos_model extends CI_Model {
             ."pe.id_propuesta_evaluacion, "
             ."te.nom_tipo_evaluacion, "
             ."dop.cve_documento_opinion,  "
-            ."pa.id_plan_accion "
+            ."pa.id_plan_accion, "
+            ."(case "
+            ."when pe.id_propuesta_evaluacion in (" . $lista_por_iniciar . ") then 'por_iniciar' "
+            ."when pe.id_propuesta_evaluacion in (" . $lista_en_proceso . ") then 'en_proceso' "
+            ."when pe.id_propuesta_evaluacion in (" . $lista_concluido . ") then 'concluido' "
+            ."when pe.id_propuesta_evaluacion in (" . $lista_cancelado . ") then 'cancelado' "
+            ."end) as status "
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
@@ -364,6 +449,7 @@ class Proyectos_model extends CI_Model {
             ."left join planes_accion pa on pa.cve_documento_opinion = dop.cve_documento_opinion "
             ."where "
             ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."and pe.id_propuesta_evaluacion not in (" . $lista_por_iniciar .") "
             ."order by "
             ."py.periodo desc, d.nom_dependencia, py.cve_proyecto, pe.id_propuesta_evaluacion "
             ."limit " . $limite . " offset " . $inicio
@@ -374,16 +460,94 @@ class Proyectos_model extends CI_Model {
     }
 
     public function num_programas_agenda_evaluacion_publico() {
+        // obtener lista de posibles archivos para cada registro
+        $sql = ""
+            ."select "
+            ."pe.id_propuesta_evaluacion "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."where "
+            ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."order by "
+            ."pe.id_propuesta_evaluacion "
+            ."";
+        $query = $this->db->query($sql);
+        $proyectos = $query->result_array();
+        $tipo_archivo = 'pdf';
+        $dir_docs = './doc/';
+        $docs_por_iniciar = [];
+        $docs_en_proceso = [];
+        $docs_concluido = [];
+        $docs_cancelado = [];
+        foreach ($proyectos as $proyectos_item) {
+            $prefijo = 'ct' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $contrato_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'on' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $oficio_notificacion_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'if' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $informe_final_fs = $dir_docs . $nombre_archivo;
+
+            $prefijo = 'cl' ;
+            $nombre_archivo = $prefijo . '_' . $proyectos_item['id_propuesta_evaluacion'] . '.' . $tipo_archivo;
+            $cancelacion_fs = $dir_docs . $nombre_archivo;
+
+            $status = 'por_iniciar';
+            if ( file_exists($contrato_fs) or file_exists($oficio_notificacion_fs) ) {
+                $status = 'en_proceso' ;
+            }
+            if ( file_exists($informe_final_fs) ) {
+                $status = 'concluido' ;
+            }
+            if ( file_exists($cancelacion_fs) ) {
+                $status = 'cancelado' ;
+            }
+
+            switch ($status) {
+                case 'por_iniciar':
+                    array_push($docs_por_iniciar, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'en_proceso':
+                    array_push($docs_en_proceso, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'concluido':
+                    array_push($docs_concluido, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+                case 'cancelado':
+                    array_push($docs_cancelado, $proyectos_item['id_propuesta_evaluacion']);
+                    break;
+            };
+        }
+        $lista_por_iniciar = implode(',', $docs_por_iniciar);
+        if (empty($lista_por_iniciar)) {
+            $lista_por_iniciar = '0';
+        }
+        $lista_en_proceso = implode(',', $docs_en_proceso);
+        if (empty($lista_en_proceso)) {
+            $lista_en_proceso = '0';
+        }
+        $lista_concluido = implode(',', $docs_concluido);
+        if (empty($lista_concluido)) {
+            $lista_concluido = '0';
+        }
+        $lista_cancelado = implode(',', $docs_cancelado);
+        if (empty($lista_cancelado)) {
+            $lista_cancelado = '0';
+        }
+
         $sql = ""
             ."select "
             ."count(*) as num_programas "
             ."from "
             ."propuestas_evaluacion pe  "
-            ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
             ."where "
             ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."and pe.id_propuesta_evaluacion not in (" . $lista_por_iniciar .") "
             ."";
-
         $query = $this->db->query($sql);
         return $query->row_array()['num_programas'];
     }
