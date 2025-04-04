@@ -25,7 +25,6 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."py.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, py.nom_proyecto, py.periodo "
             ."from "
             ."propuestas_evaluacion pe "
-            ."left join dependencias d on d.cve_dependencia = pe.cve_dependencia "
             ."left join get_dependencia_periodo(pe.cve_dependencia, ?) d on pe.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
             ."left join proyectos py on py.id_proyecto = pe.id_proyecto "

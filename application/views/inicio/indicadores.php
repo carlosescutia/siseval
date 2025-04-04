@@ -67,11 +67,32 @@
                     </div>
                 </div>
                 <div class="col border border-dark-subtle border-2 rounded pt-4 mb-3 m-0 m-sm-3">
-                <!--
                     <h1>Recomendaciones</h1>
                     <div class="row mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                            <h4>Generadas</h4>
+                            <h1 class="display-3"><?= $num_recomendaciones ?></h1>
+                        </div>
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                            <h4>Aceptadas</h4>
+                            <h1 class="display-3"><?= $num_recomendaciones_aceptadas ?></h1>
+                        </div>
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                            <h4>Atendidas</h4>
+                            <h1 class="display-3"><?= $num_recomendaciones_atendidas ?></h1>
+                        </div>
                     </div>
-                -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                            <h3>Generadas vs Aceptadas</h3>
+                            <canvas id="recomendaciones_generadas_aceptadas" height="300"></canvas>
+                        </div>
+                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                            <h3>Aceptadas vs Atendidas</h3>
+                            <canvas id="recomendaciones_aceptadas_atendidas"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -161,5 +182,92 @@ new Chart(evaluaciones_tipo, {
         }
     }
 });
+
+const recomendaciones_generadas_aceptadas = document.getElementById('recomendaciones_generadas_aceptadas');
+generadas = <?= $num_recomendaciones ?>;
+aceptadas = <?= $num_recomendaciones_aceptadas ?>;
+no_aceptadas = generadas - aceptadas;
+new Chart(recomendaciones_generadas_aceptadas, {
+    type: 'doughnut',
+    data: {
+        labels: ['Aceptadas','No aceptadas'],
+        datasets: [{
+            data: [aceptadas, no_aceptadas],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        size: 10
+                    }
+                }
+            },
+            datalabels: {
+                anchor: 'center',
+                align: 'center',
+                color: 'blue',
+                font: {
+                    weight: 'bold',
+                },
+                formatter: function (value, ctx) {
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(0) + " %";
+                    return percentage;
+                }
+            }
+        }
+    }
+});
+
+const recomendaciones_aceptadas_atendidas = document.getElementById('recomendaciones_aceptadas_atendidas');
+aceptadas = <?= $num_recomendaciones_aceptadas ?>;
+atendidas = <?= $num_recomendaciones_atendidas ?>;
+no_atendidas = aceptadas - atendidas;
+new Chart(recomendaciones_aceptadas_atendidas, {
+    type: 'doughnut',
+    data: {
+        labels: ['Atendidas','No atendidas'],
+        datasets: [{
+            data: [atendidas, no_atendidas],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        size: 10
+                    }
+                }
+            },
+            datalabels: {
+                anchor: 'center',
+                align: 'center',
+                color: 'blue',
+                font: {
+                    weight: 'bold',
+                },
+                formatter: function (value, ctx) {
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(0) + " %";
+                    return percentage;
+                }
+            }
+        }
+    }
+});
+
 
 </script>

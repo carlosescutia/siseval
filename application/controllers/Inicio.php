@@ -18,6 +18,7 @@ class Inicio extends CI_Controller {
         $this->load->model('dependencias_model');
         $this->load->model('tipos_evaluacion_model');
         $this->load->model('propuestas_evaluacion_model');
+        $this->load->model('recomendaciones_model');
 
         $this->etapa_modulo = 0;
         $this->nom_etapa_modulo = '';
@@ -87,6 +88,10 @@ class Inicio extends CI_Controller {
             $data['num_propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
             $data['evaluaciones_ejercicio'] = $this->propuestas_evaluacion_model->get_evaluaciones_ejercicio($cve_dependencia_filtro, $tipo_evaluacion_filtro);
             $data['evaluaciones_tipo'] = $this->propuestas_evaluacion_model->get_evaluaciones_tipo($cve_dependencia_filtro, $periodo_filtro);
+
+            $data['num_recomendaciones'] = $this->recomendaciones_model->get_num_recomendaciones($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['num_recomendaciones_aceptadas'] = $this->recomendaciones_model->get_num_recomendaciones_aceptadas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['num_recomendaciones_atendidas'] = $this->recomendaciones_model->get_num_recomendaciones_atendidas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

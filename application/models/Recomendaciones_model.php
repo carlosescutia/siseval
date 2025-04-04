@@ -66,6 +66,85 @@ class Recomendaciones_model extends CI_Model {
         return $query->row_array()['num_recomendaciones_documento_opinion'];
     }
 
+    public function get_num_recomendaciones($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select "
+            ."count(*) as num_recomendaciones "
+            ."from "
+            ."recomendaciones r "
+            ."left join documentos_opinion dop on dop.cve_documento_opinion = r.cve_documento_opinion "
+            ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_recomendaciones'] ?? null ;
+    }
+
+    public function get_num_recomendaciones_aceptadas($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select "
+            ."count(*) as num_recomendaciones_aceptadas "
+            ."from "
+            ."recomendaciones r "
+            ."left join documentos_opinion dop on dop.cve_documento_opinion = r.cve_documento_opinion "
+            ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."and r.postura = 'a' "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_recomendaciones_aceptadas'] ?? null ;
+    }
+
+    public function get_num_recomendaciones_atendidas($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select "
+            ."count(*) as num_recomendaciones_atendidas "
+            ."from "
+            ."actividades a "
+            ."left join recomendaciones r on r.cve_recomendacion = a.cve_recomendacion "
+            ."left join documentos_opinion dop on dop.cve_documento_opinion = r.cve_documento_opinion "
+            ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."and a.registro_avance >= a.unidad_medida "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_recomendaciones_atendidas'] ?? null ;
+    }
+
+
     public function guardar($data, $cve_recomendacion)
     {
         if ($cve_recomendacion) {
