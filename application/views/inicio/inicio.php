@@ -3,11 +3,10 @@
         <h2>Inicio</h2>
     </div>
     <div class="row">
-        <div class="col-md-7 tabla-datos">
-            <?php include "bienvenida.php"; ?>
+        <div class="col-md-12 tabla-datos">
             <?php include "indicadores.php"; ?>
         </div>
-        <div class="col-md-5 ml-5">
+        <div class="col-md-5 mx-5">
             <?php include "calendario.php"; ?>
         </div>
     </div>

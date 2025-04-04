@@ -1,4 +1,4 @@
-<div class="card border-0 border-start mt-0 mb-3 text-center">
+<div class="card mb-3 text-center">
     <div class="card-body">
         <h3 class="mb-3">Próximos eventos</h3>
         <table class="table table-striped text-start">

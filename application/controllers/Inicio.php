@@ -16,6 +16,8 @@ class Inicio extends CI_Controller {
         $this->load->model('accesos_sistema_model');
         $this->load->model('opciones_sistema_model');
         $this->load->model('dependencias_model');
+        $this->load->model('tipos_evaluacion_model');
+        $this->load->model('propuestas_evaluacion_model');
 
         $this->etapa_modulo = 0;
         $this->nom_etapa_modulo = '';
@@ -31,9 +33,60 @@ class Inicio extends CI_Controller {
             $periodos = $this->proyectos_model->get_anios_proyectos();
             $this->session->set_userdata('periodos', $periodos);
             $data['userdata'] = $this->session->userdata;
+            $anio_sesion = $data['userdata']['anio_sesion'];
+            $cve_rol = $data['userdata']['cve_rol'];
+
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            if ($cve_rol != 'usr') {
+                $cve_dependencia = '%';
+            }
+
+            $filtros = $this->input->post();
+            if ($filtros) {
+                $periodo_filtro = $filtros['periodo_filtro'];
+                $cve_dependencia_filtro = $filtros['cve_dependencia_filtro'];
+                $tipo_evaluacion_filtro = $filtros['tipo_evaluacion_filtro'];
+                $filtros_proyectos = array(
+                    'periodo_filtro' => $periodo_filtro,
+                    'cve_dependencia_filtro' => $cve_dependencia_filtro,
+                    'tipo_evaluacion_filtro' => $tipo_evaluacion_filtro,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+            } else {
+                if ($this->session->userdata('periodo_filtro')) {
+                    $periodo_filtro = $this->session->userdata('periodo_filtro');
+                } else {
+                    $periodo_filtro = '0';
+                }
+                if ($this->session->userdata('cve_dependencia_filtro')) {
+                    $cve_dependencia_filtro = $this->session->userdata('cve_dependencia_filtro');
+                } else {
+                    $cve_dependencia_filtro = $cve_dependencia;
+                    if ($cve_rol != 'usr') {
+                        $cve_dependencia_filtro = '%';
+                    }
+                }
+                if ($this->session->userdata('tipo_evaluacion_filtro')) {
+                    $tipo_evaluacion_filtro = $this->session->userdata('tipo_evaluacion_filtro');
+                } else {
+                    $tipo_evaluacion_filtro = '0';
+                }
+            }
+
+            $data['periodo_filtro'] = $periodo_filtro;
+            $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
+            $data['tipo_evaluacion_filtro'] = $tipo_evaluacion_filtro;
+
+            $data['periodos_filtro'] = $periodos;
+            $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0, $anio_sesion);
+            $data['tipos_evaluacion_filtro'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
 
             $anio_sesion = $this->session->userdata('anio_sesion');
             $data['eventos'] = $this->eventos_model->get_eventos($anio_sesion);
+            $data['num_programas_evaluados'] = $this->propuestas_evaluacion_model->get_num_programas_evaluados($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['num_propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['evaluaciones_ejercicio'] = $this->propuestas_evaluacion_model->get_evaluaciones_ejercicio($cve_dependencia_filtro, $tipo_evaluacion_filtro);
+            $data['evaluaciones_tipo'] = $this->propuestas_evaluacion_model->get_evaluaciones_tipo($cve_dependencia_filtro, $periodo_filtro);
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

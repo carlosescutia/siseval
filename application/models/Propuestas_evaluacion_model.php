@@ -92,6 +92,113 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array()['tot_info_disponible'] ?? null ;
     }
 
+    public function get_num_programas_evaluados($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."with programas as ( "
+            ."select  "
+            ."py.cve_proyecto, py.periodo "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
+            ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $sql .= ""
+            ."group by py.cve_proyecto, py.periodo "
+            .") "
+            ."select count(*) as num_programas_evaluados from programas "
+            ."";
+
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_programas_evaluados'] ?? null ;
+    }
+
+    public function get_num_propuestas_evaluacion($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select  "
+            ."count(*) as num_propuestas_evaluacion "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
+            ."where  "
+            ."py.cve_dependencia::text LIKE ?  "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_propuestas_evaluacion'] ?? null ;
+    }
+
+    public function get_evaluaciones_ejercicio($dependencia, $tipo_evaluacion) {
+        $sql = ""
+            ."select  "
+            ."py.periodo, count(*) as num_evaluaciones "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
+            ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."and py.periodo is not null "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $sql .= ""
+            ."group by py.periodo "
+            ."";
+        $query = $this->db->query($sql, $parametros);
+        return $query->result_array() ;
+    }
+
+    public function get_evaluaciones_tipo($dependencia, $periodo) {
+        $sql = ""
+            ."select  "
+            ."te.nom_tipo_evaluacion, count(*) as num_evaluaciones "
+            ."from  "
+            ."propuestas_evaluacion pe  "
+            ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
+            ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
+            ."where py.cve_dependencia::text LIKE ? "
+            ."and py.periodo is not null "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        $sql .= ""
+            ."group by "
+            ."te.orden, te.nom_tipo_evaluacion "
+            ."order by "
+            ."te.orden "
+            ."";
+        $query = $this->db->query($sql, $parametros);
+        return $query->result_array() ;
+    }
+
     public function get_proyecto($id_propuesta_evaluacion)
     {
         $sql = "select py.* from proyectos py left join propuestas_evaluacion pe on pe.id_proyecto = py.id_proyecto where pe.id_propuesta_evaluacion = ? ";

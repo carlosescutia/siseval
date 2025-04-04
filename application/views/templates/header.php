@@ -19,6 +19,10 @@
 
         <!-- jquery -->
         <script src="<?=base_url()?>js/jquery-3.6.3.min.js"></script>
+
+        <!-- chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-sm navbar-light fixed-top d-print-none pr-3">
