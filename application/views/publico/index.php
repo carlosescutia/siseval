@@ -106,7 +106,7 @@
     $(document).ready( function () {
         $('#tbl_publico').DataTable( {
             language: {
-                url: '/js/es-MX.json',
+                url: '//cdn.datatables.net/plug-ins/2.2.2/i18n/es-MX.json',
             },
         });
     });
