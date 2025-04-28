@@ -346,7 +346,7 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_programas_agenda_evaluacion_publico($limite=null, $inicio=null) {
+    public function get_programas_agenda_evaluacion_publico() {
         // obtener lista de posibles archivos para cada registro
         $sql = ""
             ."select "
@@ -452,7 +452,6 @@ class Proyectos_model extends CI_Model {
             ."and pe.id_propuesta_evaluacion not in (" . $lista_por_iniciar .") "
             ."order by "
             ."py.periodo desc, d.nom_dependencia, py.cve_proyecto, pe.id_propuesta_evaluacion "
-            ."limit " . $limite . " offset " . $inicio
             ."";
 
         $query = $this->db->query($sql);

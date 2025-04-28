@@ -144,6 +144,59 @@ class Recomendaciones_model extends CI_Model {
         return $query->row_array()['num_recomendaciones_atendidas'] ?? null ;
     }
 
+    public function get_cumplimiento($dependencia, $periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."with tmp_proyecto as ( "
+                ."with tmp_recomend as (  "
+                    ."with tmp_activ as (  "
+                        ."select  "
+                            ."pa.id_plan_accion, a.cve_recomendacion, pa.cve_documento_opinion, a.registro_avance::numeric(10,2), a.resultados_esperados::numeric(10,2),  "
+                            ."round(a.registro_avance::numeric(10,2) / a.resultados_esperados::numeric(10,2) * 100) as promedio, r.ponderacion  "
+                        ."from  "
+                            ."actividades a  "
+                            ."left join recomendaciones r on r.cve_recomendacion = a.cve_recomendacion  "
+                            ."left join planes_accion pa on pa.cve_documento_opinion = r.cve_documento_opinion "
+                    .")  "
+                    ."select  "
+                        ."id_plan_accion, cve_recomendacion, cve_documento_opinion, ponderacion, sum(promedio) as suma, count(*) as registros,  "
+                        ."round(sum(promedio) / count(*)) as promedio, (sum(promedio) / count(*) * ponderacion / 100)::integer as promedio_ponderado  "
+                    ."from  "
+                        ."tmp_activ  "
+                    ."group by  "
+                        ."id_plan_accion, cve_documento_opinion, ponderacion, cve_recomendacion "
+                .")  "
+                ."select  "
+                    ."tr.cve_documento_opinion, py.cve_dependencia, py.periodo, pe.id_tipo_evaluacion, sum(promedio_ponderado) as promedio_proyecto "
+                ."from  "
+                    ."tmp_recomend tr "
+                    ."left join documentos_opinion dop on dop.cve_documento_opinion = tr.cve_documento_opinion "
+                    ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+                    ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+                ."group by "
+                    ."tr.cve_documento_opinion, py.cve_dependencia, py.periodo, pe.id_tipo_evaluacion "
+            .") "
+            ."select "
+                ."tpy.cve_dependencia, d.nom_dependencia, avg(promedio_proyecto)::integer as cumplimiento "
+            ."from "
+                ."tmp_proyecto tpy "
+                ."left join dependencias d on d.cve_dependencia = tpy.cve_dependencia "
+            ."where "
+                ."d.cve_dependencia::text LIKE ? "
+            ."";
+        $parametros = array();
+        array_push($parametros, "$dependencia");
+        if ($periodo > 0) {
+            $sql .= ' and tpy.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= ' and tpy.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $sql .= "group by tpy.cve_dependencia, d.nom_dependencia ";
+        $query = $this->db->query($sql, $parametros);
+        return $query->result_array() ;
+    }
 
     public function guardar($data, $cve_recomendacion)
     {

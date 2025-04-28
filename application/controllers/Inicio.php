@@ -36,6 +36,7 @@ class Inicio extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $anio_sesion = $data['userdata']['anio_sesion'];
             $cve_rol = $data['userdata']['cve_rol'];
+            
 
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             if ($cve_rol != 'usr') {
@@ -88,10 +89,12 @@ class Inicio extends CI_Controller {
             $data['num_propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
             $data['evaluaciones_ejercicio'] = $this->propuestas_evaluacion_model->get_evaluaciones_ejercicio($cve_dependencia_filtro, $tipo_evaluacion_filtro);
             $data['evaluaciones_tipo'] = $this->propuestas_evaluacion_model->get_evaluaciones_tipo($cve_dependencia_filtro, $periodo_filtro);
+            $data['evaluaciones'] = $this->propuestas_evaluacion_model->get_evaluaciones($periodo_filtro, $tipo_evaluacion_filtro);
 
             $data['num_recomendaciones'] = $this->recomendaciones_model->get_num_recomendaciones($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
             $data['num_recomendaciones_aceptadas'] = $this->recomendaciones_model->get_num_recomendaciones_aceptadas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
             $data['num_recomendaciones_atendidas'] = $this->recomendaciones_model->get_num_recomendaciones_atendidas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['cumplimiento'] = $this->recomendaciones_model->get_cumplimiento($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

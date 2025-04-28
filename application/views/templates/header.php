@@ -20,6 +20,10 @@
         <!-- jquery -->
         <script src="<?=base_url()?>js/jquery-3.6.3.min.js"></script>
 
+        <!-- datatables -->
+        <link href="<?=base_url()?>css/datatables.min.css" rel="stylesheet"/>
+        <script src="<?=base_url()?>js/datatables.min.js"></script>
+
         <!-- chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>

@@ -146,6 +146,57 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array()['num_propuestas_evaluacion'] ?? null ;
     }
 
+    public function get_evaluaciones($periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select "
+            ."d.nom_dependencia, count(*) as num_evaluaciones "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."left join dependencias d on d.cve_dependencia = py.cve_dependencia "
+            ."where "
+            ."py.periodo is not null "
+            ."";
+        $parametros = array();
+        if ($periodo > 0) {
+            $sql .= 'and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= 'and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $sql .= ""
+            ."group by d.nom_dependencia "
+            ."order by d.nom_dependencia "
+            ."";
+        $query = $this->db->query($sql, $parametros);
+        return $query->result_array() ;
+    }
+
+    public function get_num_evaluaciones($periodo, $tipo_evaluacion) {
+        $sql = ""
+            ."select "
+            ."count(*) as num_evaluaciones "
+            ."from "
+            ."propuestas_evaluacion pe "
+            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where "
+            ."py.periodo is not null "
+            ."";
+        $parametros = array();
+        if ($periodo > 0) {
+            $sql .= 'and py.periodo = ?';
+            array_push($parametros, "$periodo");
+        }
+        if ($tipo_evaluacion > 0) {
+            $sql .= 'and pe.id_tipo_evaluacion = ?';
+            array_push($parametros, "$tipo_evaluacion");
+        }
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_evaluaciones'] ?? null ;
+    }
+
     public function get_evaluaciones_ejercicio($dependencia, $tipo_evaluacion) {
         $sql = ""
             ."select  "

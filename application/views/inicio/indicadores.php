@@ -65,6 +65,28 @@
                             <canvas id="evaluaciones_tipo"></canvas>
                         </div>
                     </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12 pt-4 pb-2 mb-3">
+                            <h3>Evaluaciones por dependencia</h3>
+                            <table id="tbl_evaluaciones_dependencia" class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-start">Dependencia</th>
+                                        <th scope="col" class="text-center">Evaluaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($evaluaciones as $evaluaciones_item) { ?>
+                                        <tr>
+                                            <td class="text-start"><?= $evaluaciones_item['nom_dependencia'] ?></td>
+                                            <td class="text-center"><?= $evaluaciones_item['num_evaluaciones'] ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="col border border-dark-subtle border-2 rounded pt-4 mb-3 m-0 m-sm-3">
                     <h1>Recomendaciones</h1>
@@ -91,6 +113,42 @@
                         <div class="col-sm-6 pt-4 pb-2 mb-3">
                             <h3>Aceptadas vs Atendidas</h3>
                             <canvas id="recomendaciones_aceptadas_atendidas"></canvas>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12 pt-4 pb-2 mb-3">
+                            <h3>Cumplimiento por dependencia</h3>
+                            <table id="tbl_cumplimiento_dependencia" class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-start">Dependencia</th>
+                                        <th scope="col" class="text-center">Cumplimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($cumplimiento as $cumplimiento_item) { ?>
+                                        <?php
+                                            $cumplimiento = $cumplimiento_item['cumplimiento'];
+                                            switch (true) {
+                                                case  $cumplimiento == 100:
+                                                    $semaforo = 'text-bg-success';
+                                                    break;
+                                                case $cumplimiento >= 70 and $cumplimiento <= 99:
+                                                    $semaforo = 'text-bg-warning';
+                                                    break;
+                                                case $cumplimiento < 70:
+                                                    $semaforo = 'text-bg-danger';
+                                                    break;
+                                            }
+                                        ?>
+                                        <tr>
+                                            <td class="text-start"><?= $cumplimiento_item['nom_dependencia'] ?></td>
+                                            <td class="text-center <?=$semaforo?>"><?= $cumplimiento ?>%</td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -269,5 +327,17 @@ new Chart(recomendaciones_aceptadas_atendidas, {
     }
 });
 
+    $(document).ready( function () {
+        $('#tbl_evaluaciones_dependencia').DataTable( {
+            language: {
+                url: '/js/es-MX.json',
+            },
+        });
+        $('#tbl_cumplimiento_dependencia').DataTable( {
+            language: {
+                url: '/js/es-MX.json',
+            },
+        });
+    });
 
 </script>
