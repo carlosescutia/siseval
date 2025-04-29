@@ -330,12 +330,12 @@ new Chart(recomendaciones_aceptadas_atendidas, {
     $(document).ready( function () {
         $('#tbl_evaluaciones_dependencia').DataTable( {
             language: {
-                url: '//cdn.datatables.net/plug-ins/2.2.2/i18n/es-MX.json',
+                url: '<?= base_url() ?>js/es-MX.json',
             },
         });
         $('#tbl_cumplimiento_dependencia').DataTable( {
             language: {
-                url: '//cdn.datatables.net/plug-ins/2.2.2/i18n/es-MX.json',
+                url: '<?= base_url() ?>js/es-MX.json',
             },
         });
     });
