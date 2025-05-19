@@ -24,7 +24,18 @@
                     </tr>
                     <tr>
                         <td>Tipo de evaluación</td>
-                        <td><label><?=$propuesta_evaluacion['nom_tipo_evaluacion'] ?></label></td>
+                        <?php
+                            if ( $propuesta_evaluacion['nom_tipo_evaluacion'] == 'Otra (especifique)' ) {
+                                if ( $propuesta_evaluacion['otro_tipo_evaluacion'] == '' ) {
+                                    $txt_tipo_evaluacion = 'Otra';
+                                } else {
+                                    $txt_tipo_evaluacion = $propuesta_evaluacion['otro_tipo_evaluacion'] ;
+                                }
+                            } else {
+                                $txt_tipo_evaluacion = $propuesta_evaluacion['nom_tipo_evaluacion'] ;
+                            }
+                        ?>
+                        <td><label><?=$txt_tipo_evaluacion ?></label></td>
                     </tr>
                     <tr>
                         <td>Año de aplicación de la evaluación</td>

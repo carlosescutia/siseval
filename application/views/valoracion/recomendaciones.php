@@ -14,7 +14,7 @@
                             <label for="desc_recomendacion">
                                 Recomendación
                             </label>
-                            <textarea rows="4" class="form-control" name="desc_recomendacion" id="desc_recomendacion" required><?=$recomendaciones_item['desc_recomendacion']?></textarea>
+                            <textarea rows="4" class="form-control" name="desc_recomendacion" id="desc_recomendacion"><?=$recomendaciones_item['desc_recomendacion']?></textarea>
                         </div>
                         <div class="col-sm-6 text-center">
                             <label>¿La recomendación cumple con los siguientes criterios?</label>
@@ -76,28 +76,28 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-sm-3 text-center">
-                                    <select class="form-select" name="clara" id="clara" required>
+                                    <select class="form-select" name="clara" id="clara">
                                         <option value=""></option>
                                         <option value="s" <?= $recomendaciones_item['clara'] == 's' ? 'selected' : '' ?> >Si</option>
                                         <option value="n" <?= $recomendaciones_item['clara'] == 'n' ? 'selected' : '' ?> >No</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3 text-center">
-                                    <select class="form-select" name="relevante" id="relevante" required>
+                                    <select class="form-select" name="relevante" id="relevante">
                                         <option value=""></option>
                                         <option value="s" <?= $recomendaciones_item['relevante'] == 's' ? 'selected' : '' ?> >Si</option>
                                         <option value="n" <?= $recomendaciones_item['relevante'] == 'n' ? 'selected' : '' ?> >No</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3 text-center">
-                                    <select class="form-select" name="justificable" id="justificable" required>
+                                    <select class="form-select" name="justificable" id="justificable">
                                         <option value=""></option>
                                         <option value="s" <?= $recomendaciones_item['justificable'] == 's' ? 'selected' : '' ?> >Si</option>
                                         <option value="n" <?= $recomendaciones_item['justificable'] == 'n' ? 'selected' : '' ?> >No</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3 text-center">
-                                    <select class="form-select" name="factible" id="factible" required>
+                                    <select class="form-select" name="factible" id="factible">
                                         <option value=""></option>
                                         <option value="s" <?= $recomendaciones_item['factible'] == 's' ? 'selected' : '' ?> >Si</option>
                                         <option value="n" <?= $recomendaciones_item['factible'] == 'n' ? 'selected' : '' ?> >No</option>
@@ -124,7 +124,7 @@
                                     </ul>
                                 </div>
                             </div>                
-                            <select class="form-select" name="id_tipo_actor" id="id_tipo_actor" required>
+                            <select class="form-select" name="id_tipo_actor" id="id_tipo_actor">
                                 <option value=""></option>
                                 <?php foreach ($tipos_actor as $tipos_actor_item) { ?>
                                     <option 
@@ -152,7 +152,7 @@
                                     </ul>
                                 </div>
                             </div>                
-                            <select class="form-select" name="prioridad" id="prioridad" required>
+                            <select class="form-select" name="prioridad" id="prioridad">
                                 <option value=""></option>
                                 <option value="a" <?= $recomendaciones_item['prioridad'] == 'a' ? 'selected' : '' ?> >Alto</option>
                                 <option value="m" <?= $recomendaciones_item['prioridad'] == 'm' ? 'selected' : '' ?> >Medio</option>
@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="responsable">Dependencia responsable de atención</label>
-                            <input type="text" class="form-control" name="responsable" id="responsable" value="<?=$recomendaciones_item['responsable']?>" required>
+                            <input type="text" class="form-control" name="responsable" id="responsable" value="<?=$recomendaciones_item['responsable']?>">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -177,7 +177,7 @@
                                     Emita su postura en la cual acepta o rechaza la recomendación.
                                 </div>
                             </div>                
-                            <select class="form-select" name="postura" id="postura" required>
+                            <select class="form-select" name="postura" id="postura">
                                 <option value=""></option>
                                 <option value="a" <?= $recomendaciones_item['postura'] == 'a' ? 'selected' : '' ?> >Aceptada</option>
                                 <option value="r" <?= $recomendaciones_item['postura'] == 'r' ? 'selected' : '' ?> >Rechazada</option>
@@ -195,7 +195,7 @@
                                     Señale las razones de su postura. En caso de contar con fuentes de información que sustenten la justificación, favor de señalarlas.
                                 </div>
                             </div>                
-                            <textarea rows="4" class="form-control" name="justificacion" id="justificacion" required><?=$recomendaciones_item['justificacion']?></textarea>
+                            <textarea rows="4" class="form-control" name="justificacion" id="justificacion"><?=$recomendaciones_item['justificacion']?></textarea>
                         </div>
                     </div>
                     <input type="hidden" name="cve_recomendacion" id="cve_recomendacion" value="<?=$recomendaciones_item['cve_recomendacion']?>">

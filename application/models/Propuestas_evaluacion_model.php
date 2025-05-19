@@ -22,7 +22,7 @@ class Propuestas_evaluacion_model extends CI_Model {
     public function get_propuesta_evaluacion_doc_op($cve_documento_opinion, $periodo) {
         $sql = ""
             ."select "
-            ."py.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, py.nom_proyecto, py.periodo "
+            ."py.cve_proyecto, d.nom_dependencia, te.nom_tipo_evaluacion, pe.otro_tipo_evaluacion, py.nom_proyecto, py.periodo "
             ."from "
             ."propuestas_evaluacion pe "
             ."left join get_dependencia_periodo(pe.cve_dependencia, ?) d on pe.cve_dependencia = d.cve_dependencia "
