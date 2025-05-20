@@ -24,12 +24,13 @@ class Usuarios extends CI_Controller {
         if ($this->session->userdata('logueado')) {
             $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
             $data['userdata'] = $this->session->userdata;
+            $anio_sesion = $this->session->userdata('anio_sesion');
 
             $permisos_requeridos = array(
                 'usuario.can_edit',
             );
             if (has_permission_or($permisos_requeridos, $data['userdata']['permisos_usuario'])) {
-                $data['usuarios'] = $this->usuarios_model->get_usuarios();
+                $data['usuarios'] = $this->usuarios_model->get_usuarios($anio_sesion);
 
                 $this->load->view('templates/header', $data);
                 $this->load->view('templates/dlg_borrar');

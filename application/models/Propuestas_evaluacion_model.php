@@ -91,7 +91,7 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array()['tot_info_disponible'] ?? null ;
     }
 
-    public function get_num_programas_evaluados($dependencia, $periodo, $tipo_evaluacion) {
+    public function get_num_programas_evaluados($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."with programas as ( "
             ."select  "
@@ -101,6 +101,7 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
             ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
             ."where py.cve_dependencia::text LIKE ? "
+            ."and coalesce(pe.excluir_agenda,0) = 0 "
             ."";
         $parametros = array();
         array_push($parametros, "$dependencia");
@@ -111,6 +112,10 @@ class Propuestas_evaluacion_model extends CI_Model {
         if ($tipo_evaluacion > 0) {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
+        }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
         }
         $sql .= ""
             ."group by py.cve_proyecto, py.periodo "
@@ -122,7 +127,7 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array()['num_programas_evaluados'] ?? null ;
     }
 
-    public function get_num_propuestas_evaluacion($dependencia, $periodo, $tipo_evaluacion) {
+    public function get_num_propuestas_evaluacion($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select  "
             ."count(*) as num_propuestas_evaluacion "
@@ -131,6 +136,7 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
             ."where  "
             ."py.cve_dependencia::text LIKE ?  "
+            ."and coalesce(pe.excluir_agenda,0) = 0 "
             ."";
         $parametros = array();
         array_push($parametros, "$dependencia");
@@ -142,11 +148,15 @@ class Propuestas_evaluacion_model extends CI_Model {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
         }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
+        }
         $query = $this->db->query($sql, $parametros);
         return $query->row_array()['num_propuestas_evaluacion'] ?? null ;
     }
 
-    public function get_evaluaciones($periodo, $tipo_evaluacion) {
+    public function get_evaluaciones($periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select "
             ."d.nom_dependencia, count(*) as num_evaluaciones "
@@ -156,6 +166,7 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."left join dependencias d on d.cve_dependencia = py.cve_dependencia "
             ."where "
             ."py.periodo is not null "
+            ."and coalesce(pe.excluir_agenda,0) = 0 "
             ."";
         $parametros = array();
         if ($periodo > 0) {
@@ -165,6 +176,10 @@ class Propuestas_evaluacion_model extends CI_Model {
         if ($tipo_evaluacion > 0) {
             $sql .= 'and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
+        }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
         }
         $sql .= ""
             ."group by d.nom_dependencia "
@@ -197,7 +212,7 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->row_array()['num_evaluaciones'] ?? null ;
     }
 
-    public function get_evaluaciones_ejercicio($dependencia, $tipo_evaluacion) {
+    public function get_evaluaciones_ejercicio($dependencia, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select  "
             ."py.periodo, count(*) as num_evaluaciones "
@@ -207,12 +222,17 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
             ."where py.cve_dependencia::text LIKE ? "
             ."and py.periodo is not null "
+            ."and coalesce(pe.excluir_agenda,0) = 0 "
             ."";
         $parametros = array();
         array_push($parametros, "$dependencia");
         if ($tipo_evaluacion > 0) {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
+        }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
         }
         $sql .= ""
             ."group by py.periodo "
@@ -221,7 +241,7 @@ class Propuestas_evaluacion_model extends CI_Model {
         return $query->result_array() ;
     }
 
-    public function get_evaluaciones_tipo($dependencia, $periodo) {
+    public function get_evaluaciones_tipo($dependencia, $periodo, $proyecto_evaluado) {
         $sql = ""
             ."select  "
             ."te.nom_tipo_evaluacion, count(*) as num_evaluaciones "
@@ -232,12 +252,17 @@ class Propuestas_evaluacion_model extends CI_Model {
             ."left join dependencias d on d.cve_dependencia = py.cve_dependencia  "
             ."where py.cve_dependencia::text LIKE ? "
             ."and py.periodo is not null "
+            ."and coalesce(pe.excluir_agenda,0) = 0 "
             ."";
         $parametros = array();
         array_push($parametros, "$dependencia");
         if ($periodo > 0) {
             $sql .= ' and py.periodo = ?';
             array_push($parametros, "$periodo");
+        }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
         }
         $sql .= ""
             ."group by "

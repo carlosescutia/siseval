@@ -48,7 +48,7 @@ FROM
     left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion
     left join proyectos py on py.id_proyecto = pe.id_proyecto
     left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion 
-    left join dependencias d on cp.cve_dependencia = d.cve_dependencia;
+    left join get_dependencia_periodo(cp.cve_dependencia, py.periodo) d on cp.cve_dependencia = d.cve_dependencia;
 /*
 Vista puntaje_calificacion_propuesta
 -----------------------

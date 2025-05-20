@@ -36,7 +36,6 @@ class Inicio extends CI_Controller {
             $data['userdata'] = $this->session->userdata;
             $anio_sesion = $data['userdata']['anio_sesion'];
             $cve_rol = $data['userdata']['cve_rol'];
-            
 
             $cve_dependencia = $data['userdata']['cve_dependencia'];
             if ($cve_rol != 'usr') {
@@ -48,10 +47,12 @@ class Inicio extends CI_Controller {
                 $periodo_filtro = $filtros['periodo_filtro'];
                 $cve_dependencia_filtro = $filtros['cve_dependencia_filtro'];
                 $tipo_evaluacion_filtro = $filtros['tipo_evaluacion_filtro'];
+                $proyecto_evaluado_filtro = $filtros['proyecto_evaluado_filtro'];
                 $filtros_proyectos = array(
                     'periodo_filtro' => $periodo_filtro,
                     'cve_dependencia_filtro' => $cve_dependencia_filtro,
                     'tipo_evaluacion_filtro' => $tipo_evaluacion_filtro,
+                    'proyecto_evaluado_filtro' => $proyecto_evaluado_filtro,
                 );
                 $this->session->set_userdata($filtros_proyectos);
             } else {
@@ -73,11 +74,17 @@ class Inicio extends CI_Controller {
                 } else {
                     $tipo_evaluacion_filtro = '0';
                 }
+                if ($this->session->userdata('proyecto_evaluado_filtro')) {
+                    $proyecto_evaluado_filtro = $this->session->userdata('proyecto_evaluado_filtro');
+                } else {
+                    $proyecto_evaluado_filtro = '';
+                }
             }
 
             $data['periodo_filtro'] = $periodo_filtro;
             $data['cve_dependencia_filtro'] = $cve_dependencia_filtro;
             $data['tipo_evaluacion_filtro'] = $tipo_evaluacion_filtro;
+            $data['proyecto_evaluado_filtro'] = $proyecto_evaluado_filtro;
 
             $data['periodos_filtro'] = $periodos;
             $data['dependencias_filtro'] = $this->dependencias_model->get_dependencias_proyectos($cve_dependencia, 0, 0, $anio_sesion);
@@ -85,16 +92,16 @@ class Inicio extends CI_Controller {
 
             $anio_sesion = $this->session->userdata('anio_sesion');
             $data['eventos'] = $this->eventos_model->get_eventos($anio_sesion);
-            $data['num_programas_evaluados'] = $this->propuestas_evaluacion_model->get_num_programas_evaluados($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
-            $data['num_propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
-            $data['evaluaciones_ejercicio'] = $this->propuestas_evaluacion_model->get_evaluaciones_ejercicio($cve_dependencia_filtro, $tipo_evaluacion_filtro);
-            $data['evaluaciones_tipo'] = $this->propuestas_evaluacion_model->get_evaluaciones_tipo($cve_dependencia_filtro, $periodo_filtro);
-            $data['evaluaciones'] = $this->propuestas_evaluacion_model->get_evaluaciones($periodo_filtro, $tipo_evaluacion_filtro);
+            $data['num_programas_evaluados'] = $this->propuestas_evaluacion_model->get_num_programas_evaluados($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['num_propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['evaluaciones_ejercicio'] = $this->propuestas_evaluacion_model->get_evaluaciones_ejercicio($cve_dependencia_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['evaluaciones_tipo'] = $this->propuestas_evaluacion_model->get_evaluaciones_tipo($cve_dependencia_filtro, $periodo_filtro, $proyecto_evaluado_filtro);
+            $data['evaluaciones'] = $this->propuestas_evaluacion_model->get_evaluaciones($periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
 
-            $data['num_recomendaciones'] = $this->recomendaciones_model->get_num_recomendaciones($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
-            $data['num_recomendaciones_aceptadas'] = $this->recomendaciones_model->get_num_recomendaciones_aceptadas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
-            $data['num_recomendaciones_atendidas'] = $this->recomendaciones_model->get_num_recomendaciones_atendidas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
-            $data['cumplimiento'] = $this->recomendaciones_model->get_cumplimiento($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro);
+            $data['num_recomendaciones'] = $this->recomendaciones_model->get_num_recomendaciones($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['num_recomendaciones_aceptadas'] = $this->recomendaciones_model->get_num_recomendaciones_aceptadas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['num_recomendaciones_atendidas'] = $this->recomendaciones_model->get_num_recomendaciones_atendidas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $data['cumplimiento'] = $this->recomendaciones_model->get_cumplimiento($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

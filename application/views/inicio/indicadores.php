@@ -37,6 +37,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="row row-cols-sm-auto align-items-center">
+                    <div class="col-auto">
+                        <label for="proyecto_evaluado_filtro">Proyecto evaluado:</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control bg-primary-subtle border-primary-subtle" name="proyecto_evaluado_filtro" id="proyecto_evaluado_filtro" value="<?=$proyecto_evaluado_filtro?>" >
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success btn-sm" type="submit">Aplicar</button>
+                    </div>
+                </div>
             </form>
         </div>
 
@@ -45,29 +56,26 @@
                 <div class="col border border-dark-subtle border-2 rounded pt-4 mb-3 m-0 m-sm-3">
                     <h1>Evaluaciones</h1>
                     <div class="row mb-3">
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 offset-sm-2 pt-4 pb-2 mb-3">
                             <h4>Programas evaluados</h4>
                             <h1 class="display-3"><?= $num_programas_evaluados ?></h1>
                         </div>
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h4>Evaluaciones</h4>
                             <h1 class="display-3"><?= $num_propuestas_evaluacion ?></h1>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h3>Evaluaciones por ejercicio</h3>
                             <canvas id="evaluaciones_periodo" height="300"></canvas>
                         </div>
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4  pt-4 pb-2 mb-3">
                             <h3>Evaluaciones por tipo</h3>
                             <canvas id="evaluaciones_tipo"></canvas>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h3>Evaluaciones por dependencia</h3>
                             <table id="tbl_evaluaciones_dependencia" class="table table-striped table-sm">
                                 <thead>
@@ -88,36 +96,35 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col border border-dark-subtle border-2 rounded pt-4 mb-3 m-0 m-sm-3">
                     <h1>Recomendaciones</h1>
                     <div class="row mb-3">
-                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                        <div class="col-sm-3 offset-sm-1 pt-4 pb-2 mb-3">
                             <h4>Generadas</h4>
                             <h1 class="display-3"><?= $num_recomendaciones ?></h1>
                         </div>
-                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                        <div class="col-sm-3 pt-4 pb-2 mb-3">
                             <h4>Aceptadas</h4>
                             <h1 class="display-3"><?= $num_recomendaciones_aceptadas ?></h1>
                         </div>
-                        <div class="col-sm-4 pt-4 pb-2 mb-3">
+                        <div class="col-sm-3 pt-4 pb-2 mb-3">
                             <h4>Atendidas</h4>
                             <h1 class="display-3"><?= $num_recomendaciones_atendidas ?></h1>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h3>Generadas vs Aceptadas</h3>
                             <canvas id="recomendaciones_generadas_aceptadas" height="300"></canvas>
                         </div>
-                        <div class="col-sm-6 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h3>Aceptadas vs Atendidas</h3>
                             <canvas id="recomendaciones_aceptadas_atendidas"></canvas>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12 pt-4 pb-2 mb-3">
+                        <div class="col-sm-4 pt-4 pb-2 mb-3">
                             <h3>Cumplimiento por dependencia</h3>
                             <table id="tbl_cumplimiento_dependencia" class="table table-striped table-sm">
                                 <thead>
@@ -164,6 +171,7 @@
     $num_evaluaciones_periodo_txt = implode("','", $num_evaluaciones_periodo);
 
     $tipos = array_column($evaluaciones_tipo, 'nom_tipo_evaluacion');
+    //array_walk($tipos, function(&$val) { $val = substr($val, 0, 11); } );
     $num_evaluaciones_tipo = array_column($evaluaciones_tipo, 'num_evaluaciones');
     $tipos_txt = implode("','", $tipos);
     $num_evaluaciones_tipo_txt = implode("','", $num_evaluaciones_tipo);
@@ -214,12 +222,15 @@ new Chart(evaluaciones_tipo, {
         labels: ['<?= $tipos_txt ?>'],
         datasets: [{
             data: ['<?= $num_evaluaciones_tipo_txt ?>'],
+            backgroundColor: ['#0FC2C0','#026773','#F29325','#F06060','#7F46A6','#CEB3F2','#267347','#879A21','#27418C','#6387F2','#A6567B','#FFD563','#53738D','#798C8C'],
             borderWidth: 1
         }]
     },
     options: {
         plugins: {
             legend: {
+                display: true,
+                position: 'right',
                 labels: {
                     font: {
                         size: 10
@@ -236,7 +247,7 @@ new Chart(evaluaciones_tipo, {
                 formatter: function (value, context) {
                     return value;
                 }
-            }
+            },
         }
     }
 });

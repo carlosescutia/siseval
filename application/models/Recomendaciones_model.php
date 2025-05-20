@@ -66,7 +66,7 @@ class Recomendaciones_model extends CI_Model {
         return $query->row_array()['num_recomendaciones_documento_opinion'];
     }
 
-    public function get_num_recomendaciones($dependencia, $periodo, $tipo_evaluacion) {
+    public function get_num_recomendaciones($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select "
             ."count(*) as num_recomendaciones "
@@ -87,11 +87,15 @@ class Recomendaciones_model extends CI_Model {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
         }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
+        }
         $query = $this->db->query($sql, $parametros);
         return $query->row_array()['num_recomendaciones'] ?? null ;
     }
 
-    public function get_num_recomendaciones_aceptadas($dependencia, $periodo, $tipo_evaluacion) {
+    public function get_num_recomendaciones_aceptadas($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select "
             ."count(*) as num_recomendaciones_aceptadas "
@@ -113,11 +117,15 @@ class Recomendaciones_model extends CI_Model {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
         }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
+        }
         $query = $this->db->query($sql, $parametros);
         return $query->row_array()['num_recomendaciones_aceptadas'] ?? null ;
     }
 
-    public function get_num_recomendaciones_atendidas($dependencia, $periodo, $tipo_evaluacion) {
+    public function get_num_recomendaciones_atendidas($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select "
             ."count(*) as num_recomendaciones_atendidas "
@@ -139,6 +147,10 @@ class Recomendaciones_model extends CI_Model {
         if ($tipo_evaluacion > 0) {
             $sql .= ' and pe.id_tipo_evaluacion = ?';
             array_push($parametros, "$tipo_evaluacion");
+        }
+        if ($proyecto_evaluado !== '') {
+            $sql .= ' and py.cve_proyecto = ?';
+            array_push($parametros, "$proyecto_evaluado");
         }
         $query = $this->db->query($sql, $parametros);
         return $query->row_array()['num_recomendaciones_atendidas'] ?? null ;
