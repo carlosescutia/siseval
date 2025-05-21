@@ -39,7 +39,7 @@
                 </div>
                 <div class="row row-cols-sm-auto align-items-center">
                     <div class="col-auto">
-                        <label for="proyecto_evaluado_filtro">Proyecto evaluado:</label>
+                        <label for="proyecto_evaluado_filtro" class="h6">Proyecto evaluado:</label>
                     </div>
                     <div class="col-auto">
                         <input type="text" class="form-control bg-primary-subtle border-primary-subtle" name="proyecto_evaluado_filtro" id="proyecto_evaluado_filtro" value="<?=$proyecto_evaluado_filtro?>" >
@@ -48,12 +48,13 @@
                         <button class="btn btn-success btn-sm" type="submit">Aplicar</button>
                     </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="text-start">
-                        <h6><?= $nom_proyecto_evaluado_filtro ?></h6>
-                    </div>
-                </div>
             </form>
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="text-center">
+                <h1><?= $nom_proyecto_evaluado_filtro ?></h1>
+            </div>
         </div>
 
         <div class="container text-center">
