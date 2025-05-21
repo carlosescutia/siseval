@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <h3>Propuestas de evaluación</h3>
-                    <p>Propuestas de evaluación capturadas</p>
+                    <p>Todas las propuestas de evaluación capturadas</p>
                 </div>
                 <div class="col-md-4">
                     <img src="<?=base_url();?>img/propuestas_evaluacion_01.png" class="img-fluid img-thumbnail p-0 m-0">

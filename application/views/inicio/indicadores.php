@@ -48,6 +48,11 @@
                         <button class="btn btn-success btn-sm" type="submit">Aplicar</button>
                     </div>
                 </div>
+                <div class="row mt-2">
+                    <div class="text-start">
+                        <h6><?= $nom_proyecto_evaluado_filtro ?></h6>
+                    </div>
+                </div>
             </form>
         </div>
 

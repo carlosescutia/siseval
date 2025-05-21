@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <h3>Estatus de dependencias</h3>
-                    <p>Estatus de dependencias durante proceso <?=$periodo?></p>
+                    <p>Estatus de dependencias durante proceso de planificación</p>
                 </div>
                 <div class="col-md-4">
                     <img src="<?=base_url();?>img/status_dependencias.png" class="img-fluid img-thumbnail p-0 m-0">

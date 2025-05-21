@@ -102,6 +102,12 @@ class Inicio extends CI_Controller {
             $data['num_recomendaciones_aceptadas'] = $this->recomendaciones_model->get_num_recomendaciones_aceptadas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
             $data['num_recomendaciones_atendidas'] = $this->recomendaciones_model->get_num_recomendaciones_atendidas($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
             $data['cumplimiento'] = $this->recomendaciones_model->get_cumplimiento($cve_dependencia_filtro, $periodo_filtro, $tipo_evaluacion_filtro, $proyecto_evaluado_filtro);
+            $proyecto_evaluado = $this->proyectos_model->get_proyecto_cve($proyecto_evaluado_filtro);
+            if ($proyecto_evaluado) {
+                $data['nom_proyecto_evaluado_filtro'] = $proyecto_evaluado['nom_proyecto'];
+            } else {
+                $data['nom_proyecto_evaluado_filtro'] = "";
+            }
 
             $this->load->view('templates/header', $data);
             $this->load->view('inicio/inicio', $data);

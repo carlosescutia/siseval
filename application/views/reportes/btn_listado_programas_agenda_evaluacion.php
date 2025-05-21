@@ -3,8 +3,8 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-8">
-                    <h3>Propuesta de programas Agenda anual de evaluación</h3>
-                    <p>Propuesta de programas a integrar la Agenda anual de evaluación.</p>
+                    <h3>Agenda anual de Evaluación</h3>
+                    <p>Propuestas de evaluación que integran la Agenda anual de evaluación.</p>
                 </div>
                 <div class="col-md-4">
                     <img src="<?=base_url();?>img/programas_agenda_evaluacion.png" class="img-fluid img-thumbnail p-0 m-0">
