@@ -105,6 +105,7 @@
 <script type="text/javascript">
     $(document).ready( function () {
         $('#tbl_publico').DataTable( {
+            order: [[2, 'desc'], [4, 'asc'], [0, 'asc']],
             language: {
                 url: '<?= base_url() ?>js/es-MX.json',
             },
