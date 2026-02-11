@@ -2,7 +2,8 @@
     <table id="tbl_publico" class="table table-striped table-sm">
         <thead>
             <tr>
-                <th scope="col">Clave P/Q</th>
+                <th scope="col" width="5%">Clave PP</th>
+                <th scope="col" width="5%">Clave P/Q</th>
                 <th scope="col" width="30%">Evaluación</th>
                 <th scope="col">Año</th>
                 <th scope="col">Tipo</th>
@@ -23,6 +24,7 @@
             ?>
             <?php foreach ($proyectos as $proyectos_item) { ?>
             <tr>
+                <td><?= $proyectos_item['cve_programa'] ?></td>
                 <td><?= $proyectos_item['cve_proyecto'] ?></td>
                 <td><?= $proyectos_item['nom_proyecto'] ?></td>
                 <td class="text-center"><?= $proyectos_item['periodo'] ?></td>
@@ -105,7 +107,7 @@
 <script type="text/javascript">
     $(document).ready( function () {
         $('#tbl_publico').DataTable( {
-            order: [[2, 'desc'], [4, 'asc'], [0, 'asc']],
+            order: [[3, 'desc'], [5, 'asc'], [1, 'asc']],
             language: {
                 url: '<?= base_url() ?>js/es-MX.json',
             },

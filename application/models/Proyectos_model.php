@@ -434,6 +434,7 @@ class Proyectos_model extends CI_Model {
 
         $sql = ""
             ."select "
+            ."pg.cve_programa, "
             ."d.nom_dependencia, "
             ."py.periodo, py.cve_proyecto, py.nom_proyecto, "
             ."pe.id_propuesta_evaluacion, "
@@ -449,6 +450,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
+            ."left join programas pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join documentos_opinion dop on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
