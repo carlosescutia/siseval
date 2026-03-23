@@ -26,8 +26,7 @@ class Evaluaciones extends CI_Controller {
             $anio_sesion = $data['userdata']['anio_sesion'];
 
             $data['evaluacion'] = $this->evaluaciones_model->get_evaluacion($id_evaluacion, $cve_dependencia, $cve_rol);
-            $cve_anterior_proyecto = $data['evaluacion']['cve_proyecto'];
-            $data['proyecto'] = $this->proyectos_model->get_proyecto_anterior($cve_anterior_proyecto, $cve_dependencia, $cve_rol, $anio_sesion);
+            $data['proyecto'] = $this->proyectos_model->get_proyecto_id_evaluacion_periodo($id_evaluacion, $anio_sesion);
 
             $this->load->view('templates/header', $data);
             $this->load->view('evaluaciones/detalle', $data);

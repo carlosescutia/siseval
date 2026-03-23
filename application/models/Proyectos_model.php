@@ -12,7 +12,7 @@ class Proyectos_model extends CI_Model {
             .'py.*, pg.*,  '
             .'(select count(*) from propuestas_evaluacion where id_proyecto = py.id_proyecto) as evaluaciones_propuestas, '
             .'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp. id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.id_proyecto = py.id_proyecto) as propuestas_calificadas, '
-            .'(select count(*) from evaluaciones ev left join proyectos pry on ev.cve_proyecto = pry.cve_anterior_proyecto where pry.id_proyecto = py.id_proyecto and ev.periodo < py.periodo) as evaluaciones_previas, '
+            .'(select count(*) from evaluaciones ev where cve_proyecto in (select cve_proyecto from proyectos py1 where py1.id_proyecto = py.id_proyecto union select pa.cve_proyecto_anterior from proyectos_anteriores pa left join proyectos py2 on py2.cve_proyecto = pa.cve_proyecto where py2.id_proyecto = py.id_proyecto) and ev.periodo < py.periodo) as evaluaciones_previas, '
             .'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.id_proyecto = py.id_proyecto) as num_calif_dependencias, '
             .'(select  '
             .'(case  '
@@ -93,12 +93,9 @@ class Proyectos_model extends CI_Model {
         return $query->row_array();
     }
 
-    public function get_proyecto_anterior($cve_anterior_proyecto, $cve_dependencia, $cve_rol, $periodo) {
-        if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
-            $cve_dependencia = '%';
-        }
-        $sql = 'select py.* from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where py.cve_anterior_proyecto = ? and py.cve_dependencia::text LIKE ? and py.periodo = ? ';
-        $query = $this->db->query($sql, array($cve_anterior_proyecto, $cve_dependencia, $periodo));
+    public function get_proyecto_id_evaluacion_periodo($id_evaluacion, $periodo) {
+        $sql = 'select * from proyectos where cve_proyecto = (select cve_proyecto from proyectos_anteriores where cve_proyecto = (select cve_proyecto from evaluaciones where id_evaluacion = ?) union select cve_proyecto from proyectos_anteriores where cve_proyecto_anterior = (select cve_proyecto from evaluaciones where id_evaluacion = ?) ) and periodo = ? ';
+        $query = $this->db->query($sql, array($id_evaluacion, $id_evaluacion, $periodo));
         return $query->row_array();
     }
 

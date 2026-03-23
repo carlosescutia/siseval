@@ -109,10 +109,9 @@ class Proyectos extends CI_Controller {
             $periodo = $data['userdata']['anio_sesion'];
             $data['proyecto'] = $this->proyectos_model->get_proyecto($id_proyecto, $cve_dependencia, $cve_rol, $periodo);
             $cve_proyecto = $data['proyecto']['cve_proyecto'];
-            $cve_anterior_proyecto = $data['proyecto']['cve_anterior_proyecto'];
 
             $data['propuestas_evaluacion'] = $this->propuestas_evaluacion_model->get_propuestas_evaluacion_proyecto($id_proyecto);
-            $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($cve_anterior_proyecto, $periodo, $cve_dependencia, $cve_rol);
+            $data['evaluaciones'] = $this->evaluaciones_model->get_evaluaciones_proyecto($id_proyecto, $periodo, $cve_dependencia, $cve_rol);
             $data['tipos_evaluacion'] = $this->tipos_evaluacion_model->get_tipos_evaluacion();
             $data['justificaciones_evaluacion'] = $this->justificaciones_evaluacion_model->get_justificaciones_evaluacion();
             $data['metas'] = $this->metas_ods_model->get_metas_proyecto($id_proyecto);
