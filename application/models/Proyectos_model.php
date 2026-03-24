@@ -94,7 +94,7 @@ class Proyectos_model extends CI_Model {
     }
 
     public function get_proyecto_id_evaluacion_periodo($id_evaluacion, $periodo) {
-        $sql = 'select * from proyectos where cve_proyecto = (select cve_proyecto from proyectos_anteriores where cve_proyecto = (select cve_proyecto from evaluaciones where id_evaluacion = ?) union select cve_proyecto from proyectos_anteriores where cve_proyecto_anterior = (select cve_proyecto from evaluaciones where id_evaluacion = ?) ) and periodo = ? ';
+        $sql = 'select * from proyectos where cve_proyecto in (select cve_proyecto from proyectos_anteriores where cve_proyecto = (select cve_proyecto from evaluaciones where id_evaluacion = ?) union select cve_proyecto from proyectos_anteriores where cve_proyecto_anterior = (select cve_proyecto from evaluaciones where id_evaluacion = ?) ) and periodo = ? ';
         $query = $this->db->query($sql, array($id_evaluacion, $id_evaluacion, $periodo));
         return $query->row_array();
     }

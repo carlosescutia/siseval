@@ -34,22 +34,25 @@ class Evaluaciones_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_evaluacion($id_evaluacion, $cve_dependencia, $cve_rol) {
+    public function get_evaluacion($id_evaluacion, $cve_dependencia, $cve_rol, $periodo) {
         if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
             $cve_dependencia = '%';
         }
         $sql = ""
             ."select "
-            ."py.cve_dependencia, e.* "
+            ."e.*, py.id_proyecto, py.cve_proyecto "
             ."from "
             ."evaluaciones e "
-            ."left join proyectos py on py.cve_proyecto = (select cve_proyecto from proyectos_anteriores where cve_proyecto = (select cve_proyecto from evaluaciones e2 where e2.id_evaluacion = e.id_evaluacion) union select cve_proyecto from proyectos_anteriores where cve_proyecto_anterior = (select cve_proyecto from evaluaciones e3 where e3.id_evaluacion = e.id_evaluacion))"
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join proyectos py on py.cve_proyecto in  "
+            ."(select cve_proyecto from proyectos_anteriores where cve_proyecto = (select cve_proyecto from evaluaciones where id_evaluacion = e.id_evaluacion) "
+            ."union  "
+            ."select cve_proyecto from proyectos_anteriores where cve_proyecto_anterior = (select cve_proyecto from evaluaciones where id_evaluacion = e.id_evaluacion)  "
+            .") and py.periodo = ? "
             ."where "
             ."e.id_evaluacion = ? "
             ."and py.cve_dependencia::text LIKE ? "
             ."";
-        $query = $this->db->query($sql, array($id_evaluacion, $cve_dependencia));
+        $query = $this->db->query($sql, array($periodo, $id_evaluacion, $cve_dependencia));
         return $query->row_array();
     }
 

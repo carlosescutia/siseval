@@ -118,8 +118,7 @@ class Proyectos extends CI_Controller {
             $data['tipos_evaluacion_periodo'] =$this->tipos_evaluacion_periodo_model->get_id_tipos_evaluacion_periodo($periodo);
             $data['num_propuestas_evaluacion_proyecto_dependencia'] = $this->propuestas_evaluacion_model->get_num_propuestas_evaluacion_proyecto_dependencia($id_proyecto, $cve_dependencia);
 
-            // Obtener un solo registro, se están generando varios
-            $data['programa'] = $this->programas_model->get_programa_proyecto($cve_proyecto, $cve_dependencia, $cve_rol);
+            $data['programa'] = $this->programas_model->get_programa_proyecto($id_proyecto);
 
             $data['num_supervisores'] = $this->periodos_model->get_periodo_nom_periodo($data['userdata']['anio_sesion'])['num_supervisores'];
 
