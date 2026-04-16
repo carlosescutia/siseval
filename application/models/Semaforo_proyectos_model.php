@@ -5,9 +5,9 @@ class Semaforo_proyectos_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_semaforo_proyecto($cve_proyecto) {
-        $sql = 'select * from semaforo_proyectos where cve_proyecto = ? ';
-        $query = $this->db->query($sql, array($cve_proyecto));
+    public function get_semaforo_proyecto($cve_proyecto, $periodo) {
+        $sql = 'select * from semaforo_proyectos where cve_proyecto = ? and periodo = ?  ';
+        $query = $this->db->query($sql, array($cve_proyecto, $periodo));
         return $query->row_array();
     }
 

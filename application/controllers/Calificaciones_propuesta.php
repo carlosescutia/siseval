@@ -39,7 +39,7 @@ class Calificaciones_propuesta extends CI_Controller {
 
             $id_propuesta_evaluacion = $data['calificacion_propuesta']['id_propuesta_evaluacion'];
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
-            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
+            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto'], $periodo);
             $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['proyecto'] = $this->propuestas_evaluacion_model->get_proyecto($id_propuesta_evaluacion);
             $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);
@@ -66,7 +66,7 @@ class Calificaciones_propuesta extends CI_Controller {
             $data['cve_dependencia'] = $cve_dependencia;
 
             $data['propuesta_evaluacion'] = $this->propuestas_evaluacion_model->get_propuesta_evaluacion($id_propuesta_evaluacion, $periodo);
-            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto']);
+            $data['semaforo_proyecto'] = $this->semaforo_proyectos_model->get_semaforo_proyecto($data['propuesta_evaluacion']['cve_proyecto'], $periodo);
             $data['ods'] = $this->propuestas_evaluacion_model->get_ods_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['tot_info_disponible'] = $this->propuestas_evaluacion_model->get_tot_info_disponible_propuesta_evaluacion($id_propuesta_evaluacion);
             $data['proyecto'] = $this->propuestas_evaluacion_model->get_proyecto($id_propuesta_evaluacion);
