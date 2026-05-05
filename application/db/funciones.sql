@@ -31,3 +31,29 @@ end;
 $$ language plpgsql strict immutable;
 
 
+/*
+Función get_programa_periodo(cve_programa, periodo)
+-----------------------
+Obtiene valores de programas del periodo solicitado
+Si no existe, usa valores de periodo = 0 (default)
+ */
+create or replace function get_programa_periodo(param_cve_programa text, param_periodo int)
+returns table(id_programa int, cve_programa text, nom_programa text, periodo int) as 
+$$
+begin
+    return query
+        select
+            pg.* 
+        from 
+            programas pg
+        where 
+            pg.cve_programa = param_cve_programa 
+            and pg.periodo <= param_periodo 
+        order by
+            pg.periodo desc
+        limit 1
+    ;
+end;
+$$ language plpgsql strict immutable;
+
+

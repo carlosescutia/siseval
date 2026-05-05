@@ -23,7 +23,7 @@ class Valoraciones_evaluacion_model extends CI_Model {
             ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = ven.id_propuesta_evaluacion  "
             ."left join tipos_evaluacion te on te.id_tipo_evaluacion = pe.id_tipo_evaluacion "
             ."left join proyectos py on py.id_proyecto = pe.id_proyecto  "
-            ."left join programas pg on pg.cve_programa = py.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."where ven.id_valoracion_evaluacion = ? "
             ."";
         $query = $this->db->query($sql, array($id_valoracion_evaluacion));

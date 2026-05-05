@@ -31,7 +31,7 @@ class Proyectos_model extends CI_Model {
             .') as status_propuesta '
             .'from '
             .'proyectos py '
-            .'left join programas pg on py.cve_programa = pg.cve_programa '
+            .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
             .'where '
             .'py.cve_dependencia::text LIKE ? '
             .'and py.periodo = ? '
@@ -67,12 +67,12 @@ class Proyectos_model extends CI_Model {
             $cve_dependencia = '%';
         }
         $sql = ''
-            .'select p'
-            .'y.*, d.nom_dependencia '
+            .'select '
+            .'py.*, d.nom_dependencia '
             .'from '
             .'proyectos py '
-            .'left join programas pg on py.cve_programa = pg.cve_programa '
-            ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
+            .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
+            .'left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia '
             .'where '
             .'py.id_proyecto = ? '
             .'and py.cve_dependencia::text LIKE ? '
@@ -109,7 +109,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
@@ -142,8 +142,8 @@ class Proyectos_model extends CI_Model {
             .'from  '
             .'propuestas_evaluacion pe  '
             .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
-            .'left join programas pg on py.cve_programa = pg.cve_programa '
-            ."left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia "
+            .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
+            .'left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia '
             .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
             .'where  '
             .'py.cve_dependencia::text LIKE ? '
@@ -224,7 +224,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -251,7 +251,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -284,7 +284,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join clasificaciones_supervisor cs on pe.clasificacion_supervisor = cs.cve_clasificacion_supervisor  "
@@ -324,7 +324,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "
@@ -447,7 +447,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join documentos_opinion dop on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
@@ -610,7 +610,7 @@ class Proyectos_model extends CI_Model {
             ."from "
             ."propuestas_evaluacion pe  "
             ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
-            ."left join programas pg on py.cve_programa = pg.cve_programa "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
             ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
             ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
             ."left join puntaje_calificacion_propuesta pcp on py.id_proyecto = pcp.id_proyecto and pe.id_propuesta_evaluacion = pcp.id_propuesta_evaluacion "

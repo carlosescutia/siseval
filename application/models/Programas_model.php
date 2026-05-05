@@ -6,7 +6,15 @@ class Programas_model extends CI_Model {
     }
 
     public function get_programa_proyecto($id_proyecto) {
-        $sql = 'select pg.cve_programa, pg.nom_programa from proyectos py left join programas pg on py.cve_programa = pg.cve_programa where py.id_proyecto = ? ;';
+        $sql = ''
+            .'select '
+            .'pg.cve_programa, pg.nom_programa '
+            .'from '
+            .'proyectos py '
+            .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
+            .'where '
+            .'py.id_proyecto = ? '
+            .'';
         $query = $this->db->query($sql, array($id_proyecto));
         return $query->row_array();
     }
