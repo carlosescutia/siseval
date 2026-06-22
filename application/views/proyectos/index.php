@@ -294,6 +294,7 @@
                                             $fondo_previo = 'bg-primary';
                                         } ?>
                                         <p><span class="badge rounded-pill <?=$fondo_actual?>"><?= $proyectos_item['evaluaciones_propuestas'] ?></span> evaluaciones propuestas<br>
+                                        <span class="badge rounded-pill bg-primary"><?= $proyectos_item['evaluaciones_aae'] ?></span> evaluaciones en AAE<br>
                                         <span class="badge rounded-pill <?=$fondo_calificadas?>"><?= $proyectos_item['propuestas_calificadas'] ?></span> propuestas calificadas<br>
                                         <span class="badge rounded-pill <?=$fondo_previo?>"><?= $proyectos_item['evaluaciones_previas'] ?></span> evaluaciones previas</p>
                                     </div>

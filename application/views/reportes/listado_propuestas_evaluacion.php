@@ -28,6 +28,7 @@
                             <th scope="col">Clave P/Q</th>
                             <th scope="col">Nombre P/Q</th>
                             <th scope="col">Tipo de evaluación</th>
+                            <th scope="col">Fecha de carga</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,20 @@
                             <td><?= $propuestas_evaluacion_item['cve_proyecto'] ?></td>
                             <td><?= $propuestas_evaluacion_item['nom_proyecto'] ?></td>
                             <td><?= $propuestas_evaluacion_item['nom_tipo_evaluacion'] ?></td>
+                            <td>
+                                <?php
+                                    $fmt = datefmt_create(
+                                        'es_MX',
+                                        IntlDateFormatter::NONE,
+                                        IntlDateFormatter::NONE,
+                                        null,
+                                        IntlDateFormatter::GREGORIAN,
+                                        'dd/MM/yy'
+                                    );
+                                $fecha = strtotime($propuestas_evaluacion_item['fecha_carga']);
+                                ?>
+                                <?= datefmt_format($fmt, $fecha) ?>
+                            </td>
                         </tr>
                         <?php } ?>
                     </tbody>

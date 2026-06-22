@@ -11,6 +11,7 @@ class Proyectos_model extends CI_Model {
             .'select '
             .'py.*, pg.*,  '
             .'(select count(*) from propuestas_evaluacion where id_proyecto = py.id_proyecto) as evaluaciones_propuestas, '
+            .'(select count(*) from propuestas_evaluacion where coalesce(excluir_agenda, 0) != 1 and id_proyecto = py.id_proyecto) as evaluaciones_aae, '
             .'(select count(distinct(cp.id_propuesta_evaluacion)) from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp. id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.id_proyecto = py.id_proyecto) as propuestas_calificadas, '
             .'(select count(*) from evaluaciones ev where cve_proyecto in (select cve_proyecto from proyectos py1 where py1.id_proyecto = py.id_proyecto union select pa.cve_proyecto_anterior from proyectos_anteriores pa left join proyectos py2 on py2.cve_proyecto = pa.cve_proyecto where py2.id_proyecto = py.id_proyecto) and ev.periodo < py.periodo) as evaluaciones_previas, '
             .'(select count(*) as num_calif_dependencias from calificaciones_propuesta cp left join propuestas_evaluacion pe on cp.id_propuesta_evaluacion = pe.id_propuesta_evaluacion where pe.id_proyecto = py.id_proyecto) as num_calif_dependencias, '
@@ -137,19 +138,20 @@ class Proyectos_model extends CI_Model {
     public function get_propuestas_evaluacion($cve_dependencia, $periodo, $salida=null) {
         $sql = ''
             .'select  '
-            .'d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.cve_proyecto,  '
-            .'py.nom_proyecto, te.nom_tipo_evaluacion '
+                .'d.nom_dependencia, pg.cve_programa, pg.nom_programa, py.cve_proyecto,  '
+                .'py.nom_proyecto, te.nom_tipo_evaluacion, '
+                ."(select fecha from bitacora where trim(accion) = 'agregó' and trim(entidad) = 'propuestas_evaluacion' and valor::int = pe.id_propuesta_evaluacion) as fecha_carga "
             .'from  '
-            .'propuestas_evaluacion pe  '
-            .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
-            .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
-            .'left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia '
-            .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
+                .'propuestas_evaluacion pe  '
+                .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
+                .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
+                .'left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia '
+                .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
             .'where  '
-            .'py.cve_dependencia::text LIKE ? '
-            .'and py.periodo = ? '
+                .'py.cve_dependencia::text LIKE ? '
+                .'and py.periodo = ? '
             .'order by '
-            .'d.nom_dependencia, pg.cve_programa, py.cve_proyecto  '
+                .'d.nom_dependencia, pg.cve_programa, py.cve_proyecto  '
             .'';
         $query = $this->db->query($sql, array($periodo, $cve_dependencia, $periodo));
 
