@@ -35,7 +35,7 @@ class Evaluaciones_model extends CI_Model {
     }
 
     public function get_evaluacion($id_evaluacion, $cve_dependencia, $cve_rol, $periodo) {
-        if ($cve_rol == 'adm' or $cve_rol == 'sup' or $cve_rol == 'sec') {
+        if ($cve_rol != 'usr') {
             $cve_dependencia = '%';
         }
         $sql = ""
