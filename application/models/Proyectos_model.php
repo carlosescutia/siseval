@@ -696,5 +696,40 @@ class Proyectos_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_fechas_publicacion_documentos($periodo, $salida=null) {
+        $sql = ""
+            ."select "
+            ."pg.cve_programa, py.cve_proyecto, py.nom_proyecto, py.periodo, "
+            ."te.nom_tipo_evaluacion, "
+            ."d.nom_dependencia, "
+            ."pe.id_propuesta_evaluacion, "
+            ."dop.cve_documento_opinion,  "
+            ."pa.id_plan_accion "
+            ."from "
+            ."propuestas_evaluacion pe  "
+            ."left join proyectos py on pe.id_proyecto = py.id_proyecto "
+            ."left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa "
+            ."left join dependencias d on py.cve_dependencia = d.cve_dependencia "
+            ."left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion "
+            ."left join documentos_opinion dop on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+            ."left join planes_accion pa on pa.cve_documento_opinion = dop.cve_documento_opinion "
+            ."where "
+            ."coalesce(pe.excluir_agenda,0) <> 1 "
+            ."and py.periodo = ? "
+            ."order by "
+            ."py.periodo desc, d.nom_dependencia, py.cve_proyecto, pe.id_propuesta_evaluacion "
+            ."";
+
+        $query = $this->db->query($sql, $periodo);
+
+        if ($salida == 'csv') {
+            $delimiter = ",";
+            $newline = "\r\n";
+            return $this->dbutil->csv_from_result($query, $delimiter, $newline);
+        } else {
+            return $query->result_array();
+        }
+    }
+
 
 }

@@ -228,5 +228,37 @@ class Reportes extends CI_Controller {
         }
     }
 
+    public function listado_fechas_publicacion($salida='')
+    {
+        if ($this->session->userdata('logueado')) {
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+
+            $salida = '';
+            if ($this->input->post()) {
+                $salida = $this->input->post('salida');
+            }
+
+            if ($cve_rol != 'usr') {
+                $cve_dependencia = '%';
+            }
+
+            $anio_sesion = $this->session->userdata('anio_sesion');
+            $data['proyectos'] = $this->proyectos_model->get_fechas_publicacion_documentos($anio_sesion);
+
+            if ($salida == 'csv') {
+                force_download("listado_fechas_publicacion_" . $anio_sesion . ".csv", $data['proyectos']);
+            } else {
+                $this->load->view('templates/header', $data);
+                $this->load->view('reportes/listado_fechas_publicacion', $data);
+                $this->load->view('templates/footer');
+            }
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
 
 }
