@@ -41,6 +41,16 @@
                     <?php
                         $permisos_requeridos = array(
                         'reportes_usuario.can_view',
+                        'reportes_secretario.can_view',
+                        'reportes_administrador.can_view',
+                        );
+                        if (has_permission_or($permisos_requeridos, $permisos_usuario)) {
+                            include "btn_listado_base_propuestas.php";
+                        } 
+                    ?>
+                    <?php
+                        $permisos_requeridos = array(
+                        'reportes_usuario.can_view',
                         'reportes_supervisor.can_view',
                         'reportes_secretario.can_view',
                         'reportes_administrador.can_view',

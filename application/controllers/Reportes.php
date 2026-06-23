@@ -196,5 +196,37 @@ class Reportes extends CI_Controller {
         }
     }
 
+    public function listado_base_propuestas($salida='')
+    {
+        if ($this->session->userdata('logueado')) {
+            $this->funciones_sistema->recargar_permisos($this->etapa_modulo, $this->nom_etapa_modulo);
+            $data['userdata'] = $this->session->userdata;
+            $cve_dependencia = $data['userdata']['cve_dependencia'];
+            $cve_rol = $data['userdata']['cve_rol'];
+
+            $salida = '';
+            if ($this->input->post()) {
+                $salida = $this->input->post('salida');
+            }
+
+            if ($cve_rol != 'usr') {
+                $cve_dependencia = '%';
+            }
+
+            $anio_sesion = $this->session->userdata('anio_sesion');
+            $data['propuestas_evaluacion'] = $this->proyectos_model->get_base_propuestas_evaluacion($cve_dependencia, $anio_sesion, $salida);
+
+            if ($salida == 'csv') {
+                force_download("listado_propuestas_evaluacion_" . $anio_sesion . ".csv", $data['propuestas_evaluacion']);
+            } else {
+                $this->load->view('templates/header', $data);
+                $this->load->view('reportes/listado_base_propuestas', $data);
+                $this->load->view('templates/footer');
+            }
+        } else {
+            redirect('inicio/login');
+        }
+    }
+
 
 }

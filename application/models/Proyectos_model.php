@@ -164,6 +164,66 @@ class Proyectos_model extends CI_Model {
         }
     }
 
+    public function get_base_propuestas_evaluacion($cve_dependencia, $periodo, $salida=null) {
+        $sql = ''
+            .'select  '
+                .'d.nom_dependencia, py.cve_proyecto,  '
+                .'py.nom_proyecto, te.nom_tipo_evaluacion, je.nom_justificacion_evaluacion, '
+                ."(case "
+                    ."when pe.recursos_propios = 'S' then 'recursos propios' "
+                    ."when pe.recursos_propios = 'N' then 'otros recursos' "
+                    ."when pe.recursos_propios = 'NA' then 'no aplica' "
+                    ."else '' "
+                    ."end "
+                .") as financiamiento, "
+                .'pe.objetivo, pe.observaciones, '
+                ."(case "
+                    ."when pe.recomendaciones_previas = '100' then 'Todas atendidas' "
+                    ."when pe.recomendaciones_previas = '66' then 'Atendidas más del 50%' "
+                    ."when pe.recomendaciones_previas = '33' then 'Atendidas menos del 50%' "
+                    ."when pe.recomendaciones_previas = '0' then 'Sin atender' "
+                    ."when pe.recomendaciones_previas = '-1' then 'No aplica' "
+                    ."else '' "
+                    ."end "
+                .") as recomendaciones_previas, "
+                ."( "
+                    ."(case when info_diagnostico = 1 then 'Diagnóstico, ' else '' end) || "
+                    ."(case when info_mir = 1 then 'MIR, ' else '' end) || "
+                    ."(case when info_reglasop = 1 then 'Reglas de operación, ' else '' end) || "
+                    ."(case when info_regsadm = 1 then 'Registros administrativos, ' else '' end) || "
+                    ."(case when info_fuentes_of = 1 then 'Información de fuentes oficiales, ' else '' end) || "
+                    ."(case when info_progpresup = 1 then 'Información programático presupuestaria, ' else '' end) || "
+                    ."(case when info_padronben = 1 then 'Padrón de beneficiarios, ' else '' end) || "
+                    ."(case when info_lineamientos = 1 then 'Lineamientos, ' else '' end) || "
+                    ."(case when info_guiasop = 1 then 'Guías operativas, ' else '' end) || "
+                    ."(case when info_normativa = 1 then 'Normativa, ' else '' end) || "
+                    ."(case when info_otro = 1 then 'Otro' else '' end) "
+                .") as info_disponible, "
+                ."(select fecha from bitacora where trim(accion) = 'agregó' and trim(entidad) = 'propuestas_evaluacion' and valor::int = pe.id_propuesta_evaluacion) as fecha_carga "
+            .'from  '
+                .'propuestas_evaluacion pe  '
+                .'left join proyectos py on pe.id_proyecto = py.id_proyecto  '
+                .'left join get_programa_periodo(py.cve_programa, py.periodo) pg on py.cve_programa = pg.cve_programa '
+                .'left join get_dependencia_periodo(py.cve_dependencia, ?) d on py.cve_dependencia = d.cve_dependencia '
+                .'left join tipos_evaluacion te on pe.id_tipo_evaluacion = te.id_tipo_evaluacion '
+                .'left join justificaciones_evaluacion je on je.id_justificacion_evaluacion = pe.id_justificacion_evaluacion '
+            .'where  '
+                .'py.cve_dependencia::text LIKE ? '
+                .'and py.periodo = ? '
+            .'order by '
+                .'d.nom_dependencia, pg.cve_programa, py.cve_proyecto  '
+            .'';
+        $query = $this->db->query($sql, array($periodo, $cve_dependencia, $periodo));
+
+        if ($salida == 'csv') {
+            $delimiter = ",";
+            $newline = "\r\n";
+            return $this->dbutil->csv_from_result($query, $delimiter, $newline);
+        } else {
+            return $query->result_array();
+        }
+    }
+
     public function get_estadisticas_proyectos_dependencia($cve_dependencia, $periodo) {
         $sql = ''
             .'select '
