@@ -19,17 +19,17 @@
                         </label>
                         <textarea rows="4" class="form-control" name="desc_actividad" id="desc_actividad" required></textarea>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <label for="unidad_medida">
                             Unidad de medida
                         </label>
                         <input type="text" class="form-control" name="unidad_medida" id="unidad_medida" required >
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-3">
                         <label for="resultados_esperados">
                             Resultados esperados
                         </label>
-                        <textarea rows="4" class="form-control" name="resultados_esperados" id="resultados_esperados" required></textarea>
+                        <input type="number" class="form-control" name="resultados_esperados" id="resultados_esperados" title="Meta a lograr, expresar de manera numérica." required>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -55,7 +55,7 @@
                         <label for="ponderacion">
                             Ponderación
                         </label>
-                        <input type="text" class="form-control" name="ponderacion" id="ponderacion" required >
+                        <input type="number" class="form-control" name="ponderacion" id="ponderacion" title="Expresar de manera numérica sin signo de porcentaje." required >
                     </div>
                 </div>
                 <div class="row mb-3">

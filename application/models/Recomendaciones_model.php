@@ -128,15 +128,16 @@ class Recomendaciones_model extends CI_Model {
     public function get_num_recomendaciones_atendidas($dependencia, $periodo, $tipo_evaluacion, $proyecto_evaluado) {
         $sql = ""
             ."select "
-            ."count(*) as num_recomendaciones_atendidas "
+                ."count(*) as num_recomendaciones_atendidas "
             ."from "
-            ."actividades a "
-            ."left join recomendaciones r on r.cve_recomendacion = a.cve_recomendacion "
-            ."left join documentos_opinion dop on dop.cve_documento_opinion = r.cve_documento_opinion "
-            ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
-            ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
-            ."where py.cve_dependencia::text LIKE ? "
-            ."and a.registro_avance >= a.unidad_medida "
+                ."actividades a "
+                ."left join recomendaciones r on r.cve_recomendacion = a.cve_recomendacion "
+                ."left join documentos_opinion dop on dop.cve_documento_opinion = r.cve_documento_opinion "
+                ."left join propuestas_evaluacion pe on pe.id_propuesta_evaluacion = dop.id_propuesta_evaluacion "
+                ."left join proyectos py on py.id_proyecto = pe.id_proyecto "
+            ."where "
+                ."py.cve_dependencia::text LIKE ? "
+                ."and a.registro_avance >= a.resultados_esperados "
             ."";
         $parametros = array();
         array_push($parametros, "$dependencia");

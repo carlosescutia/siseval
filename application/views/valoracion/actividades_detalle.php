@@ -13,13 +13,13 @@
         <form method="post" action="<?= base_url() ?>valoracion/actividades_guardar">
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-sm-7">
+                    <div class="col-sm-5">
                         <label for="desc_actividad">
                             Actividad
                         </label>
                         <textarea rows="2" class="form-control" name="desc_actividad" id="desc_actividad" required><?= $actividad['desc_actividad'] ?></textarea>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <label for="unidad_medida">
                             Unidad de medida
                         </label>
@@ -29,7 +29,7 @@
                         <label for="resultados_esperados">
                             Resultados esperados
                         </label>
-                        <input type="text" class="form-control" name="resultados_esperados" id="resultados_esperados" value="<?= $actividad['resultados_esperados'] ?>" required >
+                        <input type="number" class="form-control" name="resultados_esperados" id="resultados_esperados" value="<?= $actividad['resultados_esperados'] ?>" title="Meta a lograr, expresar de manera numérica" required >
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -55,7 +55,7 @@
                         <label for="ponderacion">
                             Ponderación
                         </label>
-                        <input type="text" class="form-control" name="ponderacion" id="ponderacion" value="<?= $actividad['ponderacion'] ?>" required >
+                        <input type="number" class="form-control" name="ponderacion" id="ponderacion" value="<?= $actividad['ponderacion'] ?>" title="Expresar de manera numérica sin signo de porcentaje." required >
                     </div>
                 </div>
                 <div class="row mb-3">
